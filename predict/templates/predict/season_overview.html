@@ -3,6 +3,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
+<div id="season-list">
+<h1>Seasons</h1>
+{% if season_list %}
+    <ul>
+    {% for season in season_list %}
+        <li><a href="/predict/{{ season.name }}/">{{ season.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+</div>
+<div class="page-body">
 <div id="hdr">
 {% if season %}
     {% for s in season %}
@@ -10,6 +21,7 @@
     {% endfor %}
 {% endif %}
 </div>
+<div class="page-row">
 <div id="dchamp" class="content">
 {% if driver_champ %}
     <h2>Drivers Championship</h2>
@@ -48,6 +60,8 @@
     </table>
 {% endif %}
 </div>
+</div>
+<div class="page-row">
 <div id="calendar" class="content">
 {% if race_list %}
     <h2>Calendar</h2>
@@ -76,4 +90,6 @@
 {% else %}
     <p>No teams are available.</p>
 {% endif %}
+</div>
+</div>
 </div>

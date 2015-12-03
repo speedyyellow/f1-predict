@@ -7,6 +7,8 @@
     <h1>{{team.name}}</h1>
 {% endif %}
 
+<div class="page-row">
+<div class="content">
 {% if driver_list %}
     <h2>Drivers</h2>
     <table>
@@ -16,7 +18,11 @@
     {% endfor %}
     </table>
 {% endif %}
+</div>
+</div>
 
+<div class="page-row">
+<div class="content">
 {% if result_list %}
     <h2>Results</h2>
     <table>
@@ -36,3 +42,5 @@
     {% endfor %}
     </table>
 {% endif %}
+</div>
+</div>

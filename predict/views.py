@@ -12,8 +12,7 @@ from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team
 
 @login_required
 def index(request):
-    season_list = Season.objects.order_by('name')
-    context = {'season_list': season_list}
+    context = {'season_list': get_season_list()}
     return render(request, 'predict/index.html', context)
 
 @login_required
@@ -24,7 +23,8 @@ def season_overview(request, season_id):
     dc = get_drivers_champ(season_id)
     cc = get_constructors_champ(season_id)
     score = score_season(request.user, season[0])
-    context = {'season': season,
+    context = {'season_list': get_season_list(),
+                'season': season,
                 'race_list': race_list,
                 'team_list' : team_list,
                 'driver_champ' : dc,
@@ -65,6 +65,9 @@ def driver_overview(request, season_id, driver_id):
 #-------------------------------------------------------------------------------
 #   Query wrappers
 #-------------------------------------------------------------------------------
+def get_season_list():
+    return Season.objects.order_by('-name')
+
 def get_entry_list(season_id):
     team_list = TeamDriver.objects.filter(season__name=season_id).order_by('team__name', 'driver__name')
     return team_list
