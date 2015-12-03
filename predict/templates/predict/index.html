@@ -3,7 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
-<div id="season-list">
+{% include "predict/season_list.html" %}
+
+<!-- <div id="season-list">
 <h1>Seasons</h1>
 {% if season_list %}
     <ul>
@@ -13,7 +15,7 @@
     </ul>
 {% endif %}
 </div>
-
+ -->
 
 <div class="page-body">
 <h1>F1 Prediction Game</h1>
