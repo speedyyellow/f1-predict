@@ -105,8 +105,11 @@ def get_race_result_positions(result):
     return positions
 
 def get_user_prediction(user, season_round):
-    prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.date).order_by('created')[:1]
-    return prediction[0]
+    try:
+        prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.date).latest('created')
+        return prediction
+    except Exception, e:
+        return Prediction()
 
 def get_prediction_positions(prediction):
     pred_positions = PredictionPosition.objects.filter(prediction__pk=prediction.pk).order_by('position__position')[:10]

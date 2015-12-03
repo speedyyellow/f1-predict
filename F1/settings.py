@@ -69,6 +69,9 @@ TEMPLATES = [
     },
 ]
 
+#LOGIN_URL = '/login/'
+#LOGOUT_URL = '/logout/'
+
 WSGI_APPLICATION = 'F1.wsgi.application'
 
 
