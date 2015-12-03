@@ -1,0 +1,39 @@
+li a {
+    color: green;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid grey;
+    text-align: left;
+}
+
+td, th {
+    padding: 5px;
+}
+
+#hdr {
+    top: 0px;
+    width: 100%;
+    background-color: white;
+}
+
+#dchamp {
+    background-color: white;
+}
+
+#cchamp {
+    background-color: white;
+}
+
+.content {
+    width: 50%;
+    height: 75%;
+    float: left;
+}

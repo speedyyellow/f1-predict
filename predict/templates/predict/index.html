@@ -1,0 +1,16 @@
+{% load staticfiles %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+</head>
+
+{% if season_list %}
+    <ul>
+    {% for season in season_list %}
+        <li><a href="/predict/{{ season.name }}/">{{ season.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No seasons are available.</p>
+{% endif %}
+
+<h1>F1 Prediction Game</h1>

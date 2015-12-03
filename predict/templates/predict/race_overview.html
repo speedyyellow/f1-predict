@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+</head>
+
+{% if race %}
+    {% for entry in race %}
+	<h1>{{entry.season.name}} {{entry.circuit.country}} Grand Prix - {{score}} points</h1>
+    <h2>{{entry.circuit.name}}</h2>
+    {% endfor %}
+{% else %}
+    <p>No data available.</p>
+{% endif %}
+
+{% if results %}
+    <h3>Results</h3>
+    <table >
+    <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
+    {% for entry in results %}
+        <tr>
+            <td>{{ entry.position.position }}</td>
+            <td>{{ entry.driver.driver.number }}</td>
+            <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+            <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+            <td>{{ entry.position.points }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No results recorded</p>
+{% endif %}

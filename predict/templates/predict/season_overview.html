@@ -1,0 +1,79 @@
+<head>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+</head>
+
+<div id="hdr">
+{% if season %}
+    {% for s in season %}
+    <h1>Formula 1 {{s.name}} Season - {{score}} points</h1>
+    {% endfor %}
+{% endif %}
+</div>
+<div id="dchamp" class="content">
+{% if driver_champ %}
+    <h2>Drivers Championship</h2>
+    <table>
+    <tr>
+    <th>Position</th>
+    <th>Driver</th>
+    <th>Points</th>
+    </tr>
+     {% for e in driver_champ %}
+    <tr>
+    <td>NA</td>
+    <td><a href='/predict/{{e.result__season_round__season__name}}/driver/{{e.driver__driver__pk}}'>{{e.driver__driver__name}}</a></td>
+    <td>{{e.score}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+</div>
+<div id="cchamp" class="content">
+{% if team_champ %}
+    <h2>Constructors Championship</h2>
+    <table>
+    <tr>
+    <th>Position</th>
+    <th>Team</th>
+    <th>Points</th>
+    </tr>
+    {% for e in team_champ %}
+    <tr>
+    <td>NA</td>
+    <td><a href='/predict/{{e.result__season_round__season__name}}/team/{{e.driver__team__pk}}'>{{e.driver__team__name}}</a></td>
+    <td>{{e.score}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+</div>
+<div id="calendar" class="content">
+{% if race_list %}
+    <h2>Calendar</h2>
+    <table>
+    <tr><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
+    {% for race in race_list %}
+        <tr><td>{{ race.date }}</td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.country}}</a></td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.name}}</a></td></tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No rounds are available.</p>
+{% endif %}
+</div>
+<div id="entries" class="content">
+{% if team_list %}
+    <h2>Entry List</h2>
+    <table>
+    <tr><th>Driver</th><th>Team</th></tr>
+    {% for entry in team_list %}
+        <tr>
+            <td><a href='/predict/{{entry.season.name}}/driver/{{entry.driver.id}}'>{{ entry.driver.name }}</a></td>
+            <td><a href='/predict/{{entry.season.name}}/team/{{entry.team.id}}'>{{ entry.team.name }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No teams are available.</p>
+{% endif %}
+</div>

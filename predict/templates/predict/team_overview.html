@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+</head>
+
+{% if team %}
+    <h1>{{team.name}}</h1>
+{% endif %}
+
+{% if driver_list %}
+    <h2>Drivers</h2>
+    <table>
+    <tr><th>Name</th><th>Number</th></tr>
+    {% for driver in driver_list %}
+    <tr><td><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a><td>{{driver.driver.number}}</td> </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+
+{% if result_list %}
+    <h2>Results</h2>
+    <table>
+    <tr>
+    <th>Date</th>
+    <th>Grand Prix</th>
+    <th>Driver</th>
+    <th>Finish</th>
+    </tr>
+    {% for result in result_list %}
+    <tr>
+    <td>{{result.result.season_round.date}}</td>
+    <td><a href='/predict/{{result.result.season_round.season.name}}/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+    <td><a href='/predict/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
+    <td>{{result.position.position}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
