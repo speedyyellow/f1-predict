@@ -3,6 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
+{% include "predict/season_list.html" %}
+<div class="page-body">
+
 {% if driver %}
     <div class="page-row">
     <div class="content">
@@ -30,3 +33,4 @@
     </div>
     {% endif %}
 {% endif %}
+</div>

@@ -3,6 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
+{% include "predict/season_list.html" %}
+<div class="page-body">
+
 {% if team %}
     <h1>{{team.name}}</h1>
 {% endif %}
@@ -42,5 +45,6 @@
     {% endfor %}
     </table>
 {% endif %}
+</div>
 </div>
 </div>

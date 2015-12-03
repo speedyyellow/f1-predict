@@ -3,6 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
+{% include "predict/season_list.html" %}
+<div class="page-body">
+
 {% if race %}
 	<h1>{{race.season.name}} {{race.circuit.country}} Grand Prix - {{score}} points</h1>
     <h2>{{race.circuit.name}}</h2>
@@ -27,3 +30,5 @@
 {% else %}
     <p>No results recorded</p>
 {% endif %}
+</div>
+

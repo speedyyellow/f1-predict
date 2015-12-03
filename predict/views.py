@@ -39,7 +39,8 @@ def race_overview(request, season_id, country_id):
     pred = get_user_prediction(request.user, race)
     result_positions = get_race_result_positions(result)
     score = score_round(pred, result)
-    context = {'race' : race,
+    context = {'season_list': get_season_list(),
+    			'race' : race,
                 'results' : result_positions,
                 'score' : score }
     return render(request, 'predict/race_overview.html', context)
@@ -49,7 +50,8 @@ def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
     results = get_team_results(season_id, team)
-    context = {'team' : team,
+    context = {'season_list': get_season_list(),
+    			'team' : team,
                'driver_list' : drivers,
                'result_list' : results }
     return render(request, 'predict/team_overview.html', context)
@@ -58,7 +60,8 @@ def team_overview(request, season_id, team_id):
 def driver_overview(request, season_id, driver_id):
     driver = get_driver(season_id, driver_id)
     results = get_driver_results(season_id, driver_id)
-    context = {'driver' : driver,
+    context = {'season_list': get_season_list(),
+    			'driver' : driver,
                'result_list' : results }
     return render(request, 'predict/driver_overview.html', context)
 

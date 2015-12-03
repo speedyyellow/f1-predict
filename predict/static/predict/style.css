@@ -5,6 +5,25 @@ body {
     background-color: rgb(200, 200, 200);
 }
 
+ul {
+    text-align: center;
+    background-color: rgb(238, 238, 238);
+    list-style-type: none;
+    padding: 0;
+    border: 2px solid #ddd;
+    font-size: 115%;
+}
+
+ul li {
+    padding: 8px 16px;
+    border-bottom: 2px solid #ddd;
+    text-decoration: none;
+}
+
+ul li:last-child {
+    border-bottom: none
+}
+
 #season-list {
     position: fixed;
     top: -12px;
@@ -13,7 +32,7 @@ body {
 
 .page-body {
     position: relative;
-    left: 200px;
+    left: 150px;
 }
 
 .page-row{
