@@ -21,8 +21,8 @@
     </tr>
      {% for e in driver_champ %}
     <tr>
-    <td>NA</td>
-    <td><a href='/predict/{{e.result__season_round__season__name}}/driver/{{e.driver__driver__pk}}'>{{e.driver__driver__name}}</a></td>
+    <td>{{e.rank}}</td>
+    <td><a href='/predict/{{e.season}}/driver/{{e.key}}'>{{e.name}}</a></td>
     <td>{{e.score}}</td>
     </tr>
     {% endfor %}
@@ -40,8 +40,8 @@
     </tr>
     {% for e in team_champ %}
     <tr>
-    <td>NA</td>
-    <td><a href='/predict/{{e.result__season_round__season__name}}/team/{{e.driver__team__pk}}'>{{e.driver__team__name}}</a></td>
+    <td>{{e.rank}}</td>
+    <td><a href='/predict/{{e.season}}/team/{{e.key}}'>{{e.name}}</a></td>
     <td>{{e.score}}</td>
     </tr>
     {% endfor %}

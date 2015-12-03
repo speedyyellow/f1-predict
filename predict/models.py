@@ -61,7 +61,6 @@ class ResultPosition(models.Model):
     def __str__(self):
         return str(self.position.position) + " " + self.driver.driver.name + " " + self.result.season_round.circuit.country
 
-
 # player data
 class Prediction(models.Model):
     created = models.DateTimeField()

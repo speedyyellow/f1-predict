@@ -4,10 +4,8 @@
 </head>
 
 {% if race %}
-    {% for entry in race %}
-	<h1>{{entry.season.name}} {{entry.circuit.country}} Grand Prix - {{score}} points</h1>
-    <h2>{{entry.circuit.name}}</h2>
-    {% endfor %}
+	<h1>{{race.season.name}} {{race.circuit.country}} Grand Prix - {{score}} points</h1>
+    <h2>{{race.circuit.name}}</h2>
 {% else %}
     <p>No data available.</p>
 {% endif %}

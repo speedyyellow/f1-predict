@@ -3,11 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
 </head>
 
-{% if driver_list %}
-    {% for driver in driver_list %}
+{% if driver %}
     <h1>{{driver.driver.name}} ({{driver.driver.number}})</h1>
     <h2><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></h2>
-    {% endfor %}
 
     {% if result_list %}
         <h3>Results</h3>
