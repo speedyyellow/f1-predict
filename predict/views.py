@@ -35,14 +35,15 @@ def season_overview(request, season_id):
 @login_required
 def race_overview(request, season_id, country_id):
     race = get_race(season_id, country_id)
+    context = {'season_list': get_season_list(), 'race' : race, 'score' : 0}
     result = get_race_result(season_id, country_id)
-    pred = get_user_prediction(request.user, race)
-    result_positions = get_race_result_positions(result)
-    score = score_round(pred, result)
-    context = {'season_list': get_season_list(),
-    			'race' : race,
-                'results' : result_positions,
-                'score' : score }
+    if result != None:
+        result_positions = get_race_result_positions(result)
+        pred = get_user_prediction(request.user, race)
+        score = score_round(pred, result)
+        context['results'] = result_positions
+        context['score'] = score
+
     return render(request, 'predict/race_overview.html', context)
 
 @login_required
@@ -93,21 +94,24 @@ def get_team_results(season_id, team):
 
 def get_race_results(season):
     results = RaceResult.objects.filter(season_round__season__name=season.name).order_by('season_round__date')
-    return results
+    if results.count() > 0:
+        return results
+    else:
+        return None
 
 def get_race_result(season_id, country_id):
     results = RaceResult.objects.filter(season_round__season__name=season_id, season_round__circuit__country=country_id)[:1]
     if results.count() >= 1:
         return results[0]
     else:
-        return RaceResult()
+        return None
 
 def get_race(season_id, country_id):
     races = SeasonRound.objects.filter(season__name=season_id, circuit__country=country_id)[:1]
     if races.count() >= 1:
         return races[0]
     else:
-        return SeasonRound()
+        return None
 
 
 def get_races(season_id):
