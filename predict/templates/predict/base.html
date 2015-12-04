@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+    <title>{% block title %}F1 Prediction Game{% endblock %}</title>
+</head>
+
+<body>
+    <div class="sidebar">
+        {% block sidebar %}
+        <p>Sidebar</p>
+        {% endblock %}
+    </div>
+
+    <div class="page-content">
+        {% block page-content %}
+        <p>Page Content</p>
+        {% endblock %}
+    </div>
+</body>
+</html>
+
+
+

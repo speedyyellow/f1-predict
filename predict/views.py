@@ -97,18 +97,28 @@ def get_race_results(season):
 
 def get_race_result(season_id, country_id):
     results = RaceResult.objects.filter(season_round__season__name=season_id, season_round__circuit__country=country_id)[:1]
-    return results[0]
+    if results.count() >= 1:
+        return results[0]
+    else:
+        return RaceResult()
 
 def get_race(season_id, country_id):
     races = SeasonRound.objects.filter(season__name=season_id, circuit__country=country_id)[:1]
-    return races[0]
+    if races.count() >= 1:
+        return races[0]
+    else:
+        return SeasonRound()
+
 
 def get_races(season_id):
     return SeasonRound.objects.filter(season__name=season_id).order_by('date')
 
 def get_race_result_positions(result):
-    positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')[:10]
+    positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')
     return positions
+
+def get_race_result_top_ten(result):
+    return get_race_result_positions(result)[:10]
 
 def get_user_prediction(user, season_round):
     try:
@@ -147,7 +157,7 @@ def score_round(prediction, race_result):
 
     # get the prediction positions & race positions
     prediction_pos = get_prediction_positions(prediction)
-    result_pos = get_race_result_positions(race_result)
+    result_pos = get_race_result_top_ten(race_result)
 
     # now check for position matches
     for ppos in prediction_pos:

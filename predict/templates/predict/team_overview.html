@@ -1,14 +1,23 @@
-{% load staticfiles %}
-<head>
-<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
-</head>
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
 
+<!-- The season list sidebar -->
+{% block sidebar %}
 {% include "predict/season_list.html" %}
-<div class="page-body">
+{% endblock %}
 
+<!-- The main page content -->
+{% block page-content %}
+<div class="page-row">
+<div class="content">
 {% if team %}
-    <h1>{{team.name}}</h1>
+    <table>
+    <tr><th>{{team.name}}</th></tr>
+    <tr><td>{{team.engine}}</td></tr>
+    </table>
 {% endif %}
+</div>
+</div>
 
 <div class="page-row">
 <div class="content">
@@ -47,4 +56,4 @@
 {% endif %}
 </div>
 </div>
-</div>
+{% endblock %}

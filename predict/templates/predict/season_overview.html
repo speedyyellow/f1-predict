@@ -1,20 +1,27 @@
-<head>
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
-</head>
 
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
+
+<!-- The season list sidebar -->
+{% block sidebar %}
 {% include "predict/season_list.html" %}
+{% endblock %}
 
-<div class="page-body">
-<div id="hdr">
-{% if season %}
-    {% for s in season %}
-    <h1>Formula 1 {{s.name}} Season - {{score}} points</h1>
-    {% endfor %}
-{% endif %}
+<!-- The main page content -->
+{% block page-content %}
+<div class="page-row">
+    <div class="content">
+    {% if season %}
+        {% for s in season %}
+            <table>
+                <tr><th>Formula 1 {{s.name}} Season</th> <th>{{score}} points</th></tr>
+            </table>
+        {% endfor %}
+    {% endif %}
+    </div>
 </div>
 <div class="page-row">
-<div id="dchamp" class="content">
+<div class="content">
 {% if driver_champ %}
     <h2>Drivers Championship</h2>
     <table>
@@ -33,7 +40,7 @@
     </table>
 {% endif %}
 </div>
-<div id="cchamp" class="content">
+<div class="content">
 {% if team_champ %}
     <h2>Constructors Championship</h2>
     <table>
@@ -84,4 +91,4 @@
 {% endif %}
 </div>
 </div>
-</div>
+{% endblock %}

@@ -1,10 +1,14 @@
-<div id="season-list">
-<h1>Seasons</h1>
+{% block sidebar %}
 {% if season_list %}
-    <ul>
+<div id="season-list">
+    <div class="content">
+    <table>
+    <tr><th><a href="/predict/">F1 Predict</a></th></tr>
     {% for season in season_list %}
-        <li><a href="/predict/{{ season.name }}/">{{ season.name }}</a></li>
+        <tr><td><a href="/predict/{{ season.name }}/">{{ season.name }}</a></td></tr>
     {% endfor %}
-    </ul>
-{% endif %}
+    </table>
+    </div>
 </div>
+{% endif %}
+{% endblock %}

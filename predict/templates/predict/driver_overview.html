@@ -1,16 +1,20 @@
-{% load staticfiles %}
-<head>
-<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
-</head>
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
 
+<!-- The season list sidebar -->
+{% block sidebar %}
 {% include "predict/season_list.html" %}
-<div class="page-body">
+{% endblock %}
 
+<!-- The main page content -->
+{% block page-content %}
 {% if driver %}
     <div class="page-row">
     <div class="content">
-    <h1>{{driver.driver.name}} ({{driver.driver.number}})</h1>
-    <h2><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></h2>
+    <table>
+    <tr><th>{{driver.driver.name}}</th><th>({{driver.driver.number}})</th></tr>
+    <tr><td><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></td><td></tr>
+    </table>
     </div>
     </div>
 
@@ -34,3 +38,4 @@
     {% endif %}
 {% endif %}
 </div>
+{% endblock %}
