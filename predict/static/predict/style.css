@@ -20,6 +20,7 @@ body {
 .page-content {
     position: relative;
     left: 180px;
+    width: auto;
 }
 
 /* logical row on the page */
@@ -37,7 +38,7 @@ body {
 .content {
 font-family: sans-serif;
 -webkit-font-smoothing: antialiased;
-font-size: 115%;
+font-size: 100%;
 width: auto;
 overflow: auto;
 display: block;
@@ -46,14 +47,14 @@ float: left;
 .content th {
 background-color: rgb(75, 196, 196);
 font-weight: normal;
-font-size: 130%;
+font-size: 120%;
 color: white;
-padding: 20px 30px;
+padding: 20px 40px;
 text-align: center;
 }
 .content td {
 background-color: rgb(238, 238, 238);
-padding: 20px 30px;
+padding: 10px 10px;
 color: rgb(111, 111, 111);
 text-align: left;
 }

@@ -1,0 +1,19 @@
+<div class="content">
+{% if team_champ %}
+    <h2>Constructors Championship</h2>
+    <table>
+    <tr>
+    <th>Position</th>
+    <th>Team</th>
+    <th>Points</th>
+    </tr>
+    {% for e in team_champ %}
+    <tr>
+    <td>{{e.rank}}</td>
+    <td><a href='/predict/{{e.season}}/team/{{e.key}}'>{{e.name}}</a></td>
+    <td>{{e.score}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+</div>

@@ -1,0 +1,11 @@
+<div id="calendar" class="content">
+{% if race_list %}
+    <h2>Calendar</h2>
+    <table>
+    <tr><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
+    {% for race in race_list %}
+        <tr><td>{{ race.date }}</td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.country}}</a></td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.name}}</a></td></tr>
+    {% endfor %}
+    </table>
+{% endif %}
+</div>
