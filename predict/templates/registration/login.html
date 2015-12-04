@@ -1,17 +1,31 @@
-{% load staticfiles %}
-<head>
-<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
-</head>
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
 
-<form action="{% url 'login' %}" method="post" accept-charset="utf-8">
-    {% csrf_token %}
-    {% for field in form %}
-        <label>{{ field.label }}</label>
-        {% if field.errors %}
-            {{ field.errors }}
-        {% endif %}
-        {{ field }}
-    {% endfor %}
-    <input type="hidden" name="next" value="{{ next }}" />
-    <input class="button small" type="submit" value="Submit"/>
-</form>
+<!-- The season list sidebar -->
+{% block sidebar %}
+{% include "predict/season_list.html" %}
+{% endblock %}
+
+<!-- The main page content -->
+{% block page-content %}
+<div class="page-row">
+    <div class="content">
+        <table>
+            <tr><th>F1 Prediction Game</th></tr>
+        </table>
+
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+    <form method="post" action=".">{% csrf_token %}
+        <table border="0">
+            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
+            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
+        </table>
+        <input type="submit" value="Login" />
+        <input type="hidden" name="next" value="/predict" />
+    </form>
+    <a href="/register">Register</a>
+</div>
+</div>
+{% endblock %}

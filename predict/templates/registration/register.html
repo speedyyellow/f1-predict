@@ -1,39 +1,18 @@
-{% load staticfiles %}
-<head>
-<link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
-</head>
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
 
-<!-- <form action="." method="post">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  {% for field in form %}
-    {% if field.name != "username" %}
-      <div class="field-wrapper">
-        <div class="label-wrapper">
-          {{ field.label_tag }}
-          {% if field.field.required %}<span class="required">*</span>{% endif %}
-        </div>
-        <div class="value-wrapper">
-          {{ field }}
-          {{ field.errors }}
-        </div>
-      </div>
-    {% endif %}
-  {% endfor %}
-  <div class="submit-wrapper">
-    <input type="submit" value="Sign Up"/>
-  </div>
-</form> -->
+<!-- The season list sidebar -->
+{% block sidebar %}
+{% include "predict/season_list.html" %}
+{% endblock %}
 
-<form action="{% url 'login' %}" method="post" accept-charset="utf-8">
-    {% csrf_token %}
-    {% for field in form %}
-        <label>{{ field.label }}</label>
-        {% if field.errors %}
-            {{ field.errors }}
-        {% endif %}
-        {{ field }}
-    {% endfor %}
-    <input type="hidden" name="next" value="{{ next }}" />
-    <input class="button small" type="submit" value="Submit"/>
-</form>
+<!-- The main page content -->
+{% block page-content %}
+   <form method="post" action=".">{% csrf_token %}
+        <table border="0">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Register" />
+    </form>
+    <a href="/accounts/login/">Login</a>
+{% endblock %}

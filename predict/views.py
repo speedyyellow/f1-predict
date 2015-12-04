@@ -10,9 +10,8 @@ from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team
 #   Views
 #-------------------------------------------------------------------------------
 
-@login_required
 def index(request):
-    context = {'season_list': get_season_list()}
+    context = {'user': request.user, 'season_list': get_season_list()}
     return render(request, 'predict/index.html', context)
 
 @login_required
@@ -23,7 +22,7 @@ def season_overview(request, season_id):
     dc = get_drivers_champ(season_id)
     cc = get_constructors_champ(season_id)
     score = score_season(request.user, season[0])
-    context = {'season_list': get_season_list(),
+    context = {'user': request.user, 'season_list': get_season_list(),
                 'season': season,
                 'race_list': race_list,
                 'team_list' : team_list,
@@ -35,7 +34,7 @@ def season_overview(request, season_id):
 @login_required
 def race_overview(request, season_id, country_id):
     race = get_race(season_id, country_id)
-    context = {'season_list': get_season_list(), 'race' : race, 'score' : 0}
+    context = {'user': request.user, 'season_list': get_season_list(), 'race' : race, 'score' : 0}
     result = get_race_result(season_id, country_id)
     if result != None:
         result_positions = get_race_result_positions(result)
@@ -51,7 +50,7 @@ def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
     results = get_team_results(season_id, team)
-    context = {'season_list': get_season_list(),
+    context = {'user': request.user, 'season_list': get_season_list(),
     			'team' : team,
                'driver_list' : drivers,
                'result_list' : results }
@@ -61,7 +60,7 @@ def team_overview(request, season_id, team_id):
 def driver_overview(request, season_id, driver_id):
     driver = get_driver(season_id, driver_id)
     results = get_driver_results(season_id, driver_id)
-    context = {'season_list': get_season_list(),
+    context = {'user': request.user, 'season_list': get_season_list(),
     			'driver' : driver,
                'result_list' : results }
     return render(request, 'predict/driver_overview.html', context)
@@ -203,3 +202,43 @@ def get_champ(results, name_field, key_field):
             last_score = res['score']
 
     return champ
+
+
+#-------------------------------------------------------------------------------
+#   login & registration
+#-------------------------------------------------------------------------------
+# from predict.forms import *
+# from django.contrib.auth.decorators import login_required
+# from django.contrib.auth import logout
+# from django.views.decorators.csrf import csrf_protect
+# from django.shortcuts import render_to_response
+# from django.http import HttpResponseRedirect
+# from django.template import RequestContext
+ 
+# @csrf_protect
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             user = User.objects.create_user(
+#             username=form.cleaned_data['username'],
+#             password=form.cleaned_data['password1'],
+#             email=form.cleaned_data['email']
+#             )
+#             return HttpResponseRedirect('/register/success/')
+#     else:
+#         form = RegistrationForm()
+
+#     variables = RequestContext(request, {'form': form})
+#     return render_to_response('registration/register.html',variables,)
+ 
+# def register_success(request):
+#     return render_to_response('/accounts/login/',)
+ 
+# def logout_page(request):
+#     logout(request)
+#     return HttpResponseRedirect('/')
+ 
+# @login_required
+# def home(request):
+#     return render_to_response('home.html',{ 'user': request.user })

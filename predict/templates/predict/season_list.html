@@ -7,6 +7,9 @@
     {% for season in season_list %}
         <tr><td><a href="/predict/{{ season.name }}/">{{ season.name }}</a></td></tr>
     {% endfor %}
+    {% if user.is_authenticated %}
+        <tr><td><a href="/accounts/logout">Logout</a></td></tr>
+    {% endif %}
     </table>
     </div>
 </div>
