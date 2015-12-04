@@ -8,11 +8,18 @@
 
 <!-- The main page content -->
 {% block page-content %}
+<div class="page-row">
+    <div class="content">
+        <table>
+            <tr><th>F1 Prediction Game</th></tr>
+        </table>
+
    <form method="post" action=".">{% csrf_token %}
         <table border="0">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="Register" />
+        <input type="submit" value="Register" next="/predict"/>
     </form>
-    <a href="/accounts/login/">Login</a>
+</div>
+</div>
 {% endblock %}
