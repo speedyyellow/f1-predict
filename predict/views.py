@@ -142,10 +142,11 @@ def score_season(user, season):
     score = 0
     # get the season results
     results = get_race_results(season)
-    for res in results:
-        # get the user's prediction for this round
-        pred = get_user_prediction(user, res.season_round)
-        score += score_round(pred, res)
+    if results != None:
+        for res in results:
+            # get the user's prediction for this round
+            pred = get_user_prediction(user, res.season_round)
+            score += score_round(pred, res)
 
     return score;
 

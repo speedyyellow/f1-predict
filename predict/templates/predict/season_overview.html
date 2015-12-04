@@ -70,8 +70,6 @@
         <tr><td>{{ race.date }}</td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.country}}</a></td><td><a href="/predict/{{ race.season.name }}/{{race.circuit.country}}/">{{race.circuit.name}}</a></td></tr>
     {% endfor %}
     </table>
-{% else %}
-    <p>No rounds are available.</p>
 {% endif %}
 </div>
 <div id="entries" class="content">
@@ -86,8 +84,6 @@
         </tr>
     {% endfor %}
     </table>
-{% else %}
-    <p>No teams are available.</p>
 {% endif %}
 </div>
 </div>
