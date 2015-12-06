@@ -20,7 +20,7 @@ body {
 .page-content {
     position: relative;
     left: 180px;
-    width: auto;
+    width: 80%;
 }
 
 /* logical row on the page */

@@ -16,7 +16,7 @@
         </table>
 
         {% if user.is_authenticated %}
-            <p>Welcome back {{user.username}}!</p>
+			{% include "predict/user_profile.html" %}
         {% endif %}
     </div>
 </div>

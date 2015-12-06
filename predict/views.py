@@ -178,6 +178,7 @@ def score_round(prediction, race_result):
 #-------------------------------------------------------------------------------
 #   Championship calculations
 #-------------------------------------------------------------------------------
+
 def get_drivers_champ(season_id):
     results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
     return get_champ(results, 'driver__driver__name', 'driver__driver__pk')
