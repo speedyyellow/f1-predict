@@ -175,6 +175,12 @@ def score_round(prediction, race_result):
 
     return score
 
+def results_table(season_id):
+    # get all the race reults for this season
+    results = get_race_results(season_id)
+    # get all the predictions
+
+
 #-------------------------------------------------------------------------------
 #   Championship calculations
 #-------------------------------------------------------------------------------
@@ -190,11 +196,13 @@ def get_constructors_champ(season_id):
 def get_champ(results, name_field, key_field):
     champ = []
     rank = 0
+    counter = 0
     last_score = 1000
     for res in results:
+        counter += 1
         if res['score'] > 0:
             if res['score'] < last_score:
-                rank += 1
+                rank = counter
             entry = {'rank' : rank,
                      'name' : res[name_field],
                      'key'  : res[key_field],
