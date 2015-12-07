@@ -1,0 +1,15 @@
+<div class="content">
+{% if season %}
+    {% for s in season %}
+    <div class="content">
+        <table>
+            <tr>
+                <th>Formula 1 {{s.name}} Season</th>
+                <th><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username}}</a></th>
+                <th>{{score}} points</th>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+{% endif %}
+</div>

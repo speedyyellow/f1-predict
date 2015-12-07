@@ -1,3 +1,5 @@
+import datetime
+from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import views
@@ -5,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 
 from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition
+from .forms import PredictionForm, PredictionPositionForm
 
 #-------------------------------------------------------------------------------
 #   Views
@@ -64,6 +67,53 @@ def driver_overview(request, season_id, driver_id):
     			'driver' : driver,
                'result_list' : results }
     return render(request, 'predict/driver_overview.html', context)
+
+@login_required
+def user_profile(request, season_id, user_id):
+    season = Season.objects.filter(name=season_id)
+    race_list = get_races(season_id)
+    team_list = get_entry_list(season_id)
+    dc = get_drivers_champ(season_id)
+    cc = get_constructors_champ(season_id)
+    score = score_season(request.user, season[0])
+    prediction = get_latest_user_prediction(request.user)
+
+    context = {'user': request.user, 'season_list': get_season_list(),
+                'season': season,
+                'race_list': race_list,
+                'team_list' : team_list,
+                'driver_champ' : dc,
+                'team_champ' : cc,
+                'score' : score,
+                'prediction' : prediction}
+
+    if request.method == "POST":
+        form = PredictionForm(request.POST)
+        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition()) for x in range(0,10)]
+        if form.is_valid() and all([pf.is_valid() for pf in pforms]):
+            pred = form.save(commit=False)
+            pred.user = request.user
+            pred.created = timezone.now()
+            pred.save()
+            pos = 1
+            for pf in pfroms:
+                new_pos = pf.save(commit=false)
+                new_pos.prediction = pred
+                new_pos.position = FinishingPosition.objects.get(position=pos)
+                pos +=1
+                new_pos.save()
+
+    else:
+        form = PredictionForm(instance=prediction)
+        pforms = []
+        for  x in range(0,10):
+            pforms.append(PredictionPositionForm(prefix=str(x), instance=PredictionPosition(prediction=prediction)))
+
+    context['form'] = form
+    context['pfroms'] = pforms
+    return render(request, 'predict/user_profile.html', context)
+
+
 
 #-------------------------------------------------------------------------------
 #   Query wrappers
@@ -126,6 +176,13 @@ def get_race_result_top_ten(result):
 def get_user_prediction(user, season_round):
     try:
         prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.date).latest('created')
+        return prediction
+    except Exception, e:
+        return Prediction()
+
+def get_latest_user_prediction(user):
+    try:
+        prediction = Prediction.objects.filter(user__pk=user.pk).latest('created')
         return prediction
     except Exception, e:
         return Prediction()

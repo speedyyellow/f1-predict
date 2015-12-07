@@ -1,1 +1,32 @@
-<p>Welcome back {{user.username}}!</p>
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
+
+<!-- The season list sidebar -->
+{% block sidebar %}
+{% include "predict/season_list.html" %}
+{% endblock %}
+
+<!-- The main page content -->
+{% block page-content %}
+<div class="content">
+    <div class="page-row">
+        {% include "predict/season_header.html" %}
+    </div>
+    <div class="page-row">
+        <p>Hi {{user.username}}, you can update your predictions on this page.</p>
+    </div>
+    </div class="page-row">
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            <table class="content">
+                {{ form.as_table }}
+                {% for p in pforms %}
+                    {{p}}
+                {% endfor %}
+                <tr><button type="submit" class="save btn btn-default">Save</button></tr>
+            </table>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

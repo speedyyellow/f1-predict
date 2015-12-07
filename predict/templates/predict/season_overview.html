@@ -10,15 +10,7 @@
 <!-- The main page content -->
 {% block page-content %}
 <div class="page-row">
-    <div class="content">
-    {% if season %}
-        {% for s in season %}
-            <table>
-                <tr><th>Formula 1 {{s.name}} Season</th><th>{{user.username}}</th><th>{{score}} points</th></tr>
-            </table>
-        {% endfor %}
-    {% endif %}
-    </div>
+    {% include "predict/season_header.html" %}
 </div>
 <div class="page-row">
     {% include "predict/driver_champ.html" %}
