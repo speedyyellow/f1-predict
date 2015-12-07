@@ -69,12 +69,14 @@ class Prediction(models.Model):
     pole_position = models.ForeignKey(TeamDriver, related_name="prediction_pole_position", null=True)
     fastest_lap = models.ForeignKey(TeamDriver, related_name="prediction_fastest_lap", null=True)
     def __str__(self):
-        return self.user.email + " " + str(self.created)
+        return self.user.username + " " + str(self.created)
 
 class PredictionPosition(models.Model):
     prediction = models.ForeignKey(Prediction)
     position = models.ForeignKey(FinishingPosition)
     driver = models.ForeignKey(TeamDriver)
+    def __str__(self):
+        return str(self.position.position) + " " + self.driver.driver.name
 
 
 

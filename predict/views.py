@@ -6,7 +6,7 @@ from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 
-from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition
+from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
 from .forms import PredictionForm, PredictionPositionForm
 
 #-------------------------------------------------------------------------------
@@ -42,8 +42,10 @@ def race_overview(request, season_id, country_id):
     if result != None:
         result_positions = get_race_result_positions(result)
         pred = get_user_prediction(request.user, race)
+        pred_positions = get_prediction_positions(pred)
         score = score_round(pred, result)
         context['results'] = result_positions
+        context['predictions'] = pred_positions
         context['score'] = score
 
     return render(request, 'predict/race_overview.html', context)
@@ -71,26 +73,15 @@ def driver_overview(request, season_id, driver_id):
 @login_required
 def user_profile(request, season_id, user_id):
     season = Season.objects.filter(name=season_id)
-    race_list = get_races(season_id)
-    team_list = get_entry_list(season_id)
-    dc = get_drivers_champ(season_id)
-    cc = get_constructors_champ(season_id)
     score = score_season(request.user, season[0])
-    prediction = get_latest_user_prediction(request.user)
-    predictions = get_prediction_positions(request.user)
+    context = {'user': request.user, 'season_list': get_season_list(), 'season': season, 'score' : score}
 
-    context = {'user': request.user, 'season_list': get_season_list(),
-                'season': season,
-                'race_list': race_list,
-                'team_list' : team_list,
-                'driver_champ' : dc,
-                'team_champ' : cc,
-                'score' : score,
-                'prediction' : prediction}
+    prediction = get_latest_user_prediction(request.user)
+    predictions = get_prediction_positions(prediction)
 
     if request.method == "POST":
         form = PredictionForm(request.POST)
-        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition()) for x in range(0,10)]
+        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition()) for x in range(1,11)]
         if form.is_valid() and all([pf.is_valid() for pf in pforms]):
             pred = form.save(commit=False)
             pred.user = request.user
@@ -98,7 +89,7 @@ def user_profile(request, season_id, user_id):
             pred.save()
             pos = 1
             for pf in pforms:
-                new_pos = pf.save(commit=false)
+                new_pos = pf.save(commit=False)
                 new_pos.prediction = pred
                 new_pos.position = FinishingPosition.objects.get(position=pos)
                 pos +=1
@@ -107,7 +98,7 @@ def user_profile(request, season_id, user_id):
     else:
         if prediction == None:
             form = PredictionForm(instance=Prediction())
-            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition()) for x in range(0,10)]
+            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition()) for x in range(1,11)]
         else:            
             form = PredictionForm(instance=prediction)
             pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p) for p in predictions]

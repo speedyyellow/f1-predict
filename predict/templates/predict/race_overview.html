@@ -8,31 +8,46 @@
 
 <!-- The main page content -->
 {% block page-content %}
+{% if race %}
+<div class="page-row">
 <div class="content">
-    <div class="page-row">
-    {% if race %}
-    	<table>
-        <tr><th>{{race.season.name}} {{race.circuit.country}} Grand Prix</th><th>{{score}} points</th></tr>
-        <tr><td>{{race.circuit.name}}</td><td>{{race.date}}</td></tr>
-        </table>
-    {% endif %}
-    </div>
-    <div class="page-row">
-    {% if results %}
-        <h3>Results</h3>
+
+	<table>
+    <tr><th>{{race.season.name}} {{race.circuit.country}} Grand Prix</th><th>{{score}} points</th></tr>
+    <tr><td>{{race.circuit.name}}</td><td>{{race.date}}</td></tr>
+    </table>
+</div>
+</div>
+{% endif %}
+
+
+{% if results %}
+<div class="page-row">
+<div class="content">
+  <h3>Results</h3>
+    <table>
+    <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
+    {% for entry in results %}
+        <tr>
+            <td>{{ entry.position.position }}</td>
+            <td>{{ entry.driver.driver.number }}</td>
+            <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+            <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+            <td>{{ entry.position.points }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    {% if predictions %}
         <table>
-        <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
-        {% for entry in results %}
-            <tr>
-                <td>{{ entry.position.position }}</td>
-                <td>{{ entry.driver.driver.number }}</td>
-                <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
-                <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
-                <td>{{ entry.position.points }}</td>
-            </tr>
+        <tr><th>Prediction</th></tr>
+        {% for p in predictions %}
+            <tr><td>{{p.driver.driver.name}}</td></tr>
         {% endfor %}
         </table>
     {% endif %}
-    </div>
 </div>
+</div>
+{% endif %}
+
 {% endblock %}
