@@ -27,7 +27,7 @@
         {% for result in result_list %}
         <tr>
         <td>{{result.result.season_round.date}}</td>
-        <td><a href='/predict/{{result.result.season_round.season.name}}/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+        <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
         <td>{{result.position.position}}</td>
         <td>{{result.position.points}}</td>
         </tr>

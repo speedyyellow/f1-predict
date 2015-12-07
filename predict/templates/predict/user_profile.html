@@ -8,25 +8,30 @@
 
 <!-- The main page content -->
 {% block page-content %}
-<div class="content">
-    <div class="page-row">
-        {% include "predict/season_header.html" %}
-    </div>
-    <div class="page-row">
-        <p>Hi {{user.username}}, you can update your predictions on this page.</p>
-    </div>
-    </div class="page-row">
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        <form method="POST" class="post-form">{% csrf_token %}
-            <table class="content">
-                {{ form.as_table }}
-                {% for p in pforms %}
-                    {{p}}
-                {% endfor %}
-                <tr><button type="submit" class="save btn btn-default">Save</button></tr>
-            </table>
-            
-        </form>
-    </div>
+<div class="page-row">
+    {% include "predict/season_header.html" %}
+</div>
+
+{% if error_message %}
+</div class="page-row">
+    <div class="content">
+	    <p><strong>{{ error_message }}</strong></p>
+	</div>
+</div>
+{% endif %}
+
+<div class="page-row">
+    <div class="content">
+    <h2>Prediction</h2>
+	    <form method="POST">{% csrf_token %}
+	        <table>
+ 	            {{ form.as_table }}
+	            {% for p in pforms %}
+	                {{p.as_table}}
+	            {% endfor %}                 
+	        	<tr><th></th><td><button type="submit" class="save btn btn-default">Save</button></td></tr>
+			</table>            
+	    </form>
+	 </div>
 </div>
 {% endblock %}

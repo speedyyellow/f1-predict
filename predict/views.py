@@ -77,6 +77,7 @@ def user_profile(request, season_id, user_id):
     cc = get_constructors_champ(season_id)
     score = score_season(request.user, season[0])
     prediction = get_latest_user_prediction(request.user)
+    predictions = get_prediction_positions(request.user)
 
     context = {'user': request.user, 'season_list': get_season_list(),
                 'season': season,
@@ -96,7 +97,7 @@ def user_profile(request, season_id, user_id):
             pred.created = timezone.now()
             pred.save()
             pos = 1
-            for pf in pfroms:
+            for pf in pforms:
                 new_pos = pf.save(commit=false)
                 new_pos.prediction = pred
                 new_pos.position = FinishingPosition.objects.get(position=pos)
@@ -104,13 +105,15 @@ def user_profile(request, season_id, user_id):
                 new_pos.save()
 
     else:
-        form = PredictionForm(instance=prediction)
-        pforms = []
-        for  x in range(0,10):
-            pforms.append(PredictionPositionForm(prefix=str(x), instance=PredictionPosition(prediction=prediction)))
+        if prediction == None:
+            form = PredictionForm(instance=Prediction())
+            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition()) for x in range(0,10)]
+        else:            
+            form = PredictionForm(instance=prediction)
+            pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p) for p in predictions]
 
     context['form'] = form
-    context['pfroms'] = pforms
+    context['pforms'] = pforms
     return render(request, 'predict/user_profile.html', context)
 
 
@@ -161,7 +164,6 @@ def get_race(season_id, country_id):
         return races[0]
     else:
         return None
-
 
 def get_races(season_id):
     return SeasonRound.objects.filter(season__name=season_id).order_by('date')
