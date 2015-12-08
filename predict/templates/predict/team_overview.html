@@ -10,10 +10,10 @@
 {% block page-content %}
 <div class="page-row">
 <div class="content">
-{% if team %}
+{% if driver_list %}
     <table>
-    <tr><th>{{team.name}}</th></tr>
-    <tr><td>{{team.engine}}</td></tr>
+    <tr><th>{{driver_list.first.team.name}}</th></tr>
+    <tr><td>{{driver_list.first.engine.name}}</td></tr>
     </table>
 {% endif %}
 </div>

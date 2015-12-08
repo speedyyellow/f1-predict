@@ -4,6 +4,7 @@ from django.contrib import admin
 from .models import Circuit
 from .models import Driver
 from .models import Team
+from .models import Engine
 from .models import Season
 from .models import SeasonRound
 from .models import TeamDriver
@@ -20,7 +21,7 @@ class RoundInline(admin.TabularInline ):
 
 class TeamDriverInline(admin.TabularInline ):
     model = TeamDriver
-    fields = ['team', 'driver']
+    fields = ['team', 'engine', 'driver']
     extra = 3
 
 class SeasonAdmin(admin.ModelAdmin):
@@ -47,6 +48,7 @@ class PredictionAdmin(admin.ModelAdmin):
 admin.site.register(Circuit)
 admin.site.register(Driver)
 admin.site.register(Team)
+admin.site.register(Engine)
 admin.site.register(FinishingPosition)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(RaceResult, ResultAdmin)

@@ -56,7 +56,6 @@ def team_overview(request, season_id, team_id):
     drivers = get_team_drivers(season_id, team)
     results = get_team_results(season_id, team)
     context = {'user': request.user, 'season_list': get_season_list(),
-    			'team' : team,
                'driver_list' : drivers,
                'result_list' : results }
     return render(request, 'predict/team_overview.html', context)

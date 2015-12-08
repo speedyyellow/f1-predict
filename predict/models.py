@@ -4,7 +4,11 @@ from django.contrib.auth.models import User
 # Core data
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    engine = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
+
+class Engine(models.Model):
+    name = models.CharField(max_length=50)
     def __str__(self):
         return self.name
 
@@ -18,7 +22,7 @@ class Circuit(models.Model):
     country = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     def __str__(self):
-        return self.name
+        return self.country
 
 class FinishingPosition(models.Model):
     position = models.IntegerField()
@@ -37,6 +41,7 @@ class TeamDriver(models.Model):
     season = models.ForeignKey(Season)
     team = models.ForeignKey(Team)
     driver = models.ForeignKey(Driver)
+    engine = models.ForeignKey(Engine, null=True)
     def __str__(self):
         return self.driver.name + " (" + self.team.name + ")"
 

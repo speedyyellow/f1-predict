@@ -20,7 +20,9 @@ table {
 */
 
 .sidebar {
-    position: fixed;
+    /*position: fixed;*/
+    width: 15%;
+    float: left;
     text-decoration: none;
 }
 
@@ -30,9 +32,10 @@ th a:visited {color: white; text-decoration: none; }
 th a:hover {color: white; text-decoration: none; }
 
 .page-content {
-    position: relative;
+/*    position: relative;
     left: 180px;
-    width: 80%;
+*/    width: 85%;
+    float: right;
 }
 
 .page-row{
