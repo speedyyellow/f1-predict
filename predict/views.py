@@ -98,7 +98,7 @@ def user_profile(request, season_id, user_id):
     else:
         if prediction == None:
             form = PredictionForm(instance=Prediction(), label_suffix='')
-            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition(), label_suffix=str(x)) for x in range(1,11)]
+            pforms = [PredictionPositionForm(prefix=str(x), instance=PredictionPosition(), label_suffix=str(x)) for x in range(1,11)]
         else:            
             form = PredictionForm(instance=prediction, label_suffix='')
             pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p, label_suffix=str(p.position.position)) for p in predictions]
@@ -171,18 +171,21 @@ def get_user_prediction(user, season_round):
         prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.date).latest('created')
         return prediction
     except Exception, e:
-        return Prediction()
+        return None
 
 def get_latest_user_prediction(user):
     try:
         prediction = Prediction.objects.filter(user__pk=user.pk).latest('created')
         return prediction
     except Exception, e:
-        return Prediction()
+        return None
 
 def get_prediction_positions(prediction):
-    pred_positions = PredictionPosition.objects.filter(prediction__pk=prediction.pk).order_by('position__position')[:10]
-    return pred_positions
+    try:
+        pred_positions = PredictionPosition.objects.filter(prediction__pk=prediction.pk).order_by('position__position')[:10]
+        return pred_positions
+    except Exception, e:
+        return None
 
 #-------------------------------------------------------------------------------
 #   Score calculations
@@ -202,6 +205,8 @@ def score_season(user, season):
 
 def score_round(prediction, race_result):
     score = 0
+    if prediction == None:
+        return score
 
     # pole & fastest lap get 5 points each
     if prediction.pole_position == race_result.pole_position:
