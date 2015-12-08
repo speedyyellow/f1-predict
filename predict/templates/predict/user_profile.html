@@ -25,6 +25,7 @@
     <h2>Prediction</h2>
 	    <form method="POST">{% csrf_token %}
 	        <table>
+                <tr><th>Last Updated</th><td>{{form.instance.created}}</td></tr>
  	            {{ form.as_table }}
 	            {% for p in pforms %}
 	                {{p.as_table}}

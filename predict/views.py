@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
 from .forms import PredictionForm, PredictionPositionForm
@@ -96,11 +97,11 @@ def user_profile(request, season_id, user_id):
 
     else:
         if prediction == None:
-            form = PredictionForm(instance=Prediction())
-            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition()) for x in range(1,11)]
+            form = PredictionForm(instance=Prediction(), label_suffix='')
+            pforms = [PredictionPositionForm(prefix=str(x), instance=PositionPosition(), label_suffix=str(x)) for x in range(1,11)]
         else:            
-            form = PredictionForm(instance=prediction)
-            pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p) for p in predictions]
+            form = PredictionForm(instance=prediction, label_suffix='')
+            pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p, label_suffix=str(p.position.position)) for p in predictions]
 
     context['form'] = form
     context['pforms'] = pforms

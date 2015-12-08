@@ -58,9 +58,9 @@ display: block;
 float: left;
 }
 .content th {
-background-color: rgb(230, 75, 75);
+background-color: rgb(100, 100, 100);
 font-weight: normal;
-font-size: 120%;
+font-size: 110%;
 color: white;
 padding: 15px 40px;
 text-align: center;
