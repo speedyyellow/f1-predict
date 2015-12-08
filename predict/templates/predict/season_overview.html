@@ -2,22 +2,35 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
-<div class="page-row">
-    {% include "predict/season_header.html" %}
+<div class="row">
+	<div class="large-12 columns">
+        {% if season %}
+        {% for s in season %}
+          <h2>Formula 1 {{s.name}} Season</h2>
+         {% endfor %}
+         {% endif %}
+    	<p>Results chart goes here</p>
+    </div>
 </div>
-<div class="page-row">
+
+<div class="row">
+	<div class="large-6 columns">
     {% include "predict/driver_champ.html" %}
+    </div>
+	<div class="large-6 columns">
     {% include "predict/team_champ.html" %}
+    </div>
 </div>
-<div class="page-row">
+
+<div class="row">
+	<div class="large-6 columns">
     {% include "predict/calendar.html" %}
+    </div>
+	<div class="large-6 columns">
     {% include "predict/entry_list.html" %}
+    </div>
 </div>
 {% endblock %}

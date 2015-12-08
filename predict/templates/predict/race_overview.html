@@ -1,33 +1,25 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
-
 <!-- The main page content -->
 {% block page-content %}
 {% if race %}
-<div class="page-row">
-<div class="content">
-
-	<table>
-    <tr><th>{{race.season.name}} {{race.circuit.country}} Grand Prix</th><th>{{score}} points</th></tr>
-    <tr><td>{{race.circuit.name}}</td><td>{{race.date}}</td></tr>
-    </table>
+<div class="row">
+    <div class="large-12 columns">
+        <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix {{score}} points</h3>
+        <h4>{{race.circuit.name}}</h4><h4>{{race.date}}</h4>
 </div>
 </div>
 {% endif %}
 
 
 {% if results %}
-<div class="page-row">
-<div class="content">
+<div class="row">
   <h3>Results</h3>
+  <div class="large-10 columns">
     <table>
-    <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
-    {% for entry in results %}
+        <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
+        {% for entry in results %}
         <tr>
             <td>{{ entry.position.position }}</td>
             <td>{{ entry.driver.driver.number }}</td>
@@ -35,16 +27,17 @@
             <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
             <td>{{ entry.position.points }}</td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </table>
-
+</div>
+<div class="large-2 columns">
     {% if predictions %}
-        <table>
+    <table>
         <tr><th>Prediction</th></tr>
         {% for p in predictions %}
-            <tr><td>{{p.driver.driver.name}}</td></tr>
+        <tr><td>{{p.driver.driver.name}}</td></tr>
         {% endfor %}
-        </table>
+    </table>
     {% endif %}
 </div>
 </div>

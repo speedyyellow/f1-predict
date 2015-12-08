@@ -1,41 +1,36 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
 {% if driver %}
-    <div class="page-row">
-    <div class="content">
+<div class="row">
+    <div class="large-6 columns">
+    <h3>Driver</h3>
     <table>
-    <tr><th>{{driver.driver.name}}</th><th>{{driver.driver.number}}</th></tr>
-    <tr><td><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></td><td>{{driver.engine.name}}</td></tr>
+        <tr><td>{{driver.driver.name}}</th><th>{{driver.driver.number}}</td></tr>
+        <tr><td><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></td><td>{{driver.engine.name}}</td></tr>
     </table>
     </div>
-    </div>
 
-    {% if result_list %}
-    <div class="page-row">
-    <div class="content">
-        <h3>Results</h3>
-        <table>
+{% if result_list %}
+    <div class="large-6 columns">
+    <h3>Results</h3>
+    <table>
         <tr><th>Date</th><th>Grand Prix</th><th>Position</th><th>Points</th></tr>
         {% for result in result_list %}
         <tr>
-        <td>{{result.result.season_round.date}}</td>
-        <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
-        <td>{{result.position.position}}</td>
-        <td>{{result.position.points}}</td>
+            <td>{{result.result.season_round.date}}</td>
+            <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+            <td>{{result.position.position}}</td>
+            <td>{{result.position.points}}</td>
         </tr>
         {% endfor %}
-        </table>
+    </table>
     </div>
-    </div>
-    {% endif %}
+</div>
+{% endif %}
 {% endif %}
 </div>
 {% endblock %}

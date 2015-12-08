@@ -2,18 +2,13 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
+
 
 <!-- The main page content -->
 {% block page-content %}
-<div class="page-row">
-    <div class="content">
-        <table>
-            <tr><th>F1 Prediction Game</th></tr>
-        </table>
-    </div>
+<div class="row">
+	<div class="panel">
+		<h1>F1 Prediction Game</h1>
+	</div>
 </div>
 {% endblock %}

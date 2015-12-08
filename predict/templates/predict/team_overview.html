@@ -1,59 +1,52 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
-<div class="page-row">
-<div class="content">
-{% if driver_list %}
-    <table>
-    <tr><th>{{driver_list.first.team.name}}</th></tr>
-    <tr><td>{{driver_list.first.engine.name}}</td></tr>
-    </table>
-{% endif %}
-</div>
-</div>
-
-<div class="page-row">
-<div class="content">
-{% if driver_list %}
-    <h2>Drivers</h2>
-    <table>
-    <tr><th>Name</th><th>Number</th></tr>
-    {% for driver in driver_list %}
-    <tr><td><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a><td>{{driver.driver.number}}</td> </tr>
-    {% endfor %}
-    </table>
-{% endif %}
-</div>
+<div class="row">
+    {% if driver_list %}
+    <div class="large-12 columns">
+        <h3>{{driver_list.first.team.name}}<h3>
+        <h3>{{driver_list.first.engine.name}}</h3>
+        </table>
+    </div>
+    {% endif %}
 </div>
 
-<div class="page-row">
-<div class="content">
-{% if result_list %}
-    <h2>Results</h2>
-    <table>
-    <tr>
-    <th>Date</th>
-    <th>Grand Prix</th>
-    <th>Driver</th>
-    <th>Finish</th>
-    </tr>
-    {% for result in result_list %}
-    <tr>
-    <td>{{result.result.season_round.date}}</td>
-    <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
-    <td><a href='/predict/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
-    <td>{{result.position.position}}</td>
-    </tr>
-    {% endfor %}
-    </table>
-{% endif %}
-</div>
+<div class="row">
+    {% if driver_list %}
+    <div class="large-4 columns">
+        <h3>Drivers</h3>
+        <table>
+            <tr><td>Name</th><th>Number</td></tr>
+            {% for driver in driver_list %}
+            <tr><td><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a><td>{{driver.driver.number}}</td> </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+    {% if result_list %}
+    <div class="large-8 columns">
+        <h3>Results</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Grand Prix</th>
+                <th>Driver</th>
+                <th>Finish</th>
+            </tr>
+            {% for result in result_list %}
+            <tr>
+                <td>{{result.result.season_round.date}}</td>
+                <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+                <td><a href='/predict/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
+                <td>{{result.position.position}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

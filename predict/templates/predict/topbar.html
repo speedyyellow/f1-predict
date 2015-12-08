@@ -1,0 +1,24 @@
+  <div class="row">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <ul class="menu">
+          <li class="menu-text">F1 Predict</li>
+          <li><a href="/predict/">Home</a></li>
+          {% for season in season_list %}
+          <li><a href="/predict/{{ season.name }}/">{{ season.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="top-bar-right">
+        <ul class="menu">
+          {% if season %}
+          {% for s in season %}
+          <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username}}</a></li>
+          <li>{{score}} points</li>
+          {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+

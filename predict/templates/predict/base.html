@@ -2,22 +2,21 @@
 <html lang="en">
 {% load staticfiles %}
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'predict/style.css' %}" />
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'predict/app.css' %}" />
     <title>{% block title %}F1 Prediction Game{% endblock %}</title>
 </head>
 
 <body>
-    <div class="sidebar">
-        {% block sidebar %}
-        <p>Sidebar</p>
-        {% endblock %}
-    </div>
+    {% include "predict/topbar.html" %}
 
-    <div class="page-content">
-        {% block page-content %}
-        <p>Page Content</p>
-        {% endblock %}
-    </div>
+    {% block page-content %}
+    <p>Page Content</p>
+    {% endblock %}
+
+    <script src="{% static 'predict/app.js' %}"></script>
 </body>
 </html>
 
