@@ -1,17 +1,22 @@
-
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
-
-
 
 <!-- The main page content -->
 {% block page-content %}
 <div class="row">
-	<div class="panel">
+	<div class="large12 columns">
 		<h1>F1 Prediction Game</h1>
-	</div>
-    {% if not user.is_authenticated %}
-    <a href="/predict/accounts/login">Login</a> or <a href="/predict/register/">Register</a>
-    {% endif %}
+        <h3>Introduction</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi odio quidem omnis corporis, labore temporibus laboriosam et perferendis ipsam minima quos cupiditate amet vero eos ea qui tempore atque, incidunt itaque iste magnam a sequi. Impedit laboriosam, numquam id quia aut consectetur eveniet, aperiam, repellendus esse, illo voluptatibus. Eveniet, aperiam!</p>
+        <h3>Rules</h3>
+        <p>Atque rerum fuga magni ab, aspernatur alias nobis, dolor odit. Eaque dolore non repudiandae numquam, quia aperiam reprehenderit totam voluptatem dicta adipisci tenetur quos facere natus recusandae fugit velit harum maiores unde dolorem dolorum sunt libero autem. Vitae sapiente accusantium iusto quidem ullam nisi dolorem corporis obcaecati, voluptate dignissimos quaerat.</p>
+        <h3>Scoring</h3>
+        <p>Qui reiciendis odio voluptatum placeat repudiandae, quasi praesentium est recusandae dolorem perferendis dolor accusamus sint molestiae. Iure modi nobis possimus, aperiam beatae! Tempore officia et delectus eos dolores iure possimus eligendi laudantium facere. Nihil eveniet magni, ex rerum vitae temporibus dicta qui. Eius minima, ad modi non earum ratione mollitia!</p>
+
+
+        {% if not user.is_authenticated %}
+        <a href="/predict/accounts/login">Login</a> or <a href="/predict/register/">Register</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+import time
 import datetime
 from django.utils import timezone
 from django.shortcuts import render
@@ -73,11 +74,9 @@ def driver_overview(request, season_id, driver_id):
 
 @login_required
 def user_profile(request, season_id, user_id):
-    season = Season.objects.filter(name=season_id)
-    score = score_season(request.user, season[0])
     context = get_context_season(request, season_id)
 
-    prediction = get_latest_user_prediction(request.user)
+    prediction = get_latest_user_prediction(request.user, season_id)
     predictions = get_prediction_positions(prediction)
 
     if request.method == "POST":
@@ -124,10 +123,9 @@ def get_context_season(request, season_id):
         context['season'] = season
         score = score_season(request.user, season[0])
         context['season_score'] = score
+        context['season_results'] = results_table(season_id)
 
     return context
-
-
 
 def get_season_list():
     return Season.objects.order_by('-name')
@@ -152,8 +150,8 @@ def get_team_results(season_id, team):
     results = ResultPosition.objects.filter(result__season_round__season__name=season_id).filter(driver__team__pk=team.pk).order_by('result__season_round__date','position__position')
     return results
 
-def get_race_results(season):
-    results = RaceResult.objects.filter(season_round__season__name=season.name).order_by('season_round__date')
+def get_race_results(season_id):
+    results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__date')
     if results.count() > 0:
         return results
     else:
@@ -190,11 +188,16 @@ def get_user_prediction(user, season_round):
     except Exception, e:
         return None
 
-def get_latest_user_prediction(user):
+def get_latest_user_prediction(user, season_id):
     try:
-        prediction = Prediction.objects.filter(user__pk=user.pk).latest('created')
+        # create year bounds for the query
+        print season_id
+        begin   = season_id+"-01-01"
+        end     = season_id+"-12-31"
+        prediction = Prediction.objects.filter(user__pk=user.pk,created__gte=begin, created__lte=end).latest('created')
         return prediction
     except Exception, e:
+        print e
         return None
 
 def get_prediction_positions(prediction):
@@ -204,6 +207,15 @@ def get_prediction_positions(prediction):
     except Exception, e:
         return None
 
+def get_active_users(season_id):
+    begin   = season_id+"-01-01"
+    end     = season_id+"-12-31"
+    predictions = Prediction.objects.filter(created__gte=begin, created__lte=end)
+    userset = ([])
+    for p in predictions:
+        userset.append(p.user)
+    return userset
+
 #-------------------------------------------------------------------------------
 #   Score calculations
 #-------------------------------------------------------------------------------
@@ -211,7 +223,7 @@ def get_prediction_positions(prediction):
 def score_season(user, season):
     score = 0
     # get the season results
-    results = get_race_results(season)
+    results = get_race_results(season.name)
     if results != None:
         for res in results:
             # get the user's prediction for this round
@@ -247,10 +259,19 @@ def score_round(prediction, race_result):
 
     return score
 
+
 def results_table(season_id):
     # get all the race reults for this season
     results = get_race_results(season_id)
-    # get all the predictions
+    users = get_active_users(season_id)
+    table = {}
+    for u in users:
+        table[u.username] = []
+        for r in results:
+            p = get_user_prediction(u, r.season_round)
+            table[u.username].append(score_round(p, r))
+        #table[u.username].append(score_season(u, ))
+    return table
 
 
 #-------------------------------------------------------------------------------
