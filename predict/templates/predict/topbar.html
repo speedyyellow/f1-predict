@@ -17,6 +17,9 @@
           <li>{{score}} points</li>
           {% endfor %}
           {% endif %}
+          {% if user.is_authenticated %}
+          <li><a href="/predict/accounts/logout/">Logout</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
