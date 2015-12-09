@@ -14,7 +14,7 @@
           {% if season %}
           {% for s in season %}
           <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username}}</a></li>
-          <li>{{score}} points</li>
+          <li>{{season_score}} points</li>
           {% endfor %}
           {% endif %}
           {% if user.is_authenticated %}

@@ -15,30 +15,31 @@ from .forms import PredictionForm, PredictionPositionForm
 #-------------------------------------------------------------------------------
 
 def index(request):
-    context = {'user': request.user, 'season_list': get_season_list()}
+    context = get_context(request)
     return render(request, 'predict/index.html', context)
 
 @login_required
 def season_overview(request, season_id):
-    season = Season.objects.filter(name=season_id)
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
     race_list = get_races(season_id)
     team_list = get_entry_list(season_id)
     dc = get_drivers_champ(season_id)
     cc = get_constructors_champ(season_id)
-    score = score_season(request.user, season[0])
-    context = {'user': request.user, 'season_list': get_season_list(),
-                'season': season,
-                'race_list': race_list,
-                'team_list' : team_list,
-                'driver_champ' : dc,
-                'team_champ' : cc,
-                'score' : score }
+    context['race_list'] = race_list
+    context['team_list'] = team_list
+    context['driver_champ'] = dc
+    context['team_champ'] = cc
     return render(request, 'predict/season_overview.html', context)
 
 @login_required
 def race_overview(request, season_id, country_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+
     race = get_race(season_id, country_id)
-    context = {'user': request.user, 'season_list': get_season_list(), 'race' : race, 'score' : 0}
+    context['race'] = race
     result = get_race_result(season_id, country_id)
     if result != None:
         result_positions = get_race_result_positions(result)
@@ -47,7 +48,7 @@ def race_overview(request, season_id, country_id):
         score = score_round(pred, result)
         context['results'] = result_positions
         context['predictions'] = pred_positions
-        context['score'] = score
+        context['round_score'] = score
 
     return render(request, 'predict/race_overview.html', context)
 
@@ -56,25 +57,25 @@ def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
     results = get_team_results(season_id, team)
-    context = {'user': request.user, 'season_list': get_season_list(),
-               'driver_list' : drivers,
-               'result_list' : results }
+    context = get_context_season(request, season_id)
+    context['driver_list'] = drivers
+    context['result_list'] = results
     return render(request, 'predict/team_overview.html', context)
 
 @login_required
 def driver_overview(request, season_id, driver_id):
     driver = get_driver(season_id, driver_id)
     results = get_driver_results(season_id, driver_id)
-    context = {'user': request.user, 'season_list': get_season_list(),
-    			'driver' : driver,
-               'result_list' : results }
+    context = get_context_season(request, season_id)
+    context['driver'] = driver
+    context['result_list'] = results
     return render(request, 'predict/driver_overview.html', context)
 
 @login_required
 def user_profile(request, season_id, user_id):
     season = Season.objects.filter(name=season_id)
     score = score_season(request.user, season[0])
-    context = {'user': request.user, 'season_list': get_season_list(), 'season': season, 'score' : score}
+    context = get_context_season(request, season_id)
 
     prediction = get_latest_user_prediction(request.user)
     predictions = get_prediction_positions(prediction)
@@ -112,6 +113,22 @@ def user_profile(request, season_id, user_id):
 #-------------------------------------------------------------------------------
 #   Query wrappers
 #-------------------------------------------------------------------------------
+def get_context(request):
+    context = {'user': request.user, 'season_list': get_season_list()}
+    return context
+
+def get_context_season(request, season_id):
+    context = get_context(request)
+    season = Season.objects.filter(name=season_id)
+    if season.count > 0:
+        context['season'] = season
+        score = score_season(request.user, season[0])
+        context['season_score'] = score
+
+    return context
+
+
+
 def get_season_list():
     return Season.objects.order_by('-name')
 

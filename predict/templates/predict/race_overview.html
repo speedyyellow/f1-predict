@@ -5,9 +5,12 @@
 {% block page-content %}
 {% if race %}
 <div class="row">
-    <div class="large-12 columns">
-        <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix {{score}} points</h3>
+    <div class="large-10 columns">
+        <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
         <h4>{{race.circuit.name}}</h4><h4>{{race.date}}</h4>
+    </div>
+    <div class="large-2 columns">
+        <h3>{{round_score}} points</h3>
     </div>
 </div>
 {% endif %}
