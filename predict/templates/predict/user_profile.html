@@ -1,15 +1,13 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-
-
 <!-- The main page content -->
 {% block page-content %}
 
 {% if error_message %}
 </div class="row">
 <div class="large12 columns">
-   <p><strong>{{ error_message }}</strong></p>
+ <p><strong>{{ error_message }}</strong></p>
 </div>
 </div>
 {% endif %}
@@ -18,7 +16,7 @@
     <div class="large12 columns">
         <h3>Prediction</h3>
         <form method="POST">{% csrf_token %}
-           <table>
+         <table>
             <tr><th>Last Updated</th><td>{{form.instance.created}}</td></tr>
             {{ form.as_table }}
             {% for p in pforms %}

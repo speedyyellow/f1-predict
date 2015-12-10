@@ -1,24 +1,20 @@
-<div class="row">
-    <div class="large-12">
-        {% if season_results and race_list %}
-        <table>
-            <tr>
-                <th>Player</th>
-                {% for race in race_list %}
-                <th>{{race.circuit.country|slice:":2"}}</th>
-                {% endfor %}
-                <th>Score</th>
-            </tr>
-            {% for score, name, results in season_results %}
-            <tr>
-                <th>{{name}}</th>
-                {% for s in results %}
-                <td>{{s}}</td>
-                {% endfor %}
-                <td>{{score}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
-    </div>
-</div>
+{% if season_results and race_list %}
+<table>
+    <tr>
+        <th>Player</th>
+        {% for race in race_list %}
+        <th>{{race.circuit.country|slice:":2"|upper}}</th>
+        {% endfor %}
+        <th>Score</th>
+    </tr>
+    {% for score, name, results in season_results %}
+    <tr>
+        <th>{{name|capfirst}}</th>
+        {% for s in results %}
+        <td>{{s}}</td>
+        {% endfor %}
+        <td>{{score}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
