@@ -80,8 +80,8 @@ def user_profile(request, season_id, user_id):
     predictions = get_prediction_positions(prediction)
 
     if request.method == "POST":
-        form = PredictionForm(request.POST)
-        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition(), label_suffix=str(x)) for x in range(1,11)]
+        form = PredictionForm(season_id, request.POST)
+        pforms = [PredictionPositionForm(season_id, request.POST, prefix=str(x), instance=PredictionPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
         if form.is_valid() and all([pf.is_valid() for pf in pforms]):
             pred = form.save(commit=False)
             pred.user = request.user
@@ -97,11 +97,11 @@ def user_profile(request, season_id, user_id):
 
     else:
         if prediction == None:
-            form = PredictionForm(instance=Prediction(), label_suffix='')
-            pforms = [PredictionPositionForm(prefix=str(x), instance=PredictionPosition(), label_suffix=str(x)) for x in range(1,11)]
+            form = PredictionForm(season_id, instance=Prediction(), label_suffix='')
+            pforms = [PredictionPositionForm(season_id, prefix=str(x), instance=PredictionPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
         else:            
-            form = PredictionForm(instance=prediction, label_suffix='')
-            pforms = [PredictionPositionForm(prefix=str(p.position.position), instance=p, label_suffix=str(p.position.position)) for p in predictions]
+            form = PredictionForm(season_id, instance=prediction, label_suffix='')
+            pforms = [PredictionPositionForm(season_id, prefix=str(p.position.position), instance=p, label_suffix=" "+str(p.position.position)) for p in predictions]
 
     context['form'] = form
     context['pforms'] = pforms

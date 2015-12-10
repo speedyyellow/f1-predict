@@ -43,7 +43,7 @@ class TeamDriver(models.Model):
     driver = models.ForeignKey(Driver)
     engine = models.ForeignKey(Engine, null=True)
     def __str__(self):
-        return self.season.name + " " + self.driver.name + " (" + self.team.name + ")"
+        return self.driver.name + " (" + self.team.name + ")(" + self.season.name + ")" 
 
 class SeasonRound(models.Model):
     season = models.ForeignKey(Season)
