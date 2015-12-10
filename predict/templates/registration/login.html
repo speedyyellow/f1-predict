@@ -1,31 +1,27 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-<!-- The season list sidebar -->
-{% block sidebar %}
-{% include "predict/season_list.html" %}
-{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
-<div class="page-row">
-    <div class="content">
+<div class="row">
+    <div class="large12 columns">
         <table>
             <tr><th>F1 Prediction Game</th></tr>
         </table>
 
-    {% if form.errors %}
+        {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
-    <form method="post" action=".">{% csrf_token %}
-        <table border="0">
-            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
-            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
-        </table>
-        <input type="submit" value="Login" />
-        <input type="hidden" name="next" value="/predict" />
-    </form>
-    <a href="/register">Register</a>
-</div>
+        {% endif %}
+        <form method="post" action=".">{% csrf_token %}
+            <table border="0">
+                <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
+                <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
+            </table>
+            <input type="hidden" name="next" value="/predict/" />
+            <input type="submit" value="Login" /> or <a href="/predict/register">Register</a>
+        </form>
+
+    </div>
 </div>
 {% endblock %}

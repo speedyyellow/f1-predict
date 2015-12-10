@@ -26,6 +26,6 @@ urlpatterns = [
     url('^predict/register/', CreateView.as_view(
                 template_name='registration/register.html',
                 form_class=UserCreationForm,
-                success_url='/accounts/login/?next=/predict'
+                success_url='/predict/accounts/login/?next=/predict'
         )),
 ]
