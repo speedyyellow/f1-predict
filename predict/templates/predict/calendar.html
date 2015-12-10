@@ -4,7 +4,7 @@
     <tr><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
     {% for race in race_list %}
         <tr>
-        	<td>{{ race.date }}</td>
+        	<td>{{ race.race_date }}</td>
         	<td><a href="/predict/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country}}</a></td>
         	<td><a href="/predict/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.name}}</a></td>
         </tr>

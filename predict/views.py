@@ -147,11 +147,11 @@ def get_team_drivers(season_id, team):
     return drivers
 
 def get_team_results(season_id, team):
-    results = ResultPosition.objects.filter(result__season_round__season__name=season_id).filter(driver__team__pk=team.pk).order_by('result__season_round__date','position__position')
+    results = ResultPosition.objects.filter(result__season_round__season__name=season_id).filter(driver__team__pk=team.pk).order_by('result__season_round__race_date','position__position')
     return results
 
 def get_race_results(season_id):
-    results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__date')
+    results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__race_date')
     if results.count() > 0:
         return results
     else:
@@ -172,7 +172,7 @@ def get_race(season_id, country_id):
         return None
 
 def get_races(season_id):
-    return SeasonRound.objects.filter(season__name=season_id).order_by('date')
+    return SeasonRound.objects.filter(season__name=season_id).order_by('race_date')
 
 def get_race_result_positions(result):
     positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')
@@ -183,7 +183,7 @@ def get_race_result_top_ten(result):
 
 def get_user_prediction(user, season_round):
     try:
-        prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.date).latest('created')
+        prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.event_date).latest('created')
         return prediction
     except Exception, e:
         return None

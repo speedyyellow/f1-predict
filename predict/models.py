@@ -48,7 +48,8 @@ class TeamDriver(models.Model):
 class SeasonRound(models.Model):
     season = models.ForeignKey(Season)
     circuit = models.ForeignKey(Circuit)
-    date = models.DateField()
+    race_date = models.DateField()
+    event_date = models.DateField(null=True)
     def __str__(self):
         return self.season.name + " " + self.circuit.name 
 
