@@ -211,10 +211,10 @@ def get_active_users(season_id):
     begin   = season_id+"-01-01"
     end     = season_id+"-12-31"
     predictions = Prediction.objects.filter(created__gte=begin, created__lte=end)
-    userset = ([])
+    userset = []
     for p in predictions:
         userset.append(p.user)
-    return userset
+    return set(userset)
 
 #-------------------------------------------------------------------------------
 #   Score calculations
