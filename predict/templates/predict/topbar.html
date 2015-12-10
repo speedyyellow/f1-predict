@@ -10,11 +10,9 @@
     </div>
     <div class="top-bar-right">
       <ul class="menu">
-        <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username|capfirst}}</a></li>
-
         {% if season %}
-
         {% for s in season %}
+        <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username|capfirst}}</a></li>
         <li>{{season_score}} points</li>
         {% endfor %}
         {% endif %}
