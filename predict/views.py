@@ -121,7 +121,7 @@ def get_context_season(request, season_id):
     season = Season.objects.filter(name=season_id)
     if season.count > 0:
         context['season'] = season
-        score = score_season(request.user, season[0])
+        score = score_season(request.user, season_id)
         context['season_score'] = score
         context['season_results'] = results_table(season_id)
 
@@ -220,10 +220,10 @@ def get_active_users(season_id):
 #   Score calculations
 #-------------------------------------------------------------------------------
 
-def score_season(user, season):
+def score_season(user, season_id):
     score = 0
     # get the season results
-    results = get_race_results(season.name)
+    results = get_race_results(season_id)
     if results != None:
         for res in results:
             # get the user's prediction for this round
@@ -236,7 +236,9 @@ def score_round(prediction, race_result):
     score = 0
     if prediction == None:
         return score
-
+    if race_result == None:
+        return score
+        
     # pole & fastest lap get 5 points each
     if prediction.pole_position == race_result.pole_position:
         score += 5
@@ -263,14 +265,24 @@ def score_round(prediction, race_result):
 def results_table(season_id):
     # get all the race reults for this season
     results = get_race_results(season_id)
+    races = get_races(season_id)
+    if races != None:
+        for race in races:
+            # get the user's prediction for this round
+            res = get_race_result(season_id, race.circuit.country)
+
     users = get_active_users(season_id)
-    table = {}
+    table = []
     for u in users:
-        table[u.username] = []
-        for r in results:
-            p = get_user_prediction(u, r.season_round)
-            table[u.username].append(score_round(p, r))
-        #table[u.username].append(score_season(u, ))
+        scores = []
+        for race in races:
+            p = get_user_prediction(u, race)
+            r = get_race_result(season_id, race.circuit.country)
+            scores.append(score_round(p, r))
+        season_score = score_season(u, season_id)
+        table.append( (season_score, u.username, scores) )
+    table.sort()
+    table.reverse()
     return table
 
 
