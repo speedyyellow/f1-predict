@@ -81,7 +81,7 @@ def user_profile(request, season_id, user_id):
 
     if request.method == "POST":
         form = PredictionForm(request.POST)
-        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition()) for x in range(1,11)]
+        pforms = [PredictionPositionForm(request.POST, prefix=str(x), instance=PredictionPosition(), label_suffix=str(x)) for x in range(1,11)]
         if form.is_valid() and all([pf.is_valid() for pf in pforms]):
             pred = form.save(commit=False)
             pred.user = request.user
