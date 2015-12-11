@@ -133,7 +133,9 @@ def get_context_race(request, race, prefix):
             pred = get_user_prediction(request.user, result.season_round)
             pred_positions = get_prediction_positions(pred)
             score = score_round(pred, result)
+            context[prefix+'result'] = result
             context[prefix+'results'] = result_positions
+            context[prefix+'prediction'] = pred
             context[prefix+'predictions'] = pred_positions
             context[prefix+'round_score'] = score
     return context

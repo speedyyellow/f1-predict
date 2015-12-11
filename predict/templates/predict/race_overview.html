@@ -19,7 +19,7 @@
             <h5>{{race.circuit.name}}</h5>
         </div>
         <div class="small-5 columns">
-            <h5>{{race.event_date}} - {{race.race_date}}</h5>
+            <h5>{{race.event_date|date:"d F"}} - {{race.race_date|date:"d F Y"}}</h5>
         </div>
         <div class="small-2 columns">
             <h3></h3>
@@ -32,13 +32,25 @@
 {% if results %}
 <div class="row">
     <div class="small-12 callout columns">
-        <div class="small-8 columns">
+        <div class="small-9 columns">
             <h4>{{race.season.name}} Results</h4>
         </div>
-        <div class="small-4 columns">
+        <div class="small-3 columns">
             <h4>Prediction</h4>
         </div>
-        <div class="small-8 columns">
+        <div class="small-9 columns">
+            <h5>Pole: <a href='/predict/{{race.season.name}}/driver/{{result.pole_position.driver.id}}'>{{result.pole_position.driver.name}}</a></h5>
+        </div>
+        <div class="small-3 columns">
+            <h5><a href='/predict/{{race.season.name}}/driver/{{prediction.pole_position.driver.id}}'>{{prediction.pole_position.driver.name}}</a></h5>
+        </div>
+        <div class="small-9 columns">
+            <h5>Fastest Lap: <a href='/predict/{{race.season.name}}/driver/{{result.fastest_lap.driver.id}}'>{{result.fastest_lap.driver.name}}</a></h5>
+        </div>
+        <div class="small-3 columns">
+            <h5><a href='/predict/{{race.season.name}}/driver/{{prediction.fastest_lap.driver.id}}'>{{prediction.fastest_lap.driver.name}}</a></h5>
+        </div>
+        <div class="small-9 columns">
             <table>
                 <tr>
                     <th>Pos</th>
@@ -56,16 +68,19 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="small-4 columns">
+        <div class="small-3 columns">
             {% if predictions %}
             <table>
-                <tr><th>Driver</th></tr>
+                <tr><th>Pos</th><th>Driver</th></tr>
                 {% for p in predictions %}
-                <tr><td>{{p.driver.driver.name}}</td></tr>
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{p.driver.driver.name}}</td>
+                </tr>
                 {% endfor %}
             </table>
             {% endif %}
-        </div>    
+        </div>
     </div>
 </div>
 {% else %}
@@ -85,6 +100,12 @@
     <div class="small-12 callout columns">
         <div class="small-12 columns">
             <h4>{{last_race.season.name}} Results</h4>
+        </div>
+        <div class="small-9 columns">
+            <h5>Pole: <a href='/predict/{{last_race.season.name}}/driver/{{last_result.pole_position.driver.id}}'>{{last_result.pole_position.driver.name}}</a></h5>
+        </div>
+        <div class="small-9 columns">
+            <h5>Fastest Lap: <a href='/predict/{{last_race.season.name}}/driver/{{last_result.fastest_lap.driver.id}}'>{{last_result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-12 columns">
             <table>
