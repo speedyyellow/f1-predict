@@ -14,7 +14,7 @@
 
 <div class="row">
     <div class="large12 callout columns">
-        <h3>Prediction</h3>
+        <h3>{{season.first.name}} Predictions</h3>
         <form method="POST">{% csrf_token %}
          <table>
             <tr><th>Last Updated</th><td>{{form.instance.created}}</td></tr>

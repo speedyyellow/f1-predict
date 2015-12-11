@@ -1,3 +1,4 @@
+<!-- 
 <div class="row">
   <div class="top-bar">
     <div class="top-bar-left">
@@ -11,10 +12,7 @@
     <div class="top-bar-right">
       <ul class="menu">
         {% if season %}
-          {% for s in season %}
-            <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username|capfirst}}</a></li>
-            <li>{{season_score}} points</li>
-          {% endfor %}
+            <li><a href="/predict/{{season.last.name}}/user/{{user.username}}">{{user.username|capfirst}} ({{season_score}})</a></li>
         {% else %}
             <li>{{user.username|capfirst}}</li>
         {% endif %}
@@ -28,3 +26,37 @@
     </div>
   </div>
 </div>
+-->
+
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="/predict/">F1 Predict</a></h1>
+    </li>
+    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <li class="has-dropdown">
+      <a href="#">{% if user.is_authenticated %}{{user.username|capfirst}}{% else %}Menu{% endif %}</a>
+        <ul class="dropdown">
+          {% if season %}
+          <li><a href="/predict/{{season.first.name}}/user/{{user.username}}">Predictions</a></li>
+          {% endif %}
+          {% for s in season_list %}
+          <li><a href="/predict/{{s.name}}/">{{s.name}}</a></li>
+          {% endfor %}
+          {% if user.is_authenticated %}
+          <li><a href="/predict/accounts/logout/?next=/predict/">Logout</a></li>
+          {% else %}
+          <li><a href="/predict/accounts/login/?next=/predict/">Login</a></li>
+          {% endif %}
+        </ul>
+      </li>
+    </ul>
+  </section>
+</nav>
