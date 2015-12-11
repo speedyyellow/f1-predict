@@ -4,17 +4,12 @@
 <!-- The main page content -->
 {% block page-content %}
 <div class="row">
-    <div class="large12 columns">
-        <table>
-            <tr><th>F1 Prediction Game</th></tr>
-        </table>
-
-   <form method="post" action=".">{% csrf_token %}
-        <table border="0">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Register" next="/predict"/>
-    </form>
-</div>
+    <div class="small-12 callout columns">
+        <h3>Register to Play</h3>
+        <form method="post" action=".">{% csrf_token %}
+            {{ form.as_ul }}
+            <input type="submit" value="Register" next="/predict"/>
+        </form>
+    </div>
 </div>
 {% endblock %}

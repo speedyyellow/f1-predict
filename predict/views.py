@@ -41,6 +41,7 @@ def race_overview(request, season_id, country_id):
 
     race = get_race(season_id, country_id)
     context['race'] = race
+    context['round_score'] = 0;
     result = get_race_result(season_id, country_id)
     if result != None:
         result_positions = get_race_result_positions(result)

@@ -7,34 +7,41 @@
 {% block page-content %}
 
 <div class="row">
-	<div class="large-12 columns">
-        {% if season %}
-        <h2>Formula 1 {{season.first.name}} Season</h2>
-        {% endif %}
+    <div class="small-12 callout columns">
+        <div class="small-12 columns">
+            {% if season %}
+            <h2>Formula 1 {{season.first.name}} Season</h2>
+            {% endif %}
+        </div>
+        <div class="small-12 columns">
+            {% include "predict/results.html" %}
+        </div>
     </div>
 </div>
 
+
+<!-- 
 <div class="row">
-    <div class="large-12 columns">
-        {% include "predict/results.html" %}
+    <div class="small-12 callout columns">
+        <div class="small-6 columns">
+            {% include "predict/driver_champ.html" %}
+        </div>
+        <div class="small-6 columns">
+            {% include "predict/team_champ.html" %}
+        </div>
     </div>
 </div>
+-->
+
 
 <div class="row">
-	<div class="large-6 columns">
-        {% include "predict/driver_champ.html" %}
-    </div>
-    <div class="large-6 columns">
-        {% include "predict/team_champ.html" %}
-    </div>
-</div>
-
-<div class="row">
-	<div class="large-6 columns">
-        {% include "predict/calendar.html" %}
-    </div>
-    <div class="large-6 columns">
-        {% include "predict/entry_list.html" %}
+    <div class="small-12 callout columns">
+        <div class="small-6 columns">
+            {% include "predict/calendar.html" %}
+        </div>
+        <div class="small-6 columns">
+            {% include "predict/entry_list.html" %}
+        </div>
     </div>
 </div>
 

@@ -3,7 +3,8 @@
     <tr>
         <th>Player</th>
         {% for race in race_list %}
-        <th>{{race.circuit.country|slice:":2"|upper}}</th>
+        <!-- <th>{{race.circuit.country|slice:":2"|upper}}</th> -->
+        <th><a href="/predict/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country|slice:":2"|upper}}</a></th>
         {% endfor %}
         <th>Score</th>
     </tr>

@@ -6,10 +6,13 @@
 {% block page-content %}
 <div class="row">
     {% if driver_list %}
-    <div class="large-12 columns">
-        <h3>{{driver_list.first.team.name}}<h3>
+    <div class="small-12 callout columns">
+    <div class="small-12 columns">
+        <h3>{{driver_list.first.team.name}}</h3>
+    </div>
+    <div class="small-12 columns">
         <h4>{{driver_list.first.engine.name}}</h4>
-        </table>
+    </div>
     </div>
     {% endif %}
 </div>
@@ -17,20 +20,25 @@
 
 <div class="row">
     {% if driver_list %}
-    <div class="large-4 columns">
-        <h3>Drivers</h3>
-        <table>
-            <tr><td>Name</th><th>Number</td></tr>
+    <div class="small-12 callout columns">
             {% for driver in driver_list %}
-            <tr><td><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a><td>{{driver.driver.number}}</td> </tr>
+            <div class="small-6 columns">
+                <div class="small-6 columns">
+                    <h3><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a></h3>
+                </div>
+                <div class="small-6 columns">
+                    <h3>{{driver.driver.number}}</h3>
+                </div>
+            </div>
             {% endfor %}
         </table>
     </div>
     {% endif %}
-
+</div>
+<div class="row">
     {% if result_list %}
-    <div class="large-8 columns">
-        <h3>Results</h3>
+    <div class="small-12 callout columns">
+        <h4>Results</h4>
         <table>
             <tr>
                 <th>Date</th>
@@ -40,7 +48,7 @@
             </tr>
             {% for result in result_list %}
             <tr>
-                <td>{{result.result.season_round.date}}</td>
+                <td>{{result.result.season_round.race_date}}</td>
                 <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
                 <td><a href='/predict/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
                 <td>{{result.position.position}}</td>

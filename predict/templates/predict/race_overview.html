@@ -5,13 +5,22 @@
 {% block page-content %}
 {% if race %}
 <div class="row">
-    <div class="large-10 columns">
-        <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
-        <h4>{{race.circuit.name}}</h4>
-        <h5>Event Starts {{race.event_date}} / Race Date: {{race.race_date}}</h5>
-    </div>
-    <div class="large-2 columns">
-        <h3>{{round_score}} points</h3>
+    <div class="small-12 callout columns">
+        <div class="small-10 columns">
+            <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
+        </div>
+        <div class="small-2 columns">
+            <h3>{{round_score}} points</h3>
+        </div>
+        <div class="small-5 columns">
+            <h5>{{race.circuit.name}}</h5>
+        </div>
+        <div class="small-5 columns">
+            <h5>{{race.event_date}} - {{race.race_date}}</h5>
+        </div>
+        <div class="small-2 columns">
+            <h3></h3>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -19,31 +28,42 @@
 
 {% if results %}
 <div class="row">
-<div class="large-12 columns"><h3>Results</h3></div>
-  <div class="large-10 columns">
-    <table>
-        <tr><th>Pos</th><th>No</th><th>Driver</th><th>Constructor</th><th>Points</th></tr>
-        {% for entry in results %}
-        <tr>
-            <td>{{ entry.position.position }}</td>
-            <td>{{ entry.driver.driver.number }}</td>
-            <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
-            <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
-            <td>{{ entry.position.points }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-<div class="large-2 columns">
-    {% if predictions %}
-    <table>
-        <tr><th>Prediction</th></tr>
-        {% for p in predictions %}
-        <tr><td>{{p.driver.driver.name}}</td></tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-</div>
+    <div class="small-12 callout columns">
+        <div class="small-8 columns">
+            <h4>Results</h4>
+        </div>
+        <div class="small-4 columns">
+            <h4>Prediction</h4>
+        </div>
+        <div class="small-8 columns">
+            <table>
+                <tr>
+                    <th>Pos</th>
+                    <th>Driver</th>
+                    <th>Constructor</th>
+                    <th>Points</th>
+                </tr>
+                {% for entry in results %}
+                <tr>
+                    <td>{{ entry.position.position }}</td>
+                    <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+                    <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+                    <td>{{ entry.position.points }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="small-4 columns">
+            {% if predictions %}
+            <table>
+                <tr><th>Driver</th></tr>
+                {% for p in predictions %}
+                <tr><td>{{p.driver.driver.name}}</td></tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>    
+    </div>
 </div>
 {% endif %}
 

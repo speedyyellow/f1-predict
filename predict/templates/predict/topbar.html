@@ -11,16 +11,18 @@
     <div class="top-bar-right">
       <ul class="menu">
         {% if season %}
-        {% for s in season %}
-        <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username|capfirst}}</a></li>
-        <li>{{season_score}} points</li>
-        {% endfor %}
+          {% for s in season %}
+            <li><a href="/predict/{{s.name}}/user/{{user.username}}">{{user.username|capfirst}}</a></li>
+            <li>{{season_score}} points</li>
+          {% endfor %}
+        {% else %}
+            <li>{{user.username|capfirst}}</li>
         {% endif %}
+
         {% if user.is_authenticated %}
-        <li><a href="/predict/accounts/logout/?next=/predict/">Logout</a></li>
-        {% endif %}
-        {% if not user.is_authenticated %}
-        <li><a href="/predict/accounts/login/?next=/predict/">Login</a></li>
+          <li><a href="/predict/accounts/logout/?next=/predict/">Logout</a></li>
+        {% else %}
+          <li><a href="/predict/accounts/login/?next=/predict/">Login</a></li>
         {% endif %}
       </ul>
     </div>
