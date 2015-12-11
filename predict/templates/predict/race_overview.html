@@ -1,6 +1,9 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
+{{race}}
+{{last_race}}
+
 <!-- The main page content -->
 {% block page-content %}
 {% if race %}
@@ -30,7 +33,7 @@
 <div class="row">
     <div class="small-12 callout columns">
         <div class="small-8 columns">
-            <h4>Results</h4>
+            <h4>{{race.season.name}} Results</h4>
         </div>
         <div class="small-4 columns">
             <h4>Prediction</h4>
@@ -65,6 +68,43 @@
         </div>    
     </div>
 </div>
-{% endif %}
+{% else %}
+<div class="row">
+    <div class="small-12 callout columns">
+        <div class="small-12 columns">
+            <h4>{{race.season.name}} Results</h4>
+        </div>
+        <div class="small-12 columns">
+            <p>No Reults</p>
+        </div>
+    </div>
+</div>{% endif %}
 
+{% if last_results %}
+<div class="row">
+    <div class="small-12 callout columns">
+        <div class="small-12 columns">
+            <h4>{{last_race.season.name}} Results</h4>
+        </div>
+        <div class="small-12 columns">
+            <table>
+                <tr>
+                    <th>Pos</th>
+                    <th>Driver</th>
+                    <th>Constructor</th>
+                    <th>Points</th>
+                </tr>
+                {% for entry in last_results %}
+                <tr>
+                    <td>{{ entry.position.position }}</td>
+                    <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+                    <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+                    <td>{{ entry.position.points }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

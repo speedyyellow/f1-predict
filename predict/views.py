@@ -38,19 +38,15 @@ def season_overview(request, season_id):
 def race_overview(request, season_id, country_id):
     # get the season context
     context = get_context_season(request, season_id)
-
+    
+    # add this seasons data
     race = get_race(season_id, country_id)
-    context['race'] = race
-    context['round_score'] = 0;
-    result = get_race_result(season_id, country_id)
-    if result != None:
-        result_positions = get_race_result_positions(result)
-        pred = get_user_prediction(request.user, race)
-        pred_positions = get_prediction_positions(pred)
-        score = score_round(pred, result)
-        context['results'] = result_positions
-        context['predictions'] = pred_positions
-        context['round_score'] = score
+    context.update(get_context_race(request, race, ""))
+
+    # add last seasons result
+    last_season_id = str(int(season_id)-1)
+    last_season_race = get_race(last_season_id, country_id)
+    context.update(get_context_race(request, last_season_race, "last_"))
 
     return render(request, 'predict/race_overview.html', context)
 
@@ -125,8 +121,23 @@ def get_context_season(request, season_id):
         score = score_season(request.user, season_id)
         context['season_score'] = score
         context['season_results'] = results_table(season_id)
-
     return context
+
+def get_context_race(request, race, prefix):
+    context = {prefix+'round_score' : 0}
+    if race != None:
+        context[prefix+'race'] = race
+        result = get_race_result(race.season.name, race.circuit.country)
+        if result != None:
+            result_positions = get_race_result_positions(result)
+            pred = get_user_prediction(request.user, result.season_round)
+            pred_positions = get_prediction_positions(pred)
+            score = score_round(pred, result)
+            context[prefix+'results'] = result_positions
+            context[prefix+'predictions'] = pred_positions
+            context[prefix+'round_score'] = score
+    return context
+
 
 def get_season_list():
     return Season.objects.order_by('-name')
