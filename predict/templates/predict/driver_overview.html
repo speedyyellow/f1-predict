@@ -7,12 +7,12 @@
 {% if driver %}
 
 <div class="row">
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
         <div class="small-10 columns">
             <h3>{{driver.driver.name}}</h3>
         </div>
         <div class="small-2 columns">
-            <h3>{{driver.driver.number}}</h3>
+            <h3>#{{driver.driver.number}}</h3>
         </div>
         <div class="small-5 columns">
             <h5><a href='/predict/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></h5>
@@ -27,7 +27,7 @@
 
 
     {% if result_list %}
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
         <h3>Results</h3>
         <table>
             <tr><th>Date</th><th>Grand Prix</th><th>Position</th><th>Points</th></tr>

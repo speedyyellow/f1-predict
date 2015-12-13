@@ -7,13 +7,13 @@
 {% block page-content %}
 
 <div class="row">
-    <div class="small-12 callout columns">
-        <div class="small-12 columns">
+    <div class="small-12 columns">
+        <div class="small-12 panel columns">
             {% if season %}
             <h2>Formula 1 {{season.first.name}} Season</h2>
             {% endif %}
         </div>
-        <div class="small-12 columns">
+        <div class="small-12 panel columns">
             {% include "predict/results.html" %}
         </div>
     </div>
@@ -22,7 +22,7 @@
 
 <!-- 
 <div class="row">
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
         <div class="small-6 columns">
             {% include "predict/driver_champ.html" %}
         </div>
@@ -35,11 +35,11 @@
 
 
 <div class="row">
-    <div class="small-12 callout columns">
-        <div class="small-6 columns">
+    <div class="small-12 columns">
+        <div class="small-6 panel columns">
             {% include "predict/calendar.html" %}
         </div>
-        <div class="small-6 columns">
+        <div class="small-6 panel columns">
             {% include "predict/entry_list.html" %}
         </div>
     </div>

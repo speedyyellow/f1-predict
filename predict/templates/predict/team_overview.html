@@ -6,7 +6,7 @@
 {% block page-content %}
 <div class="row">
     {% if driver_list %}
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
     <div class="small-12 columns">
         <h3>{{driver_list.first.team.name}}</h3>
     </div>
@@ -20,14 +20,14 @@
 
 <div class="row">
     {% if driver_list %}
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
             {% for driver in driver_list %}
             <div class="small-6 columns">
                 <div class="small-6 columns">
                     <h3><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a></h3>
                 </div>
                 <div class="small-6 columns">
-                    <h3>{{driver.driver.number}}</h3>
+                    <h3>#{{driver.driver.number}}</h3>
                 </div>
             </div>
             {% endfor %}
@@ -37,7 +37,7 @@
 </div>
 <div class="row">
     {% if result_list %}
-    <div class="small-12 callout columns">
+    <div class="small-12 panel columns">
         <h4>Results</h4>
         <table>
             <tr>
