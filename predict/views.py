@@ -112,10 +112,25 @@ def add_result(request, season_id, race_id):
     if request.method == "POST":
         # process the form
         form = ResultForm(season_id, request.POST)
-        pforms = [ResultPositionForm(season_id, request.POST, prefix=str(x), instance=PredictionPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
+        pforms = [ResultPositionForm(season_id, request.POST, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,23)]
+        if form.is_valid() and all([pf.is_valid() for pf in pforms]):
+            result = form.save(commit=False)
+            result.season_round = SeasonRound.objects.get(pk=race_id)
+            result.save()
+            pos = 1
+            for pf in pforms:
+                try:
+                    new_pos = pf.save(commit=False)
+                    new_pos.result = result
+                    new_pos.position = FinishingPosition.objects.get(position=pos)
+                    pos +=1
+                    if new_pos.driver != None:
+                        new_pos.save()
+                except Exception, e:
+                    print e
     else:
         form = ResultForm(season_id, instance=RaceResult(), label_suffix='')
-        pforms = [ResultPositionForm(season_id, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
+        pforms = [ResultPositionForm(season_id, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,23)]
 
     context['form'] = form
     context['pforms'] = pforms

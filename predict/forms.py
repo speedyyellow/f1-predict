@@ -31,7 +31,7 @@ class PredictionForm(ModelForm):
 class ResultPositionForm(ModelForm):
     def __init__(self, season_id, *args, **kwargs):
         super(ResultPositionForm, self).__init__(*args, **kwargs)
-        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
+        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id), required=False)
 
     class Meta:
         model = ResultPosition
