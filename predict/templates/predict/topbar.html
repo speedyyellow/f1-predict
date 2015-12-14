@@ -3,24 +3,24 @@
   <div class="top-bar">
     <div class="top-bar-left">
       <ul class="menu">
-        <li class="menu-text"><a href="/predict/">F1 Predict</a></li>
+        <li class="menu-text"><a href="/">F1 Predict</a></li>
         {% for season in season_list %}
-        <li><a href="/predict/{{ season.name }}/">{{ season.name }}</a></li>
+        <li><a href="/{{ season.name }}/">{{ season.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
     <div class="top-bar-right">
       <ul class="menu">
         {% if season %}
-            <li><a href="/predict/{{season.last.name}}/user/{{user.username}}">{{user.username|capfirst}} ({{season_score}})</a></li>
+            <li><a href="/{{season.last.name}}/user/{{user.username}}">{{user.username|capfirst}} ({{season_score}})</a></li>
         {% else %}
             <li>{{user.username|capfirst}}</li>
         {% endif %}
 
         {% if user.is_authenticated %}
-          <li><a href="/predict/accounts/logout/?next=/predict/">Logout</a></li>
+          <li><a href="/accounts/logout/?next=/">Logout</a></li>
         {% else %}
-          <li><a href="/predict/accounts/login/?next=/predict/">Login</a></li>
+          <li><a href="/accounts/login/?next=/">Login</a></li>
         {% endif %}
       </ul>
     </div>
@@ -31,7 +31,7 @@
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
     <li class="name">
-      <h1><a href="/predict/">F1 Predict</a></h1>
+      <h1><a href="/">F1 Predict</a></h1>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
   </ul>
@@ -42,15 +42,15 @@
       <a href="#">{% if user.is_authenticated %}{{user.username|capfirst}}{% else %}Menu{% endif %}</a>
         <ul class="dropdown">
           {% if season %}
-          <li><a href="/predict/{{season.first.name}}/user/{{user.username}}">Predictions</a></li>
+          <li><a href="/{{season.first.name}}/user/{{user.username}}">Predictions</a></li>
           {% endif %}
           {% for s in season_list %}
-          <li><a href="/predict/{{s.name}}/">{{s.name}}</a></li>
+          <li><a href="/{{s.name}}/">{{s.name}}</a></li>
           {% endfor %}
           {% if user.is_authenticated %}
-          <li><a href="/predict/accounts/logout/?next=/predict/">Logout</a></li>
+          <li><a href="/accounts/logout/?next=/">Logout</a></li>
           {% else %}
-          <li><a href="/predict/accounts/login/?next=/predict/">Login</a></li>
+          <li><a href="/accounts/login/?next=/">Login</a></li>
           {% endif %}
         </ul>
       </li>

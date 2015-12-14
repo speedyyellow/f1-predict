@@ -5,8 +5,8 @@
     {% for race in race_list %}
         <tr>
         	<td>{{ race.race_date }}</td>
-        	<td><a href="/predict/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country}}</a></td>
-        	<td><a href="/predict/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.name}}</a></td>
+        	<td><a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country}}</a></td>
+        	<td><a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.name}}</a></td>
         </tr>
     {% endfor %}
     </table>

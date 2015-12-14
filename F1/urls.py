@@ -20,10 +20,10 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
 urlpatterns = [
-    url(r'^predict/', include('predict.urls')),
-    url(r'^predict/admin/', include(admin.site.urls)),
-    url(r'^predict/accounts/', include('django.contrib.auth.urls')),
-    url('^predict/register/', CreateView.as_view(
+    url(r'^', include('predict.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url('^register/', CreateView.as_view(
                 template_name='registration/register.html',
                 form_class=UserCreationForm,
                 success_url='/predict/accounts/login/?next=/predict'

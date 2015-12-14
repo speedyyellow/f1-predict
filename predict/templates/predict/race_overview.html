@@ -39,16 +39,16 @@
             <h4>Prediction</h4>
         </div>
         <div class="small-9 columns">
-            <h5>Pole: <a href='/predict/{{race.season.name}}/driver/{{result.pole_position.driver.id}}'>{{result.pole_position.driver.name}}</a></h5>
+            <h5>Pole: <a href='/{{race.season.name}}/driver/{{result.pole_position.driver.id}}'>{{result.pole_position.driver.name}}</a></h5>
         </div>
         <div class="small-3 columns">
-            <h5><a href='/predict/{{race.season.name}}/driver/{{prediction.pole_position.driver.id}}'>{{prediction.pole_position.driver.name}}</a></h5>
+            <h5><a href='/{{race.season.name}}/driver/{{prediction.pole_position.driver.id}}'>{{prediction.pole_position.driver.name}}</a></h5>
         </div>
         <div class="small-9 columns">
-            <h5>Fastest Lap: <a href='/predict/{{race.season.name}}/driver/{{result.fastest_lap.driver.id}}'>{{result.fastest_lap.driver.name}}</a></h5>
+            <h5>Fastest Lap: <a href='/{{race.season.name}}/driver/{{result.fastest_lap.driver.id}}'>{{result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-3 columns">
-            <h5><a href='/predict/{{race.season.name}}/driver/{{prediction.fastest_lap.driver.id}}'>{{prediction.fastest_lap.driver.name}}</a></h5>
+            <h5><a href='/{{race.season.name}}/driver/{{prediction.fastest_lap.driver.id}}'>{{prediction.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-9 columns">
             <table>
@@ -61,8 +61,8 @@
                 {% for entry in results %}
                 <tr>
                     <td>{{ entry.position.position }}</td>
-                    <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
-                    <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+                    <td><a href='/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+                    <td><a href='/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
                     <td>{{ entry.position.points }}</td>
                 </tr>
                 {% endfor %}
@@ -102,10 +102,10 @@
             <h4>{{last_race.season.name}} Results</h4>
         </div>
         <div class="small-9 columns">
-            <h5>Pole: <a href='/predict/{{last_race.season.name}}/driver/{{last_result.pole_position.driver.id}}'>{{last_result.pole_position.driver.name}}</a></h5>
+            <h5>Pole: <a href='/{{last_race.season.name}}/driver/{{last_result.pole_position.driver.id}}'>{{last_result.pole_position.driver.name}}</a></h5>
         </div>
         <div class="small-9 columns">
-            <h5>Fastest Lap: <a href='/predict/{{last_race.season.name}}/driver/{{last_result.fastest_lap.driver.id}}'>{{last_result.fastest_lap.driver.name}}</a></h5>
+            <h5>Fastest Lap: <a href='/{{last_race.season.name}}/driver/{{last_result.fastest_lap.driver.id}}'>{{last_result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-12 columns">
             <table>
@@ -118,8 +118,8 @@
                 {% for entry in last_results %}
                 <tr>
                     <td>{{ entry.position.position }}</td>
-                    <td><a href='/predict/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
-                    <td><a href='/predict/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+                    <td><a href='/{{entry.result.season_round.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
+                    <td><a href='/{{entry.result.season_round.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
                     <td>{{ entry.position.points }}</td>
                 </tr>
                 {% endfor %}

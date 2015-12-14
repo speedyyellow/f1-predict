@@ -24,7 +24,7 @@
             {% for driver in driver_list %}
             <div class="small-6 columns">
                 <div class="small-6 columns">
-                    <h3><a href='/predict/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a></h3>
+                    <h3><a href='/{{driver.season.name}}/driver/{{driver.driver.pk}}'>{{driver.driver.name}}</a></h3>
                 </div>
                 <div class="small-6 columns">
                     <h3>#{{driver.driver.number}}</h3>
@@ -49,8 +49,8 @@
             {% for result in result_list %}
             <tr>
                 <td>{{result.result.season_round.race_date}}</td>
-                <td><a href='/predict/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
-                <td><a href='/predict/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
+                <td><a href='/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+                <td><a href='/{{result.result.season_round.season.name}}/driver/{{result.driver.driver.id}}'>{{ result.driver.driver.name }}</a></td>
                 <td>{{result.position.position}}</td>
             </tr>
             {% endfor %}

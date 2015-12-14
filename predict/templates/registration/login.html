@@ -10,8 +10,8 @@
 
         <form method="post" action=".">{% csrf_token %}
             {{ form.as_ul }}
-            <input type="hidden" name="next" value="/predict/" />
-            <input type="submit" value="Login" /> or <a href="/predict/register">Register</a>
+            <input type="hidden" name="next" value="/" />
+            <input type="submit" value="Login" /> or <a href="/register">Register</a>
         </form>
 
     </div>
