@@ -1,14 +1,14 @@
 {% if season_results and race_list %}
-<h3>Results</h3>
 <table class="tablesaw" data-tablesaw-mode="swipe" data-tablesaw-minimap>
     <thead>
     <tr>
-        <th  class="" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="persist">Player</th>
+        <th data-tablesaw-priority="persist">Player</th>
         {% for race in race_list %}
-        <!-- <th>{{race.circuit.country|slice:":2"|upper}}</th> -->
-        <th  scope="col" data-tablesaw-sortable-col><a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country|slice:":2"|upper}}</a></th>
+        <th  scope="col">
+            <a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country|slice:":2"|upper}}</a>
+        </th>
         {% endfor %}
-        <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Score</th>
+        <th data-tablesaw-priority="persist">Score</th>
     </tr>
     </thead>
     {% for score, name, results in season_results %}

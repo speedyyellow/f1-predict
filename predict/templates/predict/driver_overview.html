@@ -1,6 +1,9 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
+{% block header-heading %}
+Driver Overview
+{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
@@ -29,7 +32,7 @@
     {% if result_list %}
     <div class="small-12 panel columns">
         <h3>Results</h3>
-        <table>
+        <table class="tablesaw">
             <tr><th>Date</th><th>Grand Prix</th><th>Position</th><th>Points</th></tr>
             {% for result in result_list %}
             <tr>

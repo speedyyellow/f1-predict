@@ -17,11 +17,37 @@
 
     <!-- My App -->
     <link rel="stylesheet" href="{% static 'predict/app.css' %}" />
+    
+    <style>
+      .header {
+          text-align: center;
+          background: url("{% static 'images/f1-cars.jpeg' %}") no-repeat center center;
+          background-size: cover;
+          padding: 4rem;
+      }
+    </style>
 </head>
 
 <body>
 
     {% include "predict/topbar.html" %}
+
+    <header class="header">
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="small-12 columns">
+                    <h2 class="main-header"><strong>
+                    {% block header-heading %}
+                    {% endblock %}
+                    </strong></h2>
+                </div>
+            </div>
+        </div>
+        <ul class="header-subnav">
+        {% block header-subnav-items %}
+        {% endblock %}
+        </ul>
+    </header>
 
     {% block page-content %}
     <p>Page Content</p>
@@ -35,6 +61,7 @@
     </script>
 
     <!-- Tablesaw -->
+    <!--[if lt IE 9]><script src="{% static 'tablesaw/dependencies/respond.js' %}></script><![endif]-->
     <script src="{% static 'tablesaw/dependencies/jquery.js' %}"></script>
     <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
     <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>

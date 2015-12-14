@@ -1,6 +1,9 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
+{% block header-heading %}
+Team Overview
+{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
@@ -39,7 +42,7 @@
     {% if result_list %}
     <div class="small-12 panel columns">
         <h4>Results</h4>
-        <table>
+        <table class="tablesaw">
             <tr>
                 <th>Date</th>
                 <th>Grand Prix</th>

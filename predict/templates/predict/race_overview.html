@@ -1,8 +1,9 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-{{race}}
-{{last_race}}
+{% block header-heading %}
+Race Overview
+{% endblock %}
 
 <!-- The main page content -->
 {% block page-content %}
@@ -51,7 +52,7 @@
             <h5><a href='/{{race.season.name}}/driver/{{prediction.fastest_lap.driver.id}}'>{{prediction.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-9 columns">
-            <table>
+            <table class="tablesaw">
                 <tr>
                     <th>Pos</th>
                     <th>Driver</th>
@@ -70,7 +71,7 @@
         </div>
         <div class="small-3 columns">
             {% if predictions %}
-            <table>
+            <table class="tablesaw">
                 <tr><th>Pos</th><th>Driver</th></tr>
                 {% for p in predictions %}
                 <tr>
@@ -108,7 +109,7 @@
             <h5>Fastest Lap: <a href='/{{last_race.season.name}}/driver/{{last_result.fastest_lap.driver.id}}'>{{last_result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-12 columns">
-            <table>
+            <table class="tablesaw">
                 <tr>
                     <th>Pos</th>
                     <th>Driver</th>
