@@ -49,11 +49,12 @@ def race_overview(request, season_id, country_id):
     context.update(get_context_race(request, last_season_race, "last_"))
 
     result = get_race_result(season_id, country_id)
+    table = []
+
     if result != None:
         result_positions = get_race_result_positions(result)
         pred = get_user_prediction(request.user, result.season_round)
         pred_positions = get_prediction_positions(pred)        
-        table = []
         loopcount = 0
         for pos in result_positions:
             row = []
