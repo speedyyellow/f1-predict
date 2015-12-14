@@ -1,8 +1,9 @@
 {% if season_results and race_list %}
+<h3>Results</h3>
 <table class="tablesaw" data-tablesaw-mode="swipe" data-tablesaw-minimap>
     <thead>
     <tr>
-        <th data-tablesaw-priority="persist">Player</th>
+        <th data-tablesaw-priority="persist"></th>
         {% for race in race_list %}
         <th  scope="col">
             <a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country|slice:":2"|upper}}</a>

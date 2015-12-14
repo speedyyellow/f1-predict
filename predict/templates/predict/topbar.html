@@ -1,32 +1,3 @@
-<!-- 
-<div class="row">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <ul class="menu">
-        <li class="menu-text"><a href="/">F1 Predict</a></li>
-        {% for season in season_list %}
-        <li><a href="/{{ season.name }}/">{{ season.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="top-bar-right">
-      <ul class="menu">
-        {% if season %}
-            <li><a href="/{{season.last.name}}/user/{{user.username}}">{{user.username|capfirst}} ({{season_score}})</a></li>
-        {% else %}
-            <li>{{user.username|capfirst}}</li>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-          <li><a href="/accounts/logout/?next=/">Logout</a></li>
-        {% else %}
-          <li><a href="/accounts/login/?next=/">Login</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</div>
--->
 
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">

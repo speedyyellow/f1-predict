@@ -5,11 +5,9 @@
 
 
 {% block header-heading %}
-    <h2 class="main-header"><strong>
     {% if season %}
         Formula 1 {{season.first.name}} Season
     {% endif %}
-    </strong></h2>
 {% endblock %}
 
 {% block header-subnav-items %}
@@ -30,19 +28,19 @@
 </div>
 
 <div class="row panel" >
-    <div id="Drivers" class="small-12 large-6 columns">
+    <div id="Drivers" class="small-12 medium-6 columns">
         {% include "predict/driver_champ.html" %}
     </div>
-    <div id="Constructors" class="small-12 large-6 columns">
+    <div id="Constructors" class="small-12 medium-6 columns">
         {% include "predict/team_champ.html" %}
     </div>
 </div>
 
 <div class="row panel" >
-    <div id="Calendar" class="small-12 large-6 columns">
+    <div id="Calendar" class="small-12 medium-6 columns">
         {% include "predict/calendar.html" %}
     </div>
-    <div id="Entry" class="small-12 large-6 columns">
+    <div id="Entry" class="small-12 medium-6 columns">
         {% include "predict/entry_list.html" %}
     </div>
 </div>

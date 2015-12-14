@@ -13,7 +13,12 @@
     <link rel="stylesheet" href="{% static 'foundation/css/foundation.css' %}" />
 
     <!-- Tablesaw -->
-    <link rel="stylesheet" href="{% static 'tablesaw/tablesaw.css' %}" />
+    <link rel="stylesheet" href="{% static 'tablesaw/bare/tablesaw.bare.css' %}" />
+    <!-- Tablesaw -->
+    <!--[if lt IE 9]><script src="{% static 'tablesaw/dependencies/respond.js' %}></script><![endif]-->
+    <script src="{% static 'tablesaw/dependencies/jquery.js' %}"></script>
+    <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
+    <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>
 
     <!-- My App -->
     <link rel="stylesheet" href="{% static 'predict/app.css' %}" />
@@ -36,10 +41,10 @@
         <div class="row">
             <div class="small-12 columns">
                 <div class="small-12 columns">
-                    <h2 class="main-header"><strong>
+                    <h1 class="main-header"><strong>
                     {% block header-heading %}
                     {% endblock %}
-                    </strong></h2>
+                    </strong></h1>
                 </div>
             </div>
         </div>
@@ -60,11 +65,6 @@
         $(document).foundation();
     </script>
 
-    <!-- Tablesaw -->
-    <!--[if lt IE 9]><script src="{% static 'tablesaw/dependencies/respond.js' %}></script><![endif]-->
-    <script src="{% static 'tablesaw/dependencies/jquery.js' %}"></script>
-    <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
-    <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>
 </body>
 
 </html>
