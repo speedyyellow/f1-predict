@@ -48,6 +48,33 @@ def race_overview(request, season_id, country_id):
     last_season_race = get_season_round(last_season_id, country_id)
     context.update(get_context_race(request, last_season_race, "last_"))
 
+    result = get_race_result(season_id, country_id)
+    if result != None:
+        result_positions = get_race_result_positions(result)
+        pred = get_user_prediction(request.user, result.season_round)
+        pred_positions = get_prediction_positions(pred)        
+        table = []
+        loopcount = 0
+        for pos in result_positions:
+            row = []
+            row.append(pos.position.position)
+            row.append(pos.position.points)
+            row.append(pos.driver.driver.name)
+            row.append(pos.driver.driver.pk)
+            row.append(pos.driver.team.name)
+            row.append(pos.driver.team.pk)
+            if loopcount < pred_positions.count():
+                row.append(pred_positions[loopcount].driver.driver.name)
+                row.append(pred_positions[loopcount].driver.driver.pk)
+            else:
+                row.append("")
+                row.append("")
+            loopcount += 1
+            table.append( row )
+        table.sort()
+
+    context['table'] = table
+
     return render(request, 'predict/race_overview.html', context)
 
 @login_required
@@ -321,19 +348,19 @@ def score_round(prediction, race_result):
 def results_table(season_id):
     # get all the race reults for this season
     results = get_race_results(season_id)
-    races = get_season_rounds(season_id)
-    if races != None:
-        for race in races:
+    srounds = get_season_rounds(season_id)
+    if srounds != None:
+        for sround in srounds:
             # get the user's prediction for this round
-            res = get_race_result(season_id, race.circuit.country)
+            res = get_race_result(season_id, sround.circuit.country)
 
     users = get_active_users(season_id)
     table = []
     for u in users:
         scores = []
-        for race in races:
-            p = get_user_prediction(u, race)
-            r = get_race_result(season_id, race.circuit.country)
+        for sround in srounds:
+            p = get_user_prediction(u, sround)
+            r = get_race_result(season_id, sround.circuit.country)
             scores.append(score_round(p, r))
         season_score = score_season(u, season_id)
         table.append( (season_score, u.username, scores) )
