@@ -24,7 +24,7 @@ def season_overview(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
     # add the extras
-    race_list = get_races(season_id)
+    race_list = get_season_rounds(season_id)
     team_list = get_entry_list(season_id)
     dc = get_drivers_champ(season_id)
     cc = get_constructors_champ(season_id)
@@ -40,12 +40,12 @@ def race_overview(request, season_id, country_id):
     context = get_context_season(request, season_id)
     
     # add this seasons data
-    race = get_race(season_id, country_id)
+    race = get_season_round(season_id, country_id)
     context.update(get_context_race(request, race, ""))
 
     # add last seasons result
     last_season_id = str(int(season_id)-1)
-    last_season_race = get_race(last_season_id, country_id)
+    last_season_race = get_season_round(last_season_id, country_id)
     context.update(get_context_race(request, last_season_race, "last_"))
 
     return render(request, 'predict/race_overview.html', context)
@@ -54,7 +54,7 @@ def race_overview(request, season_id, country_id):
 def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
-    results = get_team_results(season_id, team)
+    results = get_team_result_positions(season_id, team)
     context = get_context_season(request, season_id)
     context['driver_list'] = drivers
     context['result_list'] = results
@@ -106,8 +106,13 @@ def user_profile(request, season_id, user_id):
 
 
 @login_required
-def add_result(request, season_id, race_id):
+def add_result(request, season_id, country_id):
     context = get_context_season(request, season_id)
+    sround = get_season_round(season_id, country_id)
+    context.update(get_context_race(request, sround, ""))
+
+    result = get_race_result(season_id, country_id)
+    result_positions = get_race_result_positions(result)
 
     if request.method == "POST":
         # process the form
@@ -115,7 +120,7 @@ def add_result(request, season_id, race_id):
         pforms = [ResultPositionForm(season_id, request.POST, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,23)]
         if form.is_valid() and all([pf.is_valid() for pf in pforms]):
             result = form.save(commit=False)
-            result.season_round = SeasonRound.objects.get(pk=race_id)
+            result.season_round = sround
             result.save()
             pos = 1
             for pf in pforms:
@@ -129,12 +134,16 @@ def add_result(request, season_id, race_id):
                 except Exception, e:
                     print e
     else:
-        form = ResultForm(season_id, instance=RaceResult(), label_suffix='')
-        pforms = [ResultPositionForm(season_id, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,23)]
+        if result == None:
+            form = ResultForm(season_id, instance=RaceResult(), label_suffix='')
+            pforms = [ResultPositionForm(season_id, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,23)]
+        else:
+            form = ResultForm(season_id, instance=result, label_suffix='')
+            pforms = [ResultPositionForm(season_id, prefix=str(r.position.position), instance=r, label_suffix=" "+str(r.position.position)) for r in result_positions]
 
     context['form'] = form
     context['pforms'] = pforms
-    return render(request, 'predict/add_result.html', context)
+    return render(request, 'predict/result.html', context)
 
 #-------------------------------------------------------------------------------
 #   Query wrappers
@@ -153,11 +162,11 @@ def get_context_season(request, season_id):
         context['season_results'] = results_table(season_id)
     return context
 
-def get_context_race(request, race, prefix):
+def get_context_race(request, season_round, prefix):
     context = {prefix+'round_score' : 0}
-    if race != None:
-        context[prefix+'race'] = race
-        result = get_race_result(race.season.name, race.circuit.country)
+    if season_round != None:
+        context[prefix+'race'] = season_round
+        result = get_race_result(season_round.season.name, season_round.circuit.country)
         if result != None:
             result_positions = get_race_result_positions(result)
             pred = get_user_prediction(request.user, result.season_round)
@@ -190,7 +199,7 @@ def get_team_drivers(season_id, team):
     drivers = TeamDriver.objects.filter(season__name=season_id, team__pk=team.pk)
     return drivers
 
-def get_team_results(season_id, team):
+def get_team_result_positions(season_id, team):
     results = ResultPosition.objects.filter(result__season_round__season__name=season_id).filter(driver__team__pk=team.pk).order_by('result__season_round__race_date','position__position')
     return results
 
@@ -208,19 +217,22 @@ def get_race_result(season_id, country_id):
     else:
         return None
 
-def get_race(season_id, country_id):
+def get_season_round(season_id, country_id):
     races = SeasonRound.objects.filter(season__name=season_id, circuit__country=country_id)[:1]
     if races.count() >= 1:
         return races[0]
     else:
         return None
 
-def get_races(season_id):
+def get_season_rounds(season_id):
     return SeasonRound.objects.filter(season__name=season_id).order_by('race_date')
 
 def get_race_result_positions(result):
-    positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')
-    return positions
+    if result != None:
+        positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')
+        return positions
+    else:
+        return None
 
 def get_race_result_top_ten(result):
     return get_race_result_positions(result)[:10]
@@ -309,7 +321,7 @@ def score_round(prediction, race_result):
 def results_table(season_id):
     # get all the race reults for this season
     results = get_race_results(season_id)
-    races = get_races(season_id)
+    races = get_season_rounds(season_id)
     if races != None:
         for race in races:
             # get the user's prediction for this round

@@ -11,7 +11,11 @@ Race Overview
 <div class="row">
     <div class="small-12 panel columns">
         <div class="small-10 columns">
+            {% if user.is_staff %}
+            <h3><a href="/{{race.season.name}}/result/{{race.circuit.country}}">{{race.season.name}} {{race.circuit.country}} Grand Prix</a></h3>
+            {% else %}
             <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
+            {% endif %}
         </div>
         <div class="small-2 columns">
             <h3>{{round_score}} points</h3>
@@ -91,11 +95,7 @@ Race Overview
             <h4>{{race.season.name}} Results</h4>
         </div>
         <div class="small-12 columns">
-            <p>No results yet
-            {% if user.is_staff %}
-              <a href="/{{race.season.name}}/addresult/{{race.pk}}">- add one?</a>
-            {% endif %}
-            </p>
+            <p>No results yet</p>
         </div>
     </div>
 </div>{% endif %}

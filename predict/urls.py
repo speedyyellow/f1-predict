@@ -12,8 +12,8 @@ urlpatterns = [
     url(r'^(?i)(?P<season_id>[0-9]+)/driver/(?P<driver_id>[0-9]+)/$', views.driver_overview, name='driver_overview'),
     # ex: /2015/China
     url(r'^(?i)(?P<season_id>[0-9]+)/round/(?P<country_id>[a-z ]+)/$', views.race_overview, name='race_overview'),
-    # ex: /2015/addresult/2
-    url(r'^(?i)(?P<season_id>[0-9]+)/addresult/(?P<race_id>[0-9]+)/$', views.add_result, name='add_result'),
+    # ex: /2015/result/china
+    url(r'^(?i)(?P<season_id>[0-9]+)/result/(?P<country_id>[a-z ]+)/$', views.add_result, name='result'),
     # ex: /2015/
     url(r'^(?i)(?P<season_id>[0-9]+)/$', views.season_overview, name='season_overview'),
 ]
