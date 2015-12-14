@@ -8,6 +8,7 @@
     <title>{% block title %}F1 Prediction Game{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'foundation/css/app.css' %}" />
     <link rel="stylesheet" href="{% static 'foundation/css/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'tablesaw/tablesaw.css' %}" />
 </head>
 
 <body>
@@ -17,10 +18,14 @@
     <p>Page Content</p>
     {% endblock %}
 
+    <script type="text/javascript" src="{% static 'predict/responsive-tables.js' %}"></script>
     <script src="{% static 'foundation/js/vendor/jquery.min.js' %}"></script>
     <script src="{% static 'foundation/js/vendor/what-input.min.js' %}"></script>
     <script src="{% static 'foundation/js/foundation.min.js' %}"></script>
     <script src="{% static 'foundation/js/app.js' %}"></script>
+    <script src="{% static 'tablesaw/dependencies/jquery.js' %}"></script>
+    <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
+    <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>
 </body>
 </html>
 
