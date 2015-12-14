@@ -9,7 +9,7 @@ from django.db.models import Sum
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
-from .forms import PredictionForm, PredictionPositionForm
+from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPositionForm
 
 #-------------------------------------------------------------------------------
 #   Views
@@ -105,6 +105,21 @@ def user_profile(request, season_id, user_id):
     return render(request, 'predict/user_profile.html', context)
 
 
+@login_required
+def add_result(request, season_id, race_id):
+    context = get_context_season(request, season_id)
+
+    if request.method == "POST":
+        # process the form
+        form = ResultForm(season_id, request.POST)
+        pforms = [ResultPositionForm(season_id, request.POST, prefix=str(x), instance=PredictionPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
+    else:
+        form = ResultForm(season_id, instance=RaceResult(), label_suffix='')
+        pforms = [ResultPositionForm(season_id, prefix=str(x), instance=ResultPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
+
+    context['form'] = form
+    context['pforms'] = pforms
+    return render(request, 'predict/add_result.html', context)
 
 #-------------------------------------------------------------------------------
 #   Query wrappers

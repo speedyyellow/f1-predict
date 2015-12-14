@@ -91,7 +91,11 @@ Race Overview
             <h4>{{race.season.name}} Results</h4>
         </div>
         <div class="small-12 columns">
-            <p>No Reults</p>
+            <p>No results yet
+            {% if user.is_staff %}
+              <a href="/{{race.season.name}}/addresult/{{race.pk}}">- add one?</a>
+            {% endif %}
+            </p>
         </div>
     </div>
 </div>{% endif %}

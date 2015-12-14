@@ -1,0 +1,29 @@
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
+
+<!-- The main page content -->
+{% block page-content %}
+
+{% if error_message %}
+</div class="row">
+<div class="large12 columns">
+ <p><strong>{{ error_message }}</strong></p>
+</div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="large12 panel columns">
+        <h3>{{season.first.name}} Result</h3>
+        <form method="POST">{% csrf_token %}
+         <table class="fullwidth">
+            {{ form.as_table }}
+            {% for p in pforms %}
+            {{p.as_table}}
+            {% endfor %}                 
+            <tr><th></th><td><button type="submit" class="save btn btn-default">Save</button></td></tr>
+        </table>            
+    </form>
+</div>
+</div>
+{% endblock %}

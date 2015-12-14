@@ -19,6 +19,9 @@
           <li><a href="/{{s.name}}/">{{s.name}}</a></li>
           {% endfor %}
           {% if user.is_authenticated %}
+            {% if user.is_staff %}
+              <li><a href="/admin/">Admin</a></li>
+            {% endif %}
           <li><a href="/accounts/logout/?next=/">Logout</a></li>
           {% else %}
           <li><a href="/accounts/login/?next=/">Login</a></li>
