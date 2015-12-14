@@ -14,9 +14,13 @@
 
     <!-- Tablesaw -->
     <link rel="stylesheet" href="{% static 'tablesaw/tablesaw.css' %}" />
+
+    <!-- My App -->
+    <link rel="stylesheet" href="{% static 'predict/app.css' %}" />
 </head>
 
 <body>
+
     {% include "predict/topbar.html" %}
 
     {% block page-content %}
@@ -25,7 +29,7 @@
 
     <!-- Foundation -->
     <script src="{% static 'foundation/js/vendor/jquery.js' %}"></script>
-    <script src="{% static 'foundation/js/foundation.min.js' %}"></script>
+    <script src="{% static 'foundation/js//foundation.min.js' %}"></script>
     <script>
         $(document).foundation();
     </script>
@@ -35,6 +39,7 @@
     <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
     <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>
 </body>
+
 </html>
 
 

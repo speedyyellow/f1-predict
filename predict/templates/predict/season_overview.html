@@ -6,43 +6,48 @@
 <!-- The main page content -->
 {% block page-content %}
 
-<div class="row">
-    <div class="small-12 columns">
-        <div class="small-12 panel columns">
-            {% if season %}
-            <h2>Formula 1 {{season.first.name}} Season</h2>
-            {% endif %}
+<header class="header">
+    <div class="row">
+        <div class="small-12 columns">
+            <div class="small-12 columns">
+                {% if season %}
+                <h2 class="main-header"><strong>Formula 1 {{season.first.name}} Season</strong></h2>
+                {% endif %}
+            </div>
         </div>
-        <div class="small-12 panel columns">
-            {% include "predict/results.html" %}
-        </div>
+    </div>
+    <ul class="header-subnav">
+        <li><a href="#Results">Results</a></li>
+        <li><a href="#Drivers">Drivers</a></li>
+        <li><a href="#Constructors">Constructors</a></li>
+        <li><a href="#Calendar">Calendar</a></li>
+        <li><a href="#Entry">Entry List</a></li>
+    </ul>
+</header>
+
+<div class="row panel">
+    <div id="Results" class="small-12 columns">
+        {% include "predict/results.html" %}
     </div>
 </div>
 
-
-<!-- 
-<div class="row">
-    <div class="small-12 panel columns">
-        <div class="small-6 columns">
-            {% include "predict/driver_champ.html" %}
-        </div>
-        <div class="small-6 columns">
-            {% include "predict/team_champ.html" %}
-        </div>
+<div class="row panel" >
+    <div id="Drivers" class="small-12 medium-6 columns">
+        {% include "predict/driver_champ.html" %}
+    </div>
+    <div id="Constructors" class="small-12 medium-6 columns">
+        {% include "predict/team_champ.html" %}
     </div>
 </div>
--->
 
-
-<div class="row">
-    <div class="small-12 columns">
-        <div class="small-6 panel columns">
-            {% include "predict/calendar.html" %}
-        </div>
-        <div class="small-6 panel columns">
-            {% include "predict/entry_list.html" %}
-        </div>
+<div class="row panel" >
+    <div id="Calendar" class="small-12 medium-6 columns">
+        {% include "predict/calendar.html" %}
+    </div>
+    <div id="Entry" class="small-12 medium-6 columns">
+        {% include "predict/entry_list.html" %}
     </div>
 </div>
+
 
 {% endblock %}
