@@ -20,7 +20,7 @@ def index(request):
     context = get_context(request)
     return render(request, 'predict/index.html', context)
 
-@cache_page(60 * 60 * 6) # cache for 6 hours - only changes after a race anyway
+@cache_page(60 * 15) # cache for 15 mins
 @login_required
 def season_overview(request, season_id):
     # get the season context
