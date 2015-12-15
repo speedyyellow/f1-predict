@@ -98,27 +98,34 @@ Race Overview
 <div class="row">
     <div class="small-12 panel columns">
         <div class="small-12 columns">
-            <h4>{{last_race.season.name}} Results</h4>
-        </div>
-        <div class="small-9 columns">
-            <h5>Pole: <a href="{% url 'driver_overview' last_race.season.name last_result.pole_position.driver.id %}">{{last_result.pole_position.driver.name}}</a></h5>
-        </div>
-        <div class="small-9 columns">
-            <h5>Fastest Lap: <a href="{% url 'driver_overview' last_race.season.name last_result.fastest_lap.driver.id %}">{{last_result.fastest_lap.driver.name}}</a></h5>
+            <table class="fullwidth">
+                <tr>
+                    <th><h4>{{last_race.season.name}} Results</h4></th>
+                    <th>Race</th>
+                </tr>
+                <tr>
+                    <th>Pole Position</th>
+                    <td><a href="{% url 'driver_overview' last_race.season.name last_result.pole_position.driver.id %}">{{last_result.pole_position.driver.name}}</a></td>
+                </tr>
+                <tr>
+                    <th>Fastest Lap</th>
+                    <td><a href="{% url 'driver_overview' last_race.season.name last_result.fastest_lap.driver.id %}">{{last_result.fastest_lap.driver.name}}</a></td>
+                </tr>
+            </table>
         </div>
         <div class="small-12 columns">
             <table class="tablesaw">
                 <tr>
                     <th>Pos</th>
                     <th>Driver</th>
-                    <th>Constructor</th>
+                    <th class="hide-for-small">Constructor</th>
                     <th>Points</th>
                 </tr>
                 {% for entry in last_results %}
                 <tr>
                     <td>{{ entry.position.position }}</td>
                     <td><a href="{% url 'driver_overview' last_race.season.name entry.driver.driver.id %}">{{ entry.driver.driver.name }}</a></td>
-                    <td><a href="{% url 'team_overview' last_race.season.name entry.driver.team.id %}">{{ entry.driver.team.name }}</a></td>
+                    <td class="hide-for-small"><a href="{% url 'team_overview' last_race.season.name entry.driver.team.id %}">{{ entry.driver.team.name }}</a></td>
                     <td>{{ entry.position.points }}</td>
                 </tr>
                 {% endfor %}
