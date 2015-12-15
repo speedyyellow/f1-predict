@@ -70,8 +70,8 @@ TEMPLATES = [
     },
 ]
 
-LOGIN_URL = '/predict/accounts/login/'
-LOGOUT_URL = '/predict/accounts/logout/'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 
 WSGI_APPLICATION = 'F1.wsgi.application'
 
