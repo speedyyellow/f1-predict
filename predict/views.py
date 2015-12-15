@@ -64,7 +64,7 @@ def race_overview(request, season_id, country_id):
             row.append(pos.driver.driver.pk)
             row.append(pos.driver.team.name)
             row.append(pos.driver.team.pk)
-            if loopcount < pred_positions.count():
+            if pred_positions != None and loopcount < pred_positions.count():
                 row.append(pred_positions[loopcount].driver.driver.name)
                 row.append(pred_positions[loopcount].driver.driver.pk)
             else:
