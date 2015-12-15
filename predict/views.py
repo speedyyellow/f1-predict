@@ -7,6 +7,7 @@ from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.cache import cache_page
 
 from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
 from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPositionForm
@@ -19,6 +20,7 @@ def index(request):
     context = get_context(request)
     return render(request, 'predict/index.html', context)
 
+@cache_page(60 * 60 * 6) # cache for 6 hours - only changes after a race anyway
 @login_required
 def season_overview(request, season_id):
     # get the season context
