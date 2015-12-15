@@ -12,7 +12,7 @@ Race Overview
     <div class="small-12 panel columns">
         <div class="small-10 columns">
             {% if user.is_staff %}
-            <h3><a href="/{{race.season.name}}/result/{{race.circuit.country}}">{{race.season.name}} {{race.circuit.country}} Grand Prix</a></h3>
+            <h3><a href="{% url 'result' race.season.name race.circuit.country %}">{{race.season.name}} {{race.circuit.country}} Grand Prix</a></h3>
             {% else %}
             <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
             {% endif %}
@@ -44,16 +44,20 @@ Race Overview
             <h4>Prediction</h4>
         </div>
         <div class="small-9 columns">
-            <h5>Pole: <a href='/{{race.season.name}}/driver/{{result.pole_position.driver.id}}'>{{result.pole_position.driver.name}}</a></h5>
+            <h5>Pole: <a href="{% url 'driver_overview' race.season.name result.pole_position.driver.id %}">{{result.pole_position.driver.name}}</a></h5>
         </div>
         <div class="small-3 columns">
-            <h5><a href='/{{race.season.name}}/driver/{{prediction.pole_position.driver.id}}'>{{prediction.pole_position.driver.name}}</a></h5>
+            {% if prediction %}
+            <h5><a href="{% url 'driver_overview' race.season.name prediction.pole_position.driver.id %}">{{prediction.pole_position.driver.name}}</a></h5>
+            {% endif %}
         </div>
         <div class="small-9 columns">
-            <h5>Fastest Lap: <a href='/{{race.season.name}}/driver/{{result.fastest_lap.driver.id}}'>{{result.fastest_lap.driver.name}}</a></h5>
+            <h5>Fastest Lap: <a href="{% url 'driver_overview' race.season.name result.fastest_lap.driver.id %}">{{result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-3 columns">
-            <h5><a href='/{{race.season.name}}/driver/{{prediction.fastest_lap.driver.id}}'>{{prediction.fastest_lap.driver.name}}</a></h5>
+            {% if prediction %}
+            <h5><a href="{% url 'driver_overview' race.season.name prediction.fastest_lap.driver.id %}">{{prediction.fastest_lap.driver.name}}</a></h5>
+            {% endif %}
         </div>
         <div class="small-12 columns">
             <table class="fullwidth">
@@ -67,11 +71,14 @@ Race Overview
                 {% for pos, points, dname, dkey, tname, tkey, pname, pkey in table %}
                 <tr>
                     <td>{{pos}}</td>
-                    <td><a href='/{{race.season.name}}/driver/{{dkey}}'>{{ dname }}</a></td>
-                    <td><a href='/{{race.season.name}}/team/{{tkey}}'>{{ tname }}</a></td>
+                    <td><a href="{% url 'driver_overview' race.season.name dkey %}">{{ dname }}</a></td>
+                    <td><a href="{% url 'team_overview' race.season.name tkey %}">{{ tname }}</a></td>
                     <td>{{points}}</td>
-                    <td><a href='/{{race.season.name}}/driver/{{pkey}}'>{{ pname }}</a></td>
+                    {% if pname %}
+                    <td><a href="{% url 'driver_overview' race.season.name pkey %}">{{ pname }}</a></td>
+                    {% else %}
                     <td></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
@@ -97,10 +104,10 @@ Race Overview
             <h4>{{last_race.season.name}} Results</h4>
         </div>
         <div class="small-9 columns">
-            <h5>Pole: <a href='/{{last_race.season.name}}/driver/{{last_result.pole_position.driver.id}}'>{{last_result.pole_position.driver.name}}</a></h5>
+            <h5>Pole: <a href="{% url 'driver_overview' last_race.season.name last_result.pole_position.driver.id %}">{{last_result.pole_position.driver.name}}</a></h5>
         </div>
         <div class="small-9 columns">
-            <h5>Fastest Lap: <a href='/{{last_race.season.name}}/driver/{{last_result.fastest_lap.driver.id}}'>{{last_result.fastest_lap.driver.name}}</a></h5>
+            <h5>Fastest Lap: <a href="{% url 'driver_overview' last_race.season.name last_result.fastest_lap.driver.id %}">{{last_result.fastest_lap.driver.name}}</a></h5>
         </div>
         <div class="small-12 columns">
             <table class="tablesaw">
@@ -113,8 +120,8 @@ Race Overview
                 {% for entry in last_results %}
                 <tr>
                     <td>{{ entry.position.position }}</td>
-                    <td><a href='/{{race.season.name}}/driver/{{entry.driver.driver.id}}'>{{ entry.driver.driver.name }}</a></td>
-                    <td><a href='/{{race.season.name}}/team/{{entry.driver.team.id}}'>{{ entry.driver.team.name }}</a></td>
+                    <td><a href="{% url 'driver_overview' last_race.season.name entry.driver.driver.id %}">{{ entry.driver.driver.name }}</a></td>
+                    <td><a href="{% url 'team_overview' last_race.season.name entry.driver.team.id %}">{{ entry.driver.team.name }}</a></td>
                     <td>{{ entry.position.points }}</td>
                 </tr>
                 {% endfor %}

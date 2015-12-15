@@ -14,7 +14,7 @@
 
 <div class="row">
     <div class="large12 panel columns">
-        <a href="/{{race.season.name}}/round/{{race.circuit.country}}"><h3>{{race.season.name}} {{race.circuit.country}} Result</h3></a>
+        <a href="{% url 'race_overview' race.season.name race.circuit.country %}"><h3>{{race.season.name}} {{race.circuit.country}} Result</h3></a>
         <form method="POST">{% csrf_token %}
             <table class="fullwidth">
                 {{ form.as_table }}

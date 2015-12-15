@@ -1,7 +1,7 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-
+{% block title %}F1 Prediction Game - Login{% endblock %}
 <!-- The main page content -->
 {% block page-content %}
 <div class="row">
@@ -10,8 +10,8 @@
 
         <form method="post" action=".">{% csrf_token %}
             {{ form.as_ul }}
-            <input type="hidden" name="next" value="/" />
-            <input type="submit" value="Login" /> or <a href="/register">Register</a>
+            <input type="hidden" name="next" value="{% url 'index' %}" />
+            <input type="submit" value="Login" /> or <a href="{% url 'register' %}">Register</a>
         </form>
 
     </div>

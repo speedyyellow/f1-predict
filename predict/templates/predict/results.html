@@ -5,7 +5,7 @@
         <th data-tablesaw-priority="persist"></th>
         {% for race in race_list %}
         <th  scope="col">
-            <a href="/{{ race.season.name }}/round/{{race.circuit.country}}/">{{race.circuit.country|slice:":2"|upper}}</a>
+            <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country|slice:":2"|upper}}</a>
         </th>
         {% endfor %}
         <th data-tablesaw-priority="persist">Score</th>

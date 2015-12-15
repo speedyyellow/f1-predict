@@ -8,7 +8,7 @@
     {% for e in team_champ %}
     <tr>
         <td>{{e.rank}}</td>
-        <td><a href='/{{e.season}}/team/{{e.key}}'>{{e.name}}</a></td>
+        <td><a href="{% url 'team_overview' e.season e.key %}">{{e.name}}</a></td>
         <td>{{e.score}}</td>
     </tr>
     {% endfor %}

@@ -4,9 +4,9 @@
     <tr><th>Number</th><th>Driver</th><th>Team</th></tr>
     {% for entry in team_list %}
         <tr>
-            <td><a href='/{{entry.season.name}}/driver/{{entry.driver.id}}'>{{ entry.driver.number }}</a></td>
-            <td><a href='/{{entry.season.name}}/driver/{{entry.driver.id}}'>{{ entry.driver.name }}</a></td>
-            <td><a href='/{{entry.season.name}}/team/{{entry.team.id}}'>{{ entry.team.name }}</a></td>
+            <td><a href="{% url 'driver_overview' entry.season.name entry.driver.id %}">{{ entry.driver.number }}</a></td>
+            <td><a href="{% url 'driver_overview' entry.season.name entry.driver.id %}">{{ entry.driver.name }}</a></td>
+            <td><a href="{% url 'team_overview' entry.season.name entry.team.id %}">{{ entry.team.name }}</a></td>
         </tr>
     {% endfor %}
     </table>

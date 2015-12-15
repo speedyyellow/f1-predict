@@ -18,7 +18,7 @@ Driver Overview
             <h3>#{{driver.driver.number}}</h3>
         </div>
         <div class="small-5 columns">
-            <h5><a href='/{{driver.season.name}}/team/{{driver.team.pk}}'>{{driver.team.name}}</a></h5>
+            <h5><a href="{% url 'team_overview' driver.season.name driver.team.pk %}">{{driver.team.name}}</a></h5>
         </div>
         <div class="small-5 columns">
             <h5>{{driver.engine.name}}</h5>
@@ -37,7 +37,7 @@ Driver Overview
             {% for result in result_list %}
             <tr>
                 <td>{{result.result.season_round.race_date}}</td>
-                <td><a href='/{{result.result.season_round.season.name}}/round/{{result.result.season_round.circuit.country}}'>{{result.result.season_round.circuit.country}}</a></td>
+                <td><a href="{% url 'race_overview' result.result.season_round.season.name result.result.season_round.circuit.country %}">{{result.result.season_round.circuit.country}}</a></td>
                 <td>{{result.position.position}}</td>
                 <td>{{result.position.points}}</td>
             </tr>

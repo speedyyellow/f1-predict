@@ -13,18 +13,18 @@
       <a href="#">{% if user.is_authenticated %}{{user.username|capfirst}}{% else %}Menu{% endif %}</a>
         <ul class="dropdown">
           {% if season %}
-          <li><a href="/{{season.first.name}}/user/{{user.username}}">Predictions</a></li>
+          <li><a href="{% url 'user_profile' season.first.name user.username %}">Predictions</a></li>
           {% endif %}
           {% for s in season_list %}
-          <li><a href="/{{s.name}}/">{{s.name}}</a></li>
+          <li><a href="{% url 'season_overview' s.name %}">{{s.name}}</a></li>
           {% endfor %}
           {% if user.is_authenticated %}
             {% if user.is_staff %}
               <li><a href="/admin/">Admin</a></li>
             {% endif %}
-          <li><a href="/accounts/logout/?next=/">Logout</a></li>
+          <li><a href="{% url 'logout' %}?next={% url 'index' %}">Logout</a></li>
           {% else %}
-          <li><a href="/accounts/login/?next=/">Login</a></li>
+          <li><a href="{% url 'login' %}">Login</a></li>
           {% endif %}
         </ul>
       </li>
