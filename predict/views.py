@@ -24,14 +24,12 @@ def season_overview(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
     # add the extras
-    race_list = get_season_rounds(season_id)
-    team_list = get_entry_list(season_id)
-    dc = get_drivers_champ(season_id)
-    cc = get_constructors_champ(season_id)
-    context['race_list'] = race_list
-    context['team_list'] = team_list
-    context['driver_champ'] = dc
-    context['team_champ'] = cc
+    context['race_list'] = get_season_rounds(season_id)
+    context['team_list'] = get_entry_list(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
+    context['team_champ'] = get_constructors_champ(season_id)
+    context['season_results'] = results_table(season_id)
+
     return render(request, 'predict/season_overview.html', context)
 
 @login_required
@@ -187,7 +185,6 @@ def get_context_season(request, season_id):
         context['season'] = season
         score = score_season(request.user, season_id)
         context['season_score'] = score
-        context['season_results'] = results_table(season_id)
     return context
 
 def get_context_race(request, season_round, prefix):
@@ -257,7 +254,7 @@ def get_season_rounds(season_id):
 
 def get_race_result_positions(result):
     if result != None:
-        positions = ResultPosition.objects.filter(result__season_round__season__pk=result.season_round.season.pk, result__pk=result.pk).order_by('position__position')
+        positions = ResultPosition.objects.filter(result__pk=result.pk).order_by('position__position')
         return positions
     else:
         return None
@@ -350,10 +347,6 @@ def results_table(season_id):
     # get all the race reults for this season
     results = get_race_results(season_id)
     srounds = get_season_rounds(season_id)
-    if srounds != None:
-        for sround in srounds:
-            # get the user's prediction for this round
-            res = get_race_result(season_id, sround.circuit.country)
 
     users = get_active_users(season_id)
     table = []
@@ -401,4 +394,3 @@ def get_champ(results, name_field, key_field):
             last_score = res['score']
 
     return champ
-
