@@ -10,26 +10,27 @@ Race Overview
 {% if race %}
 <div class="row">
     <div class="small-12 panel columns">
-        <div class="small-10 columns">
-            {% if user.is_staff %}
-            <h3><a href="{% url 'result' race.season.name race.circuit.country %}">{{race.season.name}} {{race.circuit.country}} Grand Prix</a></h3>
-            {% else %}
-            <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
-            {% endif %}
-        </div>
-        <div class="small-2 columns">
-            <h3>{{round_score}} points</h3>
-        </div>
-        <div class="small-5 columns">
-            <h5>{{race.circuit.name}}</h5>
-        </div>
-        <div class="small-5 columns">
-            <h5>{{race.event_date|date:"d F"}} - {{race.race_date|date:"d F Y"}}</h5>
-        </div>
-        <div class="small-2 columns">
-            <h3></h3>
-        </div>
-    </div>
+        <div class="small-12 columns">
+            <table class="fullwidth">
+                <tr><th>
+                    {% if user.is_staff %}
+                    <h3><a href="{% url 'result' race.season.name race.circuit.country %}">{{race.season.name}} {{race.circuit.country}} Grand Prix</a></h3>
+                    {% else %}
+                    <h3>{{race.season.name}} {{race.circuit.country}} Grand Prix</h3>
+                    {% endif %}
+                </th>
+                <th>
+                    <h3>{{round_score}} points</h3>            
+                </th>
+            </tr>
+            <tr><th>
+                {{race.circuit.name}}
+            </th><th>
+            {{race.event_date|date:"d F"}} - {{race.race_date|date:"d F Y"}}
+        </th></tr>
+    </table>      
+</div>
+</div>
 </div>
 {% endif %}
 
@@ -85,12 +86,12 @@ Race Overview
 {% else %}
 <div class="row">
     <div class="small-12 panel columns">
-        <div class="small-12 columns">
-            <h4>{{race.season.name}} Results</h4>
-        </div>
-        <div class="small-12 columns">
-            <p>No results yet</p>
-        </div>
+    <div class="small-12 columns">
+        <table class="fullwidth">
+            <tr><th><h4>{{race.season.name}} Results</h4></th></tr>
+            <tr><td>No results yet</td></tr>
+        </table>
+    </div>
     </div>
 </div>{% endif %}
 
