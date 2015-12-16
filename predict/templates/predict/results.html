@@ -1,14 +1,14 @@
 <h3>Results</h3>
-<table class="tablesaw" data-tablesaw-mode="swipe" >
+<table class="responsive">
     <thead>
     <tr>
-        <th data-tablesaw-priority="persist"></th>
+        <th class=""></th>
         {% for race in race_list %}
-        <th  scope="col">
+        <th>
             <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country|slice:":2"|upper}}</a>
         </th>
         {% endfor %}
-        <th data-tablesaw-priority="persist">Score</th>
+        <th class="">Score</th>
     </tr>
     </thead>
     {% for score, name, results in season_results %}

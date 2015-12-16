@@ -11,18 +11,10 @@
     <!-- Foundation -->
     <link rel="stylesheet" href="{% static 'foundation/css/normalize.css' %}" />
     <link rel="stylesheet" href="{% static 'foundation/css/foundation.css' %}" />
-
-    <!-- Tablesaw -->
-    <link rel="stylesheet" href="{% static 'tablesaw/bare/tablesaw.bare.css' %}" />
-    <!-- Tablesaw -->
-    <!--[if lt IE 9]><script src="{% static 'tablesaw/dependencies/respond.js' %}></script><![endif]-->
-    <script src="{% static 'tablesaw/dependencies/jquery.js' %}"></script>
-    <script src="{% static 'tablesaw/tablesaw.js' %}"></script>
-    <script src="{% static 'tablesaw/tablesaw-init.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'responsive-tables/responsive-tables.css' %}" />
 
     <!-- My App -->
     <link rel="stylesheet" href="{% static 'predict/app.css' %}" />
-    
     <style>
       .header {
           text-align: center;
@@ -61,9 +53,11 @@
     <!-- Foundation -->
     <script src="{% static 'foundation/js/vendor/jquery.js' %}"></script>
     <script src="{% static 'foundation/js//foundation.min.js' %}"></script>
+    <script src="{% static 'responsive-tables/responsive-tables.js' %}"></script>
     <script>
         $(document).foundation();
     </script>
+
 
 </body>
 
