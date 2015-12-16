@@ -42,7 +42,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -51,15 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
 
 ROOT_URLCONF = 'F1.urls'
 
@@ -116,23 +110,31 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "predict/static/")
 STATIC_URL = '/static/'
 
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+# Heroku specific settings
+if os.environ.get("HEROKU") != None:
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    #         'LOCATION': 'unique-snowflake',
+    #     }
+    # }
 
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # Parse database configuration from $DATABASE_URL
+    import dj_database_url
+    DATABASES['default'] =  dj_database_url.config()
 
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
+    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Static asset configuration
-import os
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
+    # Allow all host headers
+    ALLOWED_HOSTS = ['*']
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+    # Static asset configuration
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = 'staticfiles'
+    STATIC_URL = '/static/'
+
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
 
