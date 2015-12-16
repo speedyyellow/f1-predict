@@ -13,6 +13,11 @@ from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team
 from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPositionForm
 
 #-------------------------------------------------------------------------------
+#   globals
+#-------------------------------------------------------------------------------
+global_results = {}
+global_champs = {}
+#-------------------------------------------------------------------------------
 #   Views
 #-------------------------------------------------------------------------------
 
@@ -20,7 +25,6 @@ def index(request):
     context = get_context(request)
     return render(request, 'predict/index.html', context)
 
-@cache_page(60 * 15) # cache for 15 mins
 @login_required
 def season_overview(request, season_id):
     # get the season context
@@ -161,6 +165,10 @@ def add_result(request, season_id, country_id):
                         new_pos.save()
                 except Exception, e:
                     print e
+            # added a new result, regenerate the results & championship tables
+            rebuild_results(season_id)
+            rebuild_championships(season_id)
+
     else:
         if result == None:
             form = ResultForm(season_id, instance=RaceResult(), label_suffix='')
@@ -346,36 +354,60 @@ def score_round(prediction, race_result):
 
 
 def results_table(season_id):
-    # get all the race reults for this season
-    results = get_race_results(season_id)
-    srounds = get_season_rounds(season_id)
+    # check if we have it already
+    if season_id in global_results:
+        return global_results[season_id]
+    else:
+        # get all the race reults for this season
+        results = get_race_results(season_id)
+        srounds = get_season_rounds(season_id)
 
-    users = get_active_users(season_id)
-    table = []
-    for u in users:
-        scores = []
-        for sround in srounds:
-            p = get_user_prediction(u, sround)
-            r = get_race_result(season_id, sround.circuit.country)
-            scores.append(score_round(p, r))
-        season_score = score_season(u, season_id)
-        table.append( (season_score, u.username, scores) )
-    table.sort()
-    table.reverse()
-    return table
+        users = get_active_users(season_id)
+        table = []
+        for u in users:
+            scores = []
+            for sround in srounds:
+                p = get_user_prediction(u, sround)
+                r = get_race_result(season_id, sround.circuit.country)
+                scores.append(score_round(p, r))
+            season_score = score_season(u, season_id)
+            table.append( (season_score, u.username, scores) )
+        table.sort()
+        table.reverse()
 
+        # cache this table & return it
+        global_results[season_id] = table
+        return table
 
+def rebuild_results(season_id):
+    if season_id in global_results:
+        del global_results[season_id]
+        results_table(season_id)
 #-------------------------------------------------------------------------------
 #   Championship calculations
 #-------------------------------------------------------------------------------
+def rebuild_championships(season_id):
+    if season_id+"driver" in global_champs:
+        del global_champs[season_id+"driver"]
+    if season_id+"constructor" in global_champs:
+        del global_champs[season_id+"constructor"]
+
+    get_drivers_champ(season_id)
+    get_constructors_champ(season_id)
 
 def get_drivers_champ(season_id):
-    results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-    return get_champ(results, 'driver__driver__name', 'driver__driver__pk')
+    if season_id+"driver" not in global_champs:
+        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
+        global_champs[season_id+"driver"] = get_champ(results, 'driver__driver__name', 'driver__driver__pk')
+
+    return global_champs[season_id+"driver"]
 
 def get_constructors_champ(season_id):
-    results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__team__name','driver__team__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-    return get_champ(results, 'driver__team__name', 'driver__team__pk')
+    if season_id+"constructor" not in global_champs:
+        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__team__name','driver__team__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
+        global_champs[season_id+"driver"] = get_champ(results, 'driver__team__name', 'driver__team__pk')
+
+    return global_champs[season_id+"driver"]
 
 def get_champ(results, name_field, key_field):
     champ = []
