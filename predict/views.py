@@ -396,18 +396,20 @@ def rebuild_championships(season_id):
     get_constructors_champ(season_id)
 
 def get_drivers_champ(season_id):
-    if season_id+"driver" not in global_champs:
+    key = season_id+"driver"
+    if key not in global_champs:
         results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-        global_champs[season_id+"driver"] = get_champ(results, 'driver__driver__name', 'driver__driver__pk')
+        global_champs[key] = get_champ(results, 'driver__driver__name', 'driver__driver__pk')
 
-    return global_champs[season_id+"driver"]
+    return global_champs[key]
 
 def get_constructors_champ(season_id):
-    if season_id+"constructor" not in global_champs:
+    key = season_id+"constructor"
+    if key not in global_champs:
         results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__team__name','driver__team__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-        global_champs[season_id+"driver"] = get_champ(results, 'driver__team__name', 'driver__team__pk')
+        global_champs[key] = get_champ(results, 'driver__team__name', 'driver__team__pk')
 
-    return global_champs[season_id+"driver"]
+    return global_champs[key]
 
 def get_champ(results, name_field, key_field):
     champ = []
