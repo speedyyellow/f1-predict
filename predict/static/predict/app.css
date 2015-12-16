@@ -2,20 +2,30 @@
 
 .header {
   text-align: center;
-  text-shadow: 2px 2px #000000;
+  text-shadow: 
+   -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    2px 2px 0 #000;
+  -webkit-font-smoothing: antialiased;
   background: url("") no-repeat center center;
   background-size: cover;
   padding: 4rem; }
 
   .header .main-header {
-    color: #FFF; }
+    color: #FFF; 
+  }
 
     .header-subnav {
       float: none;
       position: relative;
       top: 4rem;
       text-align: center;
-      text-shadow: 2px 2px #000000;
+      text-shadow: 
+       -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
       margin-bottom: 0; }
       .header-subnav li {
         float: none;
