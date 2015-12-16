@@ -41,27 +41,8 @@ INSTALLED_APPS = (
     'predict',
 )
 
-if os.getenv('PLATFORM','') == "heroku":
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake',
-        }
-    }
-    MIDDLEWARE_CLASSES = (
-        'django.middleware.cache.UpdateCacheMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'django.middleware.security.SecurityMiddleware',
-        'django.middleware.cache.FetchFromCacheMiddleware',
-    )
-else:
-    MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,7 +51,15 @@ else:
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
 
 ROOT_URLCONF = 'F1.urls'
 
@@ -95,6 +84,18 @@ LOGOUT_URL = '/accounts/logout/'
 
 WSGI_APPLICATION = 'F1.wsgi.application'
 
+
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -109,41 +110,29 @@ USE_L10N = True
 USE_TZ = True
 
 
-# HEROKU DATABASE CONFIG BELOW
-if os.getenv('PLATFORM','') == "heroku":
-    # Parse database configuration from $DATABASE_URL
-    import dj_database_url
-    DATABASES['default'] =  dj_database_url.config()
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+STATIC_ROOT = os.path.join(BASE_DIR, "predict/static/")
+STATIC_URL = '/static/'
 
-    # Allow all host headers
-    ALLOWED_HOSTS = ['*']
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
 
-    # Static asset configuration
-    import os
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = 'staticfiles'
-    STATIC_URL = '/static/'
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-    )
-else:
-    # Database
-    # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+# Static asset configuration
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = 'staticfiles'
+STATIC_URL = '/static/'
 
-    # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
