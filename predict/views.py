@@ -42,7 +42,7 @@ def season_overview(request, season_id):
 def race_overview(request, season_id, country_id):
     # get the season context
     context = get_context_season(request, season_id)
-    
+
     # add this seasons data
     race = get_season_round(season_id, country_id)
     context.update(get_context_race(request, race, ""))
@@ -58,7 +58,7 @@ def race_overview(request, season_id, country_id):
     if result != None:
         result_positions = get_race_result_positions(result)
         pred = get_user_prediction(request.user, result.season_round)
-        pred_positions = get_prediction_positions(pred)        
+        pred_positions = get_prediction_positions(pred)
         loopcount = 0
         for pos in result_positions:
             row = []
@@ -128,7 +128,7 @@ def user_profile(request, season_id, user_id):
         if prediction == None:
             form = PredictionForm(season_id, instance=Prediction(), label_suffix='')
             pforms = [PredictionPositionForm(season_id, prefix=str(x), instance=PredictionPosition(), label_suffix=" "+str(x)) for x in range(1,11)]
-        else:            
+        else:
             form = PredictionForm(season_id, instance=prediction, label_suffix='')
             pforms = [PredictionPositionForm(season_id, prefix=str(p.position.position), instance=p, label_suffix=" "+str(p.position.position)) for p in predictions]
 
@@ -329,7 +329,7 @@ def score_round(prediction, race_result):
         return score
     if race_result == None:
         return score
-        
+
     # pole & fastest lap get 5 points each
     if prediction.pole_position == race_result.pole_position:
         score += 5

@@ -51,7 +51,7 @@ class SeasonRound(models.Model):
     race_date = models.DateField()
     event_date = models.DateField(null=True)
     def __str__(self):
-        return self.season.name + " " + self.circuit.name 
+        return self.season.name + " " + self.circuit.name
 
 # result data
 class RaceResult(models.Model):
@@ -70,7 +70,7 @@ class ResultPosition(models.Model):
 
 # player data
 class Prediction(models.Model):
-    created = models.DateTimeField()
+    created = models.DateField()
     user = models.ForeignKey(User, null=True)
     pole_position = models.ForeignKey(TeamDriver, related_name="prediction_pole_position", null=True)
     fastest_lap = models.ForeignKey(TeamDriver, related_name="prediction_fastest_lap", null=True)
@@ -83,14 +83,3 @@ class PredictionPosition(models.Model):
     driver = models.ForeignKey(TeamDriver)
     def __str__(self):
         return str(self.position.position) + " " + self.driver.driver.name
-
-
-
-
-
-
-
-
-
-
-
