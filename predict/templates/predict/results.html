@@ -2,10 +2,10 @@
 <table class="responsive">
     <thead>
     <tr>
-        <th class=""></th>
+        <th>Player</th>
         {% for race in race_list %}
         <th>
-            <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country|slice:":2"|upper}}</a>
+            <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country_code}}</a>
         </th>
         {% endfor %}
         <th class="">Score</th>

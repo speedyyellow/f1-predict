@@ -20,9 +20,10 @@ class Driver(models.Model):
 
 class Circuit(models.Model):
     country = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=3)
     name = models.CharField(max_length=50)
     def __str__(self):
-        return self.country
+        return self.name + " (" + self.country_code + ")"
 
 class FinishingPosition(models.Model):
     position = models.IntegerField()
