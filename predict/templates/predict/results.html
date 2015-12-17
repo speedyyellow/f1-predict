@@ -1,5 +1,5 @@
 <h3>Results</h3>
-<table class="responsive">
+<table class="responsive fullwidth">
     <thead>
     <tr>
         <th>Player</th>
@@ -8,7 +8,7 @@
             <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country_code}}</a>
         </th>
         {% endfor %}
-        <th class="">Score</th>
+        <th>Tot</th>
     </tr>
     </thead>
     {% for score, name, results in season_results %}
