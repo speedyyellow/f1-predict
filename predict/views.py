@@ -274,7 +274,7 @@ def get_race_result_top_ten(result):
 
 def get_user_prediction(user, season_round):
     try:
-        prediction = Prediction.objects.filter(user__pk=user.pk, created__lte=season_round.event_date).latest('created')
+        prediction = Prediction.objects.filter(user__pk=user.pk, created__lt=season_round.event_date).latest('pk')
         return prediction
     except Exception, e:
         return None
@@ -285,7 +285,7 @@ def get_latest_user_prediction(user, season_id):
         print season_id
         begin   = season_id+"-01-01"
         end     = season_id+"-12-31"
-        prediction = Prediction.objects.filter(user__pk=user.pk,created__gte=begin, created__lte=end).latest('created')
+        prediction = Prediction.objects.filter(user__pk=user.pk,created__gte=begin, created__lte=end).latest('pk')
         return prediction
     except Exception, e:
         print e
