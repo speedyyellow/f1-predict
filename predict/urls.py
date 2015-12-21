@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     # ex: /2015/user/username
-    url(r'^(?i)(?P<season_id>[0-9]+)/user/(?P<user_id>[0-9a-z ]+)/$', views.user_profile, name='user_profile'),
+    url(r'^(?i)user/(?P<user_id>[0-9a-z ]+)/$', views.user_profile, name='user_profile'),
     # ex: /2015/team/12
     url(r'^(?i)(?P<season_id>[0-9]+)/team/(?P<team_id>[0-9]+)/$', views.team_overview, name='team_overview'),
     # ex: /2015/driver/2

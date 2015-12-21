@@ -102,7 +102,8 @@ def driver_overview(request, season_id, driver_id):
     return render(request, 'predict/driver_overview.html', context)
 
 @login_required
-def user_profile(request, season_id, user_id):
+def user_profile(request, user_id):
+    season_id = get_year()
     context = get_context_season(request, season_id)
 
     prediction = get_latest_user_prediction(request.user, season_id)
@@ -307,6 +308,8 @@ def get_active_users(season_id):
         userset.append(p.user)
     return set(userset)
 
+def get_year():
+    return timezone.now().strftime("%Y")
 #-------------------------------------------------------------------------------
 #   Score calculations
 #-------------------------------------------------------------------------------
