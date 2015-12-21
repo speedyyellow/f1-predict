@@ -1,10 +1,11 @@
 {% if race_list %}
     <h3>Calendar</h3>
     <table  class="fullwidth">
-    <tr><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
+    <tr><th>Round</th><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
     {% for race in race_list %}
         <tr>
-        	<td>{{ race.race_date }}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{ race.race_date }}</td>
         	<td><a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country}}</a></td>
         	<td><a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.name}}</a></td>
         </tr>
