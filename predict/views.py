@@ -333,10 +333,8 @@ def score_round(prediction, race_result):
     # pole & fastest lap get 5 points each
     if prediction.pole_position == race_result.pole_position:
         score += 5
-        print "+5 pole position"
     if prediction.fastest_lap == race_result.fastest_lap:
         score += 5
-        print "+5 fastest lap"
 
     # get the prediction positions & race positions
     prediction_pos = get_prediction_positions(prediction)
@@ -348,17 +346,13 @@ def score_round(prediction, race_result):
             if ppos.driver == rpos.driver:
                 # the prediction has a driver in the top 10
                 score += 1
-                print "+1 top 10"
                 if ppos.position == rpos.position:
                     # the prediction has the driver in the correct position
                     score += 4
-                    print "+4 correct position (" + str(ppos.position) + ")"
                     if ppos.position.position == 1:
                         # and got the winner right
                         score += 5
-                        print "+5 race winner"
 
-    print "score = " + str(score)
     return score
 
 
