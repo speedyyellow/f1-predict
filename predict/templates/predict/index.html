@@ -11,12 +11,24 @@
 <div class="row">
 	<div class="large12 columns">
         <h3>Introduction</h3>
-        {% lorem %}
+        <p>Welcome to the F1 Prediction game.  This game (or a variation of it) was originally set up and run by <a href="http://sidewaysbob.blogspot.co.uk/p/f1-prediction-game.html">SidewaysBob</a> who after a number of years has decided not to continue in 2016.  After winning his game for 2015 I decided I needed to defend my title in 2016 and so built a new game heavily inspired by his.</p>
         <h3>Rules</h3>
-        {% lorem %}
+        <p>Predictions must be submitted prior to the event starting.  Most events start the Friday before the Grand Prix meaning your predictions must be entered by the end of Thursday.  Monaco starts a day early so your predictions should be in by the end of Wednesday.  If you do not enter a new prediction your current one will continue to be used for each race going forward until you change it.</p>
+        <p>Results will generally be updated on the Monday morning following the Grand Prix and will be as per the official FIA website.  Results will not be updated in the event of an exclusion applied after this time.</p>
+        <p>We will always use the top 10 cars in the official results, whether they finished the race or retired.  Pole position is considerred to be the car that starts the race in pole position.  This might not be the fastest driver in Saturday qualifying.</p>
         <h3>Scoring</h3>
-        {% lorem %}
-        
+        <p>
+            Points are awarded as follows:
+            <ul>
+                <li>1 point for each driver in the top 10</li>
+                <li>4 points for each driver in the correct position in the top 10</li>
+                <li>5 points for race winner</li>
+                <li>5 points for pole position</li>
+                <li>5 points for fastest lap</li>
+            </ul>
+            The maximum score for each round is 65 points.
+        </p>
+
         {% if not user.is_authenticated %}
         <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
         {% endif %}
