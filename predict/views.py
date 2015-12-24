@@ -35,7 +35,7 @@ def season_overview(request, season_id):
     context['driver_champ'] = get_drivers_champ(season_id)
     context['team_champ'] = get_constructors_champ(season_id)
     context['season_results'] = results_table(season_id)
-
+    context['season_graph'] = results_graph(season_id)
     return render(request, 'predict/season_overview.html', context)
 
 @login_required
@@ -365,9 +365,7 @@ def results_table(season_id):
         return global_results[season_id]
     else:
         # get all the race reults for this season
-        results = get_race_results(season_id)
         srounds = get_season_rounds(season_id)
-
         users = get_active_users(season_id)
         table = []
         for u in users:
@@ -389,6 +387,23 @@ def rebuild_results(season_id):
     if season_id in global_results:
         del global_results[season_id]
         results_table(season_id)
+
+def results_graph(season_id):
+    # get all the race reults for this season
+    results = get_race_results(season_id)
+    users = get_active_users(season_id)
+    table = []
+    for u in users:
+        cumalative = 0
+        scores = []
+        for r in results:
+            p = get_user_prediction(u, r.season_round)
+            cumalative += score_round(p, r)
+            scores.append(cumalative)
+        table.append( (u.username, scores) )
+
+    return table
+
 #-------------------------------------------------------------------------------
 #   Championship calculations
 #-------------------------------------------------------------------------------
