@@ -8,7 +8,7 @@
             <a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country_code}}</a>
         </th>
         {% endfor %}
-        <th>Tot</th>
+        <th>Total</th>
     </tr>
     </thead>
     {% for score, name, results in season_results %}
