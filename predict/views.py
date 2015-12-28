@@ -390,17 +390,18 @@ def rebuild_results(season_id):
 
 def results_graph(season_id):
     # get all the race reults for this season
-    results = get_race_results(season_id)
-    users = get_active_users(season_id)
     table = []
-    for u in users:
-        cumalative = 0
-        scores = []
-        for r in results:
-            p = get_user_prediction(u, r.season_round)
-            cumalative += score_round(p, r)
-            scores.append(cumalative)
-        table.append( (u.username, scores) )
+    results = get_race_results(season_id)
+    if results != None:
+        users = get_active_users(season_id)
+        for u in users:
+            cumalative = 0
+            scores = []
+            for r in results:
+                p = get_user_prediction(u, r.season_round)
+                cumalative += score_round(p, r)
+                scores.append(cumalative)
+            table.append( (u.username, scores) )
 
     return table
 
