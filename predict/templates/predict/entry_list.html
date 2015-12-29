@@ -1,3 +1,27 @@
+
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
+
+
+
+{% block header-heading %}
+    {% if season %}
+        Formula 1 {{season.first.name}} Season
+    {% endif %}
+{% endblock %}
+
+{% block header-subnav-items %}
+    <li><a href="{% url 'season_overview' season.first.name %}">Results</a></li>
+    <li><a href="{% url 'driver_championship' season.first.name %}">Drivers</a></li>
+    <li><a href="{% url 'constructor_championship' season.first.name %}">Constructors</a></li>
+    <li><a href="{% url 'calendar' season.first.name %}">Calendar</a></li>
+    <li><a class="is-active" href="{% url 'entry_list' season.first.name %}">Entry List</a></li>
+{% endblock %}
+
+<!-- The main page content -->
+{% block page-content %}
+<div class="row panel">
+  <div class="small-12 columns">
 {% if team_list %}
     <h3>Entry List</h3>
     <table class="fullwidth">
@@ -11,3 +35,8 @@
     {% endfor %}
     </table>
 {% endif %}
+</div>
+</div>
+
+
+{% endblock %}

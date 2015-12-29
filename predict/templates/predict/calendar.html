@@ -1,14 +1,43 @@
+
+<!-- Basic page layout -->
+{% extends "predict/base.html" %}
+
+
+
+{% block header-heading %}
+    {% if season %}
+        Formula 1 {{season.first.name}} Season
+    {% endif %}
+{% endblock %}
+
+{% block header-subnav-items %}
+    <li><a href="{% url 'season_overview' season.first.name %}">Results</a></li>
+    <li><a href="{% url 'driver_championship' season.first.name %}">Drivers</a></li>
+    <li><a href="{% url 'constructor_championship' season.first.name %}">Constructors</a></li>
+    <li><a class="is-active" href="{% url 'calendar' season.first.name %}">Calendar</a></li>
+    <li><a href="{% url 'entry_list' season.first.name %}">Entry List</a></li>
+{% endblock %}
+
+<!-- The main page content -->
+{% block page-content %}
+<div class="row panel">
+  <div class="small-12 columns">
 {% if race_list %}
     <h3>Calendar</h3>
     <table  class="fullwidth">
-    <tr><th>Round</th><th>Date</th><th>Grand Prix</th><th>Circuit</th></tr>
+    <tr><th>Round</th><th>Date</th><th>Grand Prix</th><th class="hide-for-small">Circuit</th></tr>
     {% for race in race_list %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{ race.race_date }}</td>
         	<td><a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.country}}</a></td>
-        	<td><a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.name}}</a></td>
+        	<td class="hide-for-small"><a href="{% url 'race_overview' race.season.name race.circuit.country %}">{{race.circuit.name}}</a></td>
         </tr>
     {% endfor %}
     </table>
 {% endif %}
+</div>
+</div>
+
+
+{% endblock %}

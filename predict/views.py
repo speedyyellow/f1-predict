@@ -39,6 +39,59 @@ def season_overview(request, season_id):
     return render(request, 'predict/season_overview.html', context)
 
 @login_required
+def driver_championship(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    context['race_list'] = get_season_rounds(season_id)
+    context['team_list'] = get_entry_list(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
+    context['team_champ'] = get_constructors_champ(season_id)
+    context['season_results'] = results_table(season_id)
+    context['season_graph'] = results_graph(season_id)
+    return render(request, 'predict/driver_champ.html', context)
+
+@login_required
+def constructor_championship(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    context['race_list'] = get_season_rounds(season_id)
+    context['team_list'] = get_entry_list(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
+    context['team_champ'] = get_constructors_champ(season_id)
+    context['season_results'] = results_table(season_id)
+    context['season_graph'] = results_graph(season_id)
+    return render(request, 'predict/team_champ.html', context)
+
+@login_required
+def calendar(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    context['race_list'] = get_season_rounds(season_id)
+    context['team_list'] = get_entry_list(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
+    context['team_champ'] = get_constructors_champ(season_id)
+    context['season_results'] = results_table(season_id)
+    context['season_graph'] = results_graph(season_id)
+    return render(request, 'predict/calendar.html', context)
+
+@login_required
+def entry_list(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    context['race_list'] = get_season_rounds(season_id)
+    context['team_list'] = get_entry_list(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
+    context['team_champ'] = get_constructors_champ(season_id)
+    context['season_results'] = results_table(season_id)
+    context['season_graph'] = results_graph(season_id)
+    return render(request, 'predict/entry_list.html', context)
+
+
+@login_required
 def race_overview(request, season_id, country_id):
     # get the season context
     context = get_context_season(request, season_id)

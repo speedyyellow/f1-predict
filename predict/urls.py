@@ -16,4 +16,8 @@ urlpatterns = [
     url(r'^(?i)(?P<season_id>[0-9]+)/result/(?P<country_id>[a-z ]+)/$', views.add_result, name='result'),
     # ex: /2015/
     url(r'^(?i)(?P<season_id>[0-9]+)/$', views.season_overview, name='season_overview'),
+    url(r'^(?i)(?P<season_id>[0-9]+)/drivers$', views.driver_championship, name='driver_championship'),
+    url(r'^(?i)(?P<season_id>[0-9]+)/constructors$', views.constructor_championship, name='constructor_championship'),
+    url(r'^(?i)(?P<season_id>[0-9]+)/calendar$', views.calendar, name='calendar'),
+    url(r'^(?i)(?P<season_id>[0-9]+)/entry$', views.entry_list, name='entry_list'),
 ]

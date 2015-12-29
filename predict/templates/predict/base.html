@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>{% block title %}F1 Prediction Game{% endblock %}</title>
 
     <!-- Foundation -->
@@ -18,7 +18,7 @@
     <style>
       .header {
           text-align: center;
-          background: url("{% static 'images/f1-cars.jpg' %}") no-repeat center center;
+          background: url("{% static 'images/f1-cars-dim.jpg' %}") no-repeat center center;
           background-size: cover;
           padding: 4rem;
       }
@@ -42,6 +42,13 @@
         </div>
         <ul class="header-subnav">
         {% block header-subnav-items %}
+            {% if season %}
+            <li><a href="{% url 'season_overview' season.first.name %}">Results</a></li>
+            <li><a href="{% url 'driver_championship' season.first.name %}">Drivers</a></li>
+            <li><a href="{% url 'constructor_championship' season.first.name %}">Constructors</a></li>
+            <li><a href="{% url 'calendar' season.first.name %}">Calendar</a></li>
+            <li><a href="{% url 'entry_list' season.first.name %}">Entry List</a></li>
+            {% endif %}
         {% endblock %}
         </ul>
     </header>
@@ -62,6 +69,3 @@
 </body>
 
 </html>
-
-
-
