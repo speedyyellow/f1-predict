@@ -23,6 +23,11 @@
           padding: 4rem;
       }
     </style>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+    </script>    
 </head>
 
 <body>
@@ -59,7 +64,7 @@
 
     <!-- Foundation -->
     <script src="{% static 'foundation/js/vendor/jquery.js' %}"></script>
-    <script src="{% static 'foundation/js//foundation.min.js' %}"></script>
+    <script src="{% static 'foundation/js/foundation.min.js' %}"></script>
     <script src="{% static 'responsive-tables/responsive-tables.js' %}"></script>
     <script>
         $(document).foundation();

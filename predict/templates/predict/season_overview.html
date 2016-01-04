@@ -26,7 +26,10 @@
         {% include "predict/results.html" %}
     </div>
 </div>
-
-
+<div class="row panel">
+    <div id="line_chart" title="Scores">
+        {{ chart.as_html }}
+    </div>
+</div>
 
 {% endblock %}

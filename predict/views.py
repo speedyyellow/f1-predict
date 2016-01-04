@@ -12,6 +12,8 @@ from django.views.decorators.cache import cache_page
 from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
 from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPositionForm
 
+from graphos.sources.model import SimpleDataSource
+from graphos.renderers import gchart
 #-------------------------------------------------------------------------------
 #   globals
 #-------------------------------------------------------------------------------
@@ -33,6 +35,10 @@ def season_overview(request, season_id):
     context['race_list'] = get_season_rounds(season_id)
     context['season_results'] = results_table(season_id)
     context['season_graph'] = results_graph(season_id)
+
+    Chart = gchart.LineChart(SimpleDataSource(data=results_graph(season_id)), html_id="line_chart", options={'title': "Scores"})
+    context['chart'] = Chart
+
     return render(request, 'predict/season_overview.html', context)
 
 @login_required
@@ -419,19 +425,34 @@ def rebuild_results(season_id):
         results_table(season_id)
 
 def results_graph(season_id):
+    # data =  [
+    #         ['Year', 'Sales', 'Expenses'],
+    #         [2004, 1000, 400],
+    #         [2005, 1170, 460],
+    #         [2006, 660, 1120],
+    #         [2007, 1030, 540]
+    #     ]
+
     # get all the race reults for this season
+    scores = {}
     table = []
+    users = get_active_users(season_id)
+    header = ['Round',]
+    for u in users:
+        header.append(u.username)
+        scores[u.username] = 0
+
+    table.append(header)
+
     results = get_race_results(season_id)
     if results != None:
-        users = get_active_users(season_id)
-        for u in users:
-            cumalative = 0
-            scores = []
-            for r in results:
+        for r in results:
+            row = [r.season_round.circuit.country_code]
+            for u in users:
                 p = get_user_prediction(u, r.season_round)
-                cumalative += score_round(p, r)
-                scores.append(cumalative)
-            table.append( (u.username, scores) )
+                scores[u.username] += score_round(p, r)
+                row.append(scores[u.username])
+            table.append(row)
 
     return table
 
