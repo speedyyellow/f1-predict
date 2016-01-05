@@ -1,5 +1,7 @@
 import time
 import datetime
+import thread
+
 from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -20,6 +22,7 @@ from graphos.renderers import gchart
 global_results = {}
 global_champs = {}
 global_graphs = {}
+
 #-------------------------------------------------------------------------------
 #   Views
 #-------------------------------------------------------------------------------
@@ -34,7 +37,10 @@ def season_overview(request, season_id):
     context = get_context_season(request, season_id)
     # add the extras
     context['race_list'] = get_race_results(season_id)
-    context['season_results'] = results_table(season_id)
+    t = results_table(season_id)
+    if t != None:
+        context['season_results'] = t
+
     data = results_graph(season_id)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}})
@@ -395,35 +401,6 @@ def score_round(prediction, race_result):
 
     return score
 
-
-def results_table(season_id):
-    # check if we have it already
-    if season_id in global_results:
-        return global_results[season_id]
-    else:
-        # get all the race reults for this season
-        #srounds = get_season_rounds(season_id)
-        results = get_race_results(season_id)
-        if results != None:
-            users = get_active_users(season_id)
-            table = []
-            for u in users:
-                scores = []
-                if results != None:
-                    for r in results:
-                        p = get_user_prediction(u, r.season_round)
-                        scores.append(score_round(p,r))
-                season_score = score_season(u, season_id)
-                table.append( (season_score, u.username, scores) )
-            table.sort()
-            table.reverse()
-
-            # cache this table & return it
-            global_results[season_id] = table
-            return table
-        else:
-            return None
-
 def rebuild_results(season_id):
     if season_id in global_results:
         del global_results[season_id]
@@ -432,44 +409,71 @@ def rebuild_results(season_id):
         del global_graphs[season_id]
         results_graph(season_id)
 
-def results_graph(season_id):
-    # data =  [
-    #         ['Year', 'Sales', 'Expenses'],
-    #         [2004, 1000, 400],
-    #         [2005, 1170, 460],
-    #         [2006, 660, 1120],
-    #         [2007, 1030, 540]
-    #     ]
 
+def generate_results_table(season_id):
+    # get all the race reults for this season
+    results = get_race_results(season_id)
+    if results != None:
+        users = get_active_users(season_id)
+        table = []
+        for u in users:
+            scores = []
+            if results != None:
+                for r in results:
+                    p = get_user_prediction(u, r.season_round)
+                    scores.append(score_round(p,r))
+            season_score = score_season(u, season_id)
+            table.append( (season_score, u.username, scores) )
+        table.sort()
+        table.reverse()
+
+        # cache this table & return it
+        global_results[season_id] = table
+        return table
+    else:
+        return None
+
+def results_table(season_id):
+    # check if we have it already
+    if season_id in global_results:
+        return global_results[season_id]
+    else:
+        thread.start_new_thread( generate_results_table, (season_id,))
+        return None
+
+def generate_results_graph(season_id):
+    # get all the race reults for this season
+    scores = {}
+    table = []
+    users = get_active_users(season_id)
+    header = ['Round',]
+    for u in users:
+        header.append(u.username)
+        scores[u.username] = 0
+
+    results = get_race_results(season_id)
+    if results != None:
+        table.append(header)
+        for r in results:
+            row = [r.season_round.circuit.country_code]
+            for u in users:
+                p = get_user_prediction(u, r.season_round)
+                scores[u.username] += score_round(p, r)
+                row.append(scores[u.username])
+            table.append(row)
+
+        global_graphs[season_id] = table
+    else:
+        table = None
+
+    return table
+
+def results_graph(season_id):
     if season_id in global_graphs:
         return global_graphs[season_id]
     else:
-        # get all the race reults for this season
-        scores = {}
-        table = []
-        users = get_active_users(season_id)
-        header = ['Round',]
-        for u in users:
-            header.append(u.username)
-            scores[u.username] = 0
-
-        results = get_race_results(season_id)
-        if results != None:
-            table.append(header)
-            for r in results:
-                row = [r.season_round.circuit.country_code]
-                for u in users:
-                    p = get_user_prediction(u, r.season_round)
-                    scores[u.username] += score_round(p, r)
-                    row.append(scores[u.username])
-                table.append(row)
-
-            global_graphs[season_id] = table
-        else:
-            table = None
-
-
-        return table
+        thread.start_new_thread( generate_results_graph, (season_id,))
+        return None
 
 #-------------------------------------------------------------------------------
 #   Championship calculations

@@ -2,7 +2,11 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-
+{% block page_header %}
+  {% if not season_results and race_list %}
+  <meta http-equiv="refresh" content="5" />
+  {% endif %}
+{% endblock %}
 
 {% block header-heading %}
     {% if season %}
@@ -66,12 +70,14 @@
 {% else %}
 <div class="row panel">
     <div class="small-12 columns">
+      {% if not season_results and race_list %}
+        <p>Generating results, please wait...</p>
+      {% else %}
         <p>Check back here once the season begins!</p>
+      {% endif %}
     </div>
 </div>
 {% endif %}
-
-
 
 
 {% endblock %}
