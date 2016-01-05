@@ -21,9 +21,10 @@
 <!-- The main page content -->
 {% block page-content %}
 
+{% if season_results %}
 <div class="row panel">
     <div class="small-12 columns">
-      <h3>Results</h3>
+      <h4>Results Table</h4>
       <table class="responsive fullwidth">
           <thead>
           <tr>
@@ -49,14 +50,27 @@
           {% endfor %}
       </table>
     </div>
-    {% if chart %}
+</div>
+
+{% if chart %}
+<div class="row panel">
     <div class="small-12 columns">
+    <h4>Season Graph</h4>
       <div id="line_chart" class="well">
           {{ chart.as_html }}
       </div>
     </div>
-    {% endif %}
 </div>
+{% endif %}
+
+{% else %}
+<div class="row panel">
+    <div class="small-12 columns">
+        <p>Check back here once the season begins!</p>
+    </div>
+</div>
+{% endif %}
+
 
 
 

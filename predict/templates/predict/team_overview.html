@@ -24,13 +24,14 @@ Team Overview
 <div class="row">
     {% if driver_list %}
     <div class="small-12 panel columns">
+        <h4>Drivers</h4>
             {% for driver in driver_list %}
             <div class="small-6 columns">
                 <div class="small-6 columns">
-                    <h3><a href="{% url 'driver_overview' driver.season.name driver.driver.pk %}">{{driver.driver.name}}</a></h3>
+                    <h5><a href="{% url 'driver_overview' driver.season.name driver.driver.pk %}">{{driver.driver.name}}</a></h5>
                 </div>
                 <div class="small-6 columns">
-                    <h3>#{{driver.driver.number}}</h3>
+                    <h5>#{{driver.driver.number}}</h5>
                 </div>
             </div>
             {% endfor %}

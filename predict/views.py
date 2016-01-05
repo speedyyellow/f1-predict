@@ -404,22 +404,25 @@ def results_table(season_id):
         # get all the race reults for this season
         #srounds = get_season_rounds(season_id)
         results = get_race_results(season_id)
-        users = get_active_users(season_id)
-        table = []
-        for u in users:
-            scores = []
-            if results != None:
-                for r in results:
-                    p = get_user_prediction(u, r.season_round)
-                    scores.append(score_round(p,r))
-            season_score = score_season(u, season_id)
-            table.append( (season_score, u.username, scores) )
-        table.sort()
-        table.reverse()
+        if results != None:
+            users = get_active_users(season_id)
+            table = []
+            for u in users:
+                scores = []
+                if results != None:
+                    for r in results:
+                        p = get_user_prediction(u, r.season_round)
+                        scores.append(score_round(p,r))
+                season_score = score_season(u, season_id)
+                table.append( (season_score, u.username, scores) )
+            table.sort()
+            table.reverse()
 
-        # cache this table & return it
-        global_results[season_id] = table
-        return table
+            # cache this table & return it
+            global_results[season_id] = table
+            return table
+        else:
+            return None
 
 def rebuild_results(season_id):
     if season_id in global_results:
