@@ -41,7 +41,7 @@ def season_overview(request, season_id):
     if t != None:
         context['season_results'] = t
 
-    data = None#results_graph(season_id)
+    data = results_graph(season_id, season_results)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}})
         context['chart'] = Chart
@@ -346,7 +346,7 @@ def results_table(season_id, results=None):
     else:
         return generate_results_table(season_id,results)
 
-def generate_results_graph(season_id):
+def generate_results_graph(season_id, results=None):
     # get all the race reults for this season
     scores = {}
     table = []
@@ -356,14 +356,16 @@ def generate_results_graph(season_id):
         header.append(u.username)
         scores[u.username] = 0
 
-    results = get_race_results(season_id)
+    if results == None:
+        results = get_race_results(season_id)
     if results != None:
         table.append(header)
         for r in results:
             row = [r.season_round.circuit.country_code]
+            top_ten = get_race_result_top_ten(r)
             for u in users:
                 p = get_user_prediction(u, r.season_round)
-                scores[u.username] += score_round(p, r)
+                scores[u.username] += score_round(p, r, top_ten)
                 row.append(scores[u.username])
             table.append(row)
 
@@ -374,11 +376,11 @@ def generate_results_graph(season_id):
 
     return table
 
-def results_graph(season_id):
+def results_graph(season_id, results=None):
     if season_id in global_graphs:
         return global_graphs[season_id]
     else:
-        return generate_results_graph(season_id,)
+        return generate_results_graph(season_id,results)
 
 #-------------------------------------------------------------------------------
 #   Championship calculations
