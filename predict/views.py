@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
+from django.db.models import Max, Sum
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_page
 
@@ -334,7 +334,7 @@ def generate_results_table(season_id, results=None):
         table.sort()
         table.reverse()
         # cache this table & return it
-        #global_results[season_id] = table
+        global_results[season_id] = table
         return table
     else:
         return None
@@ -370,7 +370,7 @@ def generate_results_graph(season_id, results=None):
             table.append(row)
 
         # cache this table & return it
-        #global_graphs[season_id] = table
+        global_graphs[season_id] = table
     else:
         table = None
 
