@@ -294,19 +294,18 @@ def score_round(prediction, race_result, top_ten=None):
 def rebuild_results(season_id):
     if season_id in global_results:
         del global_results[season_id]
-        results_table(season_id)
     if season_id in global_graphs:
         del global_graphs[season_id]
-        results_graph(season_id)
 
+    generate_results_data(season_id)
 
-def generate_results_table(season_id, results=None):
+def generate_results_data(season_id, results=None):
     # get all the race reults for this season
     if results == None:
         results = get_race_results(season_id)
 
     if results != None:
-        table = []
+        # calculate scores for all users & races
         user_scores = {}
         previous_rounds = 0
         for r in results:
@@ -316,7 +315,7 @@ def generate_results_table(season_id, results=None):
                 if p.user in user_scores:
                     user_scores[p.user].append(score_round(p,r,top_ten))
                 else:
-                    # add 0's for the previous rounds
+                    # add 0's for the previous rounds where this user didnt have a prediction
                     if previous_rounds > 0:
                         user_scores[p.user] = [0] * previous_rounds
                         user_scores[p.user].append(score_round(p,r,top_ten))
@@ -324,6 +323,8 @@ def generate_results_table(season_id, results=None):
                         user_scores[p.user] = [score_round(p,r,top_ten)]
             previous_rounds += 1
 
+        # construct the results table
+        table = []
         for user, scores in user_scores.iteritems():
             season_score = 0
             for s in scores:
@@ -333,54 +334,44 @@ def generate_results_table(season_id, results=None):
 
         table.sort()
         table.reverse()
-        # cache this table & return it
+
+        # construct the data table for the graph
+        # Round | User1 | user 2
+        # AU    | 25    | 34
+        graph_data = []
+        for r in results:
+            graph_data.append([r.season_round.circuit.country_code])
+        header = ['Round',]
+        for user, scores in user_scores.iteritems():
+            header.append(user.username)
+            total = 0
+            for i, score in enumerate(scores):
+                total += score
+                graph_data[i].append(total)
+        graph_data.insert(0, header)
+
+        # cache the data for later use
         global_results[season_id] = table
-        return table
-    else:
-        return None
+        global_graphs[season_id] = graph_data
 
 def results_table(season_id, results=None):
     # check if we have it already
+    if season_id not in global_results:
+        generate_results_data(season_id,results)
+
     if season_id in global_results:
         return global_results[season_id]
     else:
-        return generate_results_table(season_id,results)
-
-def generate_results_graph(season_id, results=None):
-    # get all the race reults for this season
-    scores = {}
-    table = []
-    users = get_active_users(season_id)
-    header = ['Round',]
-    for u in users:
-        header.append(u.username)
-        scores[u.username] = 0
-
-    if results == None:
-        results = get_race_results(season_id)
-    if results != None:
-        table.append(header)
-        for r in results:
-            row = [r.season_round.circuit.country_code]
-            top_ten = get_race_result_top_ten(r)
-            for u in users:
-                p = get_user_prediction(u, r.season_round)
-                scores[u.username] += score_round(p, r, top_ten)
-                row.append(scores[u.username])
-            table.append(row)
-
-        # cache this table & return it
-        global_graphs[season_id] = table
-    else:
-        table = None
-
-    return table
+        return None
 
 def results_graph(season_id, results=None):
+    if season_id not in global_graphs:
+        generate_results_data(season_id,results)
+
     if season_id in global_graphs:
         return global_graphs[season_id]
     else:
-        return generate_results_graph(season_id,results)
+        return None
 
 #-------------------------------------------------------------------------------
 #   Championship calculations
