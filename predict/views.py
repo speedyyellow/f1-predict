@@ -1,13 +1,12 @@
 import time
 import datetime
-import thread
 
 from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Max
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_page
 
@@ -36,12 +35,13 @@ def season_overview(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
     # add the extras
-    context['race_list'] = get_race_results(season_id)
-    t = results_table(season_id)
+    season_results = get_race_results(season_id)
+    context['race_list'] = season_results
+    t = results_table(season_id, season_results)
     if t != None:
         context['season_results'] = t
 
-    data = results_graph(season_id)
+    data = None#results_graph(season_id)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}})
         context['chart'] = Chart
@@ -90,12 +90,15 @@ def race_overview(request, season_id, country_id):
     race = get_season_round(season_id, country_id)
     context.update(get_context_race(request, race, ""))
 
+    test = get_race_predictions(race)
+
     # add last seasons result
     last_season_id = str(int(season_id)-1)
     last_season_race = get_season_round(last_season_id, country_id)
     context.update(get_context_race(request, last_season_race, "last_"))
 
     result = get_race_result(season_id, country_id)
+
     table = []
 
     if result != None:
@@ -225,9 +228,206 @@ def add_result(request, season_id, country_id):
     context['pforms'] = pforms
     return render(request, 'predict/result.html', context)
 
+
+def get_year():
+    return timezone.now().strftime("%Y")
+
 #-------------------------------------------------------------------------------
-#   Query wrappers
+#   Score calculations
 #-------------------------------------------------------------------------------
+
+def score_season(user, season_id):
+    score = 0
+    # get the season results
+    results = get_race_results(season_id)
+    if results != None:
+        for res in results:
+            # get the user's prediction for this round
+            pred = get_user_prediction(user, res.season_round)
+            score += score_round(pred, res)
+
+    return score;
+
+def score_results(user, results):
+    score = 0
+    if results != None:
+        for res in results:
+            # get the user's prediction for this round
+            pred = get_user_prediction(user, res.season_round)
+            score += score_round(pred, res)
+
+    return score;
+
+def score_round(prediction, race_result, top_ten=None):
+    score = 0
+    if prediction == None:
+        return score
+    if race_result == None:
+        return score
+
+    # pole & fastest lap get 5 points each
+    if prediction.pole_position == race_result.pole_position:
+        score += 5
+    if prediction.fastest_lap == race_result.fastest_lap:
+        score += 5
+
+    # get the prediction positions & race positions
+    prediction_pos = get_prediction_positions(prediction)
+    if top_ten == None:
+        top_ten = get_race_result_top_ten(race_result)
+
+    # now check for position matches
+    for ppos in prediction_pos:
+        for rpos in top_ten:
+            if ppos.driver == rpos.driver:
+                # the prediction has a driver in the top 10
+                score += 1
+                if ppos.position == rpos.position:
+                    # the prediction has the driver in the correct position
+                    score += 4
+                    if ppos.position.position == 1:
+                        # and got the winner right
+                        score += 5
+
+    return score
+
+def rebuild_results(season_id):
+    if season_id in global_results:
+        del global_results[season_id]
+        results_table(season_id)
+    if season_id in global_graphs:
+        del global_graphs[season_id]
+        results_graph(season_id)
+
+
+def generate_results_table(season_id, results=None):
+    # get all the race reults for this season
+    if results == None:
+        results = get_race_results(season_id)
+
+    if results != None:
+        table = []
+        user_scores = {}
+        previous_rounds = 0
+        for r in results:
+            top_ten = get_race_result_top_ten(r)
+            preds = get_race_predictions(r.season_round)
+            for p in preds:
+                if p.user in user_scores:
+                    user_scores[p.user].append(score_round(p,r,top_ten))
+                else:
+                    # add 0's for the previous rounds
+                    if previous_rounds > 0:
+                        user_scores[p.user] = [0] * previous_rounds
+                        user_scores[p.user].append(score_round(p,r,top_ten))
+                    else:
+                        user_scores[p.user] = [score_round(p,r,top_ten)]
+            previous_rounds += 1
+
+        for user, scores in user_scores.iteritems():
+            season_score = 0
+            for s in scores:
+                season_score += s
+
+            table.append( (season_score, user, scores) )
+
+        table.sort()
+        table.reverse()
+        # cache this table & return it
+        #global_results[season_id] = table
+        return table
+    else:
+        return None
+
+def results_table(season_id, results=None):
+    # check if we have it already
+    if season_id in global_results:
+        return global_results[season_id]
+    else:
+        return generate_results_table(season_id,results)
+
+def generate_results_graph(season_id):
+    # get all the race reults for this season
+    scores = {}
+    table = []
+    users = get_active_users(season_id)
+    header = ['Round',]
+    for u in users:
+        header.append(u.username)
+        scores[u.username] = 0
+
+    results = get_race_results(season_id)
+    if results != None:
+        table.append(header)
+        for r in results:
+            row = [r.season_round.circuit.country_code]
+            for u in users:
+                p = get_user_prediction(u, r.season_round)
+                scores[u.username] += score_round(p, r)
+                row.append(scores[u.username])
+            table.append(row)
+
+        # cache this table & return it
+        #global_graphs[season_id] = table
+    else:
+        table = None
+
+    return table
+
+def results_graph(season_id):
+    if season_id in global_graphs:
+        return global_graphs[season_id]
+    else:
+        return generate_results_graph(season_id,)
+
+#-------------------------------------------------------------------------------
+#   Championship calculations
+#-------------------------------------------------------------------------------
+def rebuild_championships(season_id):
+    if season_id+"driver" in global_champs:
+        del global_champs[season_id+"driver"]
+    if season_id+"constructor" in global_champs:
+        del global_champs[season_id+"constructor"]
+
+    get_drivers_champ(season_id)
+    get_constructors_champ(season_id)
+
+def get_drivers_champ(season_id):
+    key = season_id+"driver"
+    if key not in global_champs:
+        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
+        global_champs[key] = get_champ(results, 'driver__driver__name', 'driver__driver__pk')
+
+    return global_champs[key]
+
+def get_constructors_champ(season_id):
+    key = season_id+"constructor"
+    if key not in global_champs:
+        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__team__name','driver__team__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
+        global_champs[key] = get_champ(results, 'driver__team__name', 'driver__team__pk')
+
+    return global_champs[key]
+
+def get_champ(results, name_field, key_field):
+    champ = []
+    rank = 0
+    counter = 0
+    last_score = 1000
+    for res in results:
+        counter += 1
+        if res['score'] > 0:
+            if res['score'] < last_score:
+                rank = counter
+            entry = {'rank' : rank,
+                     'name' : res[name_field],
+                     'key'  : res[key_field],
+                     'score' : res['score'],
+                     'season' : res['result__season_round__season__name']}
+            champ.append(entry)
+            last_score = res['score']
+
+    return champ
+
 def get_context(request):
     context = {'user': request.user, 'season_list': get_season_list()}
     return context
@@ -323,6 +523,21 @@ def get_user_prediction(user, season_round):
     except Exception, e:
         return None
 
+def get_race_predictions(season_round):
+    try:
+        begin = season_round.season.name+"-01-01"
+        predictions = Prediction.objects.filter(created__gte=begin, created__lt=season_round.event_date).values('user').annotate(pred_key=Max('pk')).values('pred_key')
+
+        ids = []
+        for p in predictions:
+            ids.append(p['pred_key'])
+
+        predictions = Prediction.objects.filter(pk__in=ids).order_by('user')
+        #print pred_positions.query
+        return predictions
+    except Exception, e:
+        return None
+
 def get_latest_user_prediction(user, season_id):
     try:
         # create year bounds for the query
@@ -342,6 +557,13 @@ def get_prediction_positions(prediction):
     except Exception, e:
         return None
 
+def get_prediction_positions_for_keys(prediction_keys):
+    try:
+        pred_positions = PredictionPosition.objects.filter(prediction__pk__in=prediction_keys).order_by('prediction__user__username','position__position')
+        return pred_positions
+    except Exception, e:
+        return None
+
 def get_active_users(season_id):
     begin   = season_id+"-01-01"
     end     = season_id+"-12-31"
@@ -350,175 +572,3 @@ def get_active_users(season_id):
     for p in predictions:
         userset.append(p.user)
     return set(userset)
-
-def get_year():
-    return timezone.now().strftime("%Y")
-#-------------------------------------------------------------------------------
-#   Score calculations
-#-------------------------------------------------------------------------------
-
-def score_season(user, season_id):
-    score = 0
-    # get the season results
-    results = get_race_results(season_id)
-    if results != None:
-        for res in results:
-            # get the user's prediction for this round
-            pred = get_user_prediction(user, res.season_round)
-            score += score_round(pred, res)
-
-    return score;
-
-def score_round(prediction, race_result):
-    score = 0
-    if prediction == None:
-        return score
-    if race_result == None:
-        return score
-
-    # pole & fastest lap get 5 points each
-    if prediction.pole_position == race_result.pole_position:
-        score += 5
-    if prediction.fastest_lap == race_result.fastest_lap:
-        score += 5
-
-    # get the prediction positions & race positions
-    prediction_pos = get_prediction_positions(prediction)
-    result_pos = get_race_result_top_ten(race_result)
-
-    # now check for position matches
-    for ppos in prediction_pos:
-        for rpos in result_pos:
-            if ppos.driver == rpos.driver:
-                # the prediction has a driver in the top 10
-                score += 1
-                if ppos.position == rpos.position:
-                    # the prediction has the driver in the correct position
-                    score += 4
-                    if ppos.position.position == 1:
-                        # and got the winner right
-                        score += 5
-
-    return score
-
-def rebuild_results(season_id):
-    if season_id in global_results:
-        del global_results[season_id]
-        results_table(season_id)
-    if season_id in global_graphs:
-        del global_graphs[season_id]
-        results_graph(season_id)
-
-
-def generate_results_table(season_id):
-    # get all the race reults for this season
-    results = get_race_results(season_id)
-    if results != None:
-        users = get_active_users(season_id)
-        table = []
-        for u in users:
-            scores = []
-            if results != None:
-                for r in results:
-                    p = get_user_prediction(u, r.season_round)
-                    scores.append(score_round(p,r))
-            season_score = score_season(u, season_id)
-            table.append( (season_score, u.username, scores) )
-        table.sort()
-        table.reverse()
-
-        # cache this table & return it
-        global_results[season_id] = table
-        return table
-    else:
-        return None
-
-def results_table(season_id):
-    # check if we have it already
-    if season_id in global_results:
-        return global_results[season_id]
-    else:
-        thread.start_new_thread( generate_results_table, (season_id,))
-        return None
-
-def generate_results_graph(season_id):
-    # get all the race reults for this season
-    scores = {}
-    table = []
-    users = get_active_users(season_id)
-    header = ['Round',]
-    for u in users:
-        header.append(u.username)
-        scores[u.username] = 0
-
-    results = get_race_results(season_id)
-    if results != None:
-        table.append(header)
-        for r in results:
-            row = [r.season_round.circuit.country_code]
-            for u in users:
-                p = get_user_prediction(u, r.season_round)
-                scores[u.username] += score_round(p, r)
-                row.append(scores[u.username])
-            table.append(row)
-
-        global_graphs[season_id] = table
-    else:
-        table = None
-
-    return table
-
-def results_graph(season_id):
-    if season_id in global_graphs:
-        return global_graphs[season_id]
-    else:
-        thread.start_new_thread( generate_results_graph, (season_id,))
-        return None
-
-#-------------------------------------------------------------------------------
-#   Championship calculations
-#-------------------------------------------------------------------------------
-def rebuild_championships(season_id):
-    if season_id+"driver" in global_champs:
-        del global_champs[season_id+"driver"]
-    if season_id+"constructor" in global_champs:
-        del global_champs[season_id+"constructor"]
-
-    get_drivers_champ(season_id)
-    get_constructors_champ(season_id)
-
-def get_drivers_champ(season_id):
-    key = season_id+"driver"
-    if key not in global_champs:
-        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__driver__name','driver__driver__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-        global_champs[key] = get_champ(results, 'driver__driver__name', 'driver__driver__pk')
-
-    return global_champs[key]
-
-def get_constructors_champ(season_id):
-    key = season_id+"constructor"
-    if key not in global_champs:
-        results = ResultPosition.objects.filter(result__season_round__season__name=season_id).values('driver__team__name','driver__team__pk','result__season_round__season__name').annotate(score = Sum('position__points')).order_by('-score')
-        global_champs[key] = get_champ(results, 'driver__team__name', 'driver__team__pk')
-
-    return global_champs[key]
-
-def get_champ(results, name_field, key_field):
-    champ = []
-    rank = 0
-    counter = 0
-    last_score = 1000
-    for res in results:
-        counter += 1
-        if res['score'] > 0:
-            if res['score'] < last_score:
-                rank = counter
-            entry = {'rank' : rank,
-                     'name' : res[name_field],
-                     'key'  : res[key_field],
-                     'score' : res['score'],
-                     'season' : res['result__season_round__season__name']}
-            champ.append(entry)
-            last_score = res['score']
-
-    return champ
