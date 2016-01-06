@@ -43,7 +43,7 @@ def season_overview(request, season_id):
 
     data = results_graph(season_id, season_results)
     if data != None:
-        Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}})
+        Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
         context['chart'] = Chart
 
     return render(request, 'predict/season_overview.html', context)
