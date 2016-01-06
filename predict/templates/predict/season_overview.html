@@ -2,12 +2,6 @@
 <!-- Basic page layout -->
 {% extends "predict/base.html" %}
 
-{% block page_header %}
-  {% if not season_results and race_list %}
-  <!-- <meta http-equiv="refresh" content="5" /> -->
-  {% endif %}
-{% endblock %}
-
 {% block header-heading %}
     {% if season %}
         Formula 1 {{season.first.name}} Season
