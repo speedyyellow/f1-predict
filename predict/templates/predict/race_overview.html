@@ -48,12 +48,12 @@ Race Overview
                 <tr>
                     <th>Pole Position</th>
                     <td><a href="{% url 'driver_overview' race.season.name result.pole_position.driver.id %}">{{result.pole_position.driver.name}}</a></td>
-                    <td><a href="{% url 'driver_overview' race.season.name prediction.pole_position.driver.id %}">{{prediction.pole_position.driver.name}}</a></td>
+                    <td>{% if prediction %}<a href="{% url 'driver_overview' race.season.name prediction.pole_position.driver.id %}">{{prediction.pole_position.driver.name}}</a>{% endif %}</td>
                 </tr>
                 <tr>
                     <th>Fastest Lap</th>
                     <td><a href="{% url 'driver_overview' race.season.name result.fastest_lap.driver.id %}">{{result.fastest_lap.driver.name}}</a></td>
-                    <td><a href="{% url 'driver_overview' race.season.name prediction.fastest_lap.driver.id %}">{{prediction.fastest_lap.driver.name}}</a></td>
+                    <td>{% if prediction %}<a href="{% url 'driver_overview' race.season.name prediction.fastest_lap.driver.id %}">{{prediction.fastest_lap.driver.name}}</a>{% endif %}</td>
                 </tr>
             </table>
         </div>

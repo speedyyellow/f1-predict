@@ -30,7 +30,7 @@ def index(request):
     context = get_context(request)
     return render(request, 'predict/index.html', context)
 
-@login_required
+
 def season_overview(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -48,7 +48,7 @@ def season_overview(request, season_id):
 
     return render(request, 'predict/season_overview.html', context)
 
-@login_required
+
 def driver_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -56,7 +56,7 @@ def driver_championship(request, season_id):
     context['driver_champ'] = get_drivers_champ(season_id)
     return render(request, 'predict/driver_champ.html', context)
 
-@login_required
+
 def constructor_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -64,7 +64,7 @@ def constructor_championship(request, season_id):
     context['team_champ'] = get_constructors_champ(season_id)
     return render(request, 'predict/team_champ.html', context)
 
-@login_required
+
 def calendar(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -72,7 +72,7 @@ def calendar(request, season_id):
     context['race_list'] = get_season_rounds(season_id)
     return render(request, 'predict/calendar.html', context)
 
-@login_required
+
 def entry_list(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -81,7 +81,7 @@ def entry_list(request, season_id):
     return render(request, 'predict/entry_list.html', context)
 
 
-@login_required
+
 def race_overview(request, season_id, country_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -89,8 +89,6 @@ def race_overview(request, season_id, country_id):
     # add this seasons data
     race = get_season_round(season_id, country_id)
     context.update(get_context_race(request, race, ""))
-
-    test = get_race_predictions(race)
 
     # add last seasons result
     last_season_id = str(int(season_id)-1)
@@ -128,7 +126,7 @@ def race_overview(request, season_id, country_id):
 
     return render(request, 'predict/race_overview.html', context)
 
-@login_required
+
 def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
@@ -138,7 +136,7 @@ def team_overview(request, season_id, team_id):
     context['result_list'] = results
     return render(request, 'predict/team_overview.html', context)
 
-@login_required
+
 def driver_overview(request, season_id, driver_id):
     driver = get_driver(season_id, driver_id)
     results = get_driver_results(season_id, driver_id)
