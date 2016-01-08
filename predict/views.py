@@ -48,6 +48,19 @@ def season_overview(request, season_id):
 
     return render(request, 'predict/season_overview.html', context)
 
+def season_overview_bbcode(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    season_results = get_race_results(season_id)
+    context['race_list'] = season_results
+    t = results_table(season_id, season_results)
+    if t != None:
+        context['season_results'] = t
+
+    return render(request, 'predict/season_overview_bbcode.html', context)
+
+
 
 def driver_championship(request, season_id):
     # get the season context
