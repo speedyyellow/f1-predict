@@ -1,10 +1,10 @@
 <pre>
 {% if season_results %}
 [code=auto:0]
-Player&#9;&#9;{% for race in race_list %}{{race.season_round.circuit.country_code}}  {% endfor %}Total
---------&#9;{% for race in race_list %}----{% endfor %}-----
+Player&#9;&#9;&#9;{% for race in race_list %}{{race.season_round.circuit.country_code}}  {% endfor %}Total
+--------&#9;&#9;{% for race in race_list %}----{% endfor %}-----
 {% for score, name, results in season_results %}
-{{name|capfirst}}&#9;&#9;{% for s in results %}{{s|rjust:"2"}}  {% endfor %}{{score|rjust:"5"}}
+{{name|capfirst}}&#9;&#9;&#9;{% for s in results %}{{s|rjust:"2"}}  {% endfor %}{{score|rjust:"5"}}
 {% endfor %}
 [/code]
 {% endif %}
