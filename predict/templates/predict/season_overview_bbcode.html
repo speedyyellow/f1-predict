@@ -14,21 +14,9 @@ Player&#9;&#9;&#9;{% for race in race_list %}{{race.season_round.circuit.country
 <pre>
 {% if season_results %}
 [table]
-  [tr]
-      [th]Player[/th]
-      {% for race in race_list %}
-      [th]{{race.season_round.circuit.country_code}}[/th]
-      {% endfor %}
-      [th]Total[/th]
-  [/tr]
+  [tr][th]Player[/th]{% for race in race_list %}[th]{{race.season_round.circuit.country_code}}[/th]{% endfor %}[th]Total[/th][/tr]
   {% for score, name, results in season_results %}
-  [tr]
-      [th]{{name|capfirst}}[/th]
-      {% for s in results %}
-      [td]{{s}}[/td]
-      {% endfor %}
-      [td]{{score}}[/td]
-  [/tr]
+  [tr][th]{{name|capfirst}}[/th]{% for s in results %}[td]{{s}}[/td]{% endfor %}[td]{{score}}[/td][/tr]
   {% endfor %}
 [/table]
 {% endif %}
