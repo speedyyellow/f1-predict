@@ -111,7 +111,7 @@ STATIC_URL = '/static/'
 
 # Heroku specific settings
 if os.environ.get("HEROKU") != None:
-    DEBUG = False
+    DEBUG = True
     MIDDLEWARE_CLASSES = (
         'django.middleware.cache.UpdateCacheMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
