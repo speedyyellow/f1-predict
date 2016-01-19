@@ -111,6 +111,7 @@ STATIC_URL = '/static/'
 
 # Heroku specific settings
 if os.environ.get("HEROKU") != None:
+    DEBUG = False
     MIDDLEWARE_CLASSES = (
         'django.middleware.cache.UpdateCacheMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -135,7 +136,7 @@ if os.environ.get("HEROKU") != None:
     import dj_database_url
     DATABASES['default'] =  dj_database_url.config()
     DATABASES['default']['CONN_MAX_AGE'] = 500
-    
+
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
