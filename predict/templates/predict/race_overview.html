@@ -127,7 +127,7 @@ Race Overview
                     <td>{{ entry.position.position }}</td>
                     <td><a href="{% url 'driver_overview' last_race.season.name entry.driver.driver.id %}">{{ entry.driver.driver.name }}</a></td>
                     <td class="hide-for-small"><a href="{% url 'team_overview' last_race.season.name entry.driver.team.id %}">{{ entry.driver.team.name }}</a></td>
-                    <td>{{ entry.position.points }}</td>
+                    <td>{% if entry.position.points > 0 %}{{entry.position.points}}{% endif %}</td>
                 </tr>
                 {% endfor %}
             </table>
