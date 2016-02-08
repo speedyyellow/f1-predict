@@ -28,12 +28,14 @@
               <th>Position</th>
               <th>Driver</th>
               <th>Points</th>
+              <th>Gap</th>
           </tr>
           {% for e in driver_champ %}
           <tr>
               <td>{{e.rank}}</td>
               <td><a href="{% url 'driver_overview' e.season e.key %}">{{e.name}}</a></td>
               <td>{{e.score}}</td>
+              <td>{% if e.gap > 0 %}{{e.gap}}{% endif %}</td>
           </tr>
           {% endfor %}
       </table>

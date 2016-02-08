@@ -416,17 +416,22 @@ def get_champ(results, name_field, key_field):
     champ = []
     rank = 0
     counter = 0
+    high_score = 0
     last_score = 1000
     for res in results:
         counter += 1
         if res['score'] > 0:
             if res['score'] < last_score:
                 rank = counter
+            if high_score == 0:
+                high_score = res['score']
+
             entry = {'rank' : rank,
                      'name' : res[name_field],
                      'key'  : res[key_field],
                      'score' : res['score'],
-                     'season' : res['result__season_round__season__name']}
+                     'season' : res['result__season_round__season__name'],
+                     'gap' : high_score - res['score']}
             champ.append(entry)
             last_score = res['score']
 
