@@ -16,7 +16,7 @@ class Driver(models.Model):
     name = models.CharField(max_length=50)
     number = models.IntegerField()
     def __str__(self):
-        return self.name + " (" + self.number + ")"
+        return self.name + " (" + str(self.number) + ")"
 
 class Circuit(models.Model):
     country = models.CharField(max_length=50)
