@@ -41,7 +41,7 @@ def season_overview(request, season_id):
     if t != None:
         context['season_results'] = t
 
-    data = results_graph(season_id, season_results)
+    data = None #results_graph(season_id, season_results)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
         context['chart'] = Chart
@@ -495,6 +495,13 @@ def get_race_results(season_id):
     results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__race_date')
     if results.count() > 0:
         return results
+    else:
+        return None
+
+def get_last_three_race_results(season_id):
+    results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__race_date')
+    if results.count() > 0:
+        return results[results.count()-3:]
     else:
         return None
 
