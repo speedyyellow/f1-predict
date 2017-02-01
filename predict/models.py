@@ -43,6 +43,7 @@ class TeamDriver(models.Model):
     team = models.ForeignKey(Team)
     driver = models.ForeignKey(Driver)
     engine = models.ForeignKey(Engine, null=True)
+    active = models.BooleanField(default=True)
     def __str__(self):
         return self.driver.name + " (" + self.team.name + ")"
 
