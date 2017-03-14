@@ -8,7 +8,7 @@ from predict.models import Prediction, PredictionPosition, TeamDriver, ResultPos
 class PredictionPositionForm(ModelForm):
     def __init__(self, season_id, *args, **kwargs):
         super(PredictionPositionForm, self).__init__(*args, **kwargs)
-        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
+        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True))
 
     class Meta:
         model = PredictionPosition
@@ -19,8 +19,8 @@ class PredictionPositionForm(ModelForm):
 class PredictionForm(ModelForm):
     def __init__(self, season_id, *args, **kwargs):
         super(PredictionForm, self).__init__(*args, **kwargs)
-        self.fields['pole_position'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
-        self.fields['fastest_lap'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
+        self.fields['pole_position'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True))
+        self.fields['fastest_lap'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True))
 
     class Meta:
         model = Prediction
@@ -31,7 +31,7 @@ class PredictionForm(ModelForm):
 class ResultPositionForm(ModelForm):
     def __init__(self, season_id, *args, **kwargs):
         super(ResultPositionForm, self).__init__(*args, **kwargs)
-        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id), required=False)
+        self.fields['driver'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True), required=False)
 
     class Meta:
         model = ResultPosition
@@ -42,8 +42,8 @@ class ResultPositionForm(ModelForm):
 class ResultForm(ModelForm):
     def __init__(self, season_id, *args, **kwargs):
         super(ResultForm, self).__init__(*args, **kwargs)
-        self.fields['pole_position'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
-        self.fields['fastest_lap'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id))
+        self.fields['pole_position'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True))
+        self.fields['fastest_lap'] = ModelChoiceField(queryset=TeamDriver.objects.filter(season__name=season_id,active=True))
 
     class Meta:
         model = RaceResult

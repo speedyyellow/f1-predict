@@ -16,7 +16,7 @@ class Driver(models.Model):
     name = models.CharField(max_length=50)
     number = models.IntegerField()
     def __str__(self):
-        return self.name
+        return self.name + " (" + str(self.number) + ")"
 
 class Circuit(models.Model):
     country = models.CharField(max_length=50)
@@ -43,6 +43,7 @@ class TeamDriver(models.Model):
     team = models.ForeignKey(Team)
     driver = models.ForeignKey(Driver)
     engine = models.ForeignKey(Engine, null=True)
+    active = models.BooleanField(default=True)
     def __str__(self):
         return self.driver.name + " (" + self.team.name + ")"
 

@@ -21,7 +21,7 @@ class RoundInline(admin.TabularInline ):
 
 class TeamDriverInline(admin.TabularInline ):
     model = TeamDriver
-    fields = ['team', 'engine', 'driver']
+    fields = ['team', 'engine', 'driver','active']
     extra = 3
 
 class SeasonAdmin(admin.ModelAdmin):
@@ -53,4 +53,3 @@ admin.site.register(FinishingPosition)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(RaceResult, ResultAdmin)
 admin.site.register(Prediction, PredictionAdmin)
-

@@ -30,7 +30,7 @@ def index(request):
     context = get_context(request)
     return render(request, 'predict/index.html', context)
 
-@login_required
+
 def season_overview(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -41,14 +41,27 @@ def season_overview(request, season_id):
     if t != None:
         context['season_results'] = t
 
-    data = results_graph(season_id, season_results)
+    data = None #results_graph(season_id, season_results)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
         context['chart'] = Chart
 
     return render(request, 'predict/season_overview.html', context)
 
-@login_required
+def season_overview_bbcode(request, season_id):
+    # get the season context
+    context = get_context_season(request, season_id)
+    # add the extras
+    season_results = get_race_results(season_id)
+    context['race_list'] = season_results
+    t = results_table(season_id, season_results)
+    if t != None:
+        context['season_results'] = t
+
+    return render(request, 'predict/season_overview_bbcode.html', context)
+
+
+
 def driver_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -56,7 +69,7 @@ def driver_championship(request, season_id):
     context['driver_champ'] = get_drivers_champ(season_id)
     return render(request, 'predict/driver_champ.html', context)
 
-@login_required
+
 def constructor_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -64,7 +77,7 @@ def constructor_championship(request, season_id):
     context['team_champ'] = get_constructors_champ(season_id)
     return render(request, 'predict/team_champ.html', context)
 
-@login_required
+
 def calendar(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -72,7 +85,7 @@ def calendar(request, season_id):
     context['race_list'] = get_season_rounds(season_id)
     return render(request, 'predict/calendar.html', context)
 
-@login_required
+
 def entry_list(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -81,7 +94,7 @@ def entry_list(request, season_id):
     return render(request, 'predict/entry_list.html', context)
 
 
-@login_required
+
 def race_overview(request, season_id, country_id):
     # get the season context
     context = get_context_season(request, season_id)
@@ -89,8 +102,6 @@ def race_overview(request, season_id, country_id):
     # add this seasons data
     race = get_season_round(season_id, country_id)
     context.update(get_context_race(request, race, ""))
-
-    test = get_race_predictions(race)
 
     # add last seasons result
     last_season_id = str(int(season_id)-1)
@@ -128,7 +139,7 @@ def race_overview(request, season_id, country_id):
 
     return render(request, 'predict/race_overview.html', context)
 
-@login_required
+
 def team_overview(request, season_id, team_id):
     team = Team.objects.get(pk=team_id)
     drivers = get_team_drivers(season_id, team)
@@ -138,7 +149,7 @@ def team_overview(request, season_id, team_id):
     context['result_list'] = results
     return render(request, 'predict/team_overview.html', context)
 
-@login_required
+
 def driver_overview(request, season_id, driver_id):
     driver = get_driver(season_id, driver_id)
     results = get_driver_results(season_id, driver_id)
@@ -405,17 +416,22 @@ def get_champ(results, name_field, key_field):
     champ = []
     rank = 0
     counter = 0
+    high_score = 0
     last_score = 1000
     for res in results:
         counter += 1
         if res['score'] > 0:
             if res['score'] < last_score:
                 rank = counter
+            if high_score == 0:
+                high_score = res['score']
+
             entry = {'rank' : rank,
                      'name' : res[name_field],
                      'key'  : res[key_field],
                      'score' : res['score'],
-                     'season' : res['result__season_round__season__name']}
+                     'season' : res['result__season_round__season__name'],
+                     'gap' : high_score - res['score']}
             champ.append(entry)
             last_score = res['score']
 
@@ -479,6 +495,13 @@ def get_race_results(season_id):
     results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__race_date')
     if results.count() > 0:
         return results
+    else:
+        return None
+
+def get_last_three_race_results(season_id):
+    results = RaceResult.objects.filter(season_round__season__name=season_id).order_by('season_round__race_date')
+    if results.count() > 0:
+        return results[results.count()-3:]
     else:
         return None
 
