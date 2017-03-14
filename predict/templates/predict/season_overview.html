@@ -39,10 +39,17 @@
           <tbody>
           <tr>
               <th>{{name|capfirst}}</th>
-              {% for s in results %}
-              <td>{{s}}</td>
-              {% endfor %}
-              <td>{{score}}</td>
+              {% ifequal user.get_username|stringformat:"s" name|stringformat:"s" %}
+                  {% for s in results %}
+                  <th>{{s}}</th>
+                  {% endfor %}
+                  <th>{{score}}</th>
+              {% else %}
+                  {% for s in results %}
+                  <td>{{s}}</td>
+                  {% endfor %}
+                  <td>{{score}}</td>
+              {% endifequal %}
           </tr>
           </tbody>
           {% endfor %}
