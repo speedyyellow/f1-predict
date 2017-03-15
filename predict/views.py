@@ -67,12 +67,11 @@ def season_overview_bbcode(request, season_id):
     return render(request, 'predict/season_overview_bbcode.html', context)
 
 
-
 def driver_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
     # add the extras
-    context['driver_champ'] = None#get_drivers_champ(season_id)
+    context['driver_champ'] = get_drivers_champ(season_id)
     return render(request, 'predict/driver_champ.html', context)
 
 
