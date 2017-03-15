@@ -126,6 +126,7 @@ if os.environ.get("HEROKU") != None:
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.middleware.cache.FetchFromCacheMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
     # CACHES = {
