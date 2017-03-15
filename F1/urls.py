@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+from django.conf import settings
 
 urlpatterns = [
     url(r'^', include('predict.urls')),
@@ -30,6 +31,14 @@ urlpatterns = [
                                 name = 'register'
     ),
 ]
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
 
 # django.contrib.auth.urls
 # urlpatterns = [
