@@ -365,6 +365,7 @@ def generate_results_data(season_id, results=None):
         global_results[season_id] = table
         global_graphs[season_id] = graph_data
 
+
 def results_table(season_id, results=None):
     # check if we have it already
     if season_id not in global_results:
