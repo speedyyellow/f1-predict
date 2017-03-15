@@ -15,6 +15,8 @@ from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPos
 
 from graphos.sources.model import SimpleDataSource
 from graphos.renderers import gchart
+
+from timeit import default_timer as timer
 #-------------------------------------------------------------------------------
 #   globals
 #-------------------------------------------------------------------------------
@@ -37,10 +39,14 @@ def season_overview(request, season_id):
     # add the extras
     season_results = get_race_results(season_id)
     context['race_list'] = season_results
+
+    # generate all the data
+    generate_results_data(season_id,season_results)
+    # populate the table into the context
     t = results_table(season_id, season_results)
     if t != None:
         context['season_results'] = t
-
+    # populate the graph data into the context
     data = results_graph(season_id, season_results)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
@@ -66,7 +72,7 @@ def driver_championship(request, season_id):
     # get the season context
     context = get_context_season(request, season_id)
     # add the extras
-    context['driver_champ'] = get_drivers_champ(season_id)
+    context['driver_champ'] = None#get_drivers_champ(season_id)
     return render(request, 'predict/driver_champ.html', context)
 
 
@@ -310,12 +316,13 @@ def rebuild_results(season_id):
 
     generate_results_data(season_id)
 
-def generate_results_data(season_id, results=None):
+def generate_user_scores(season_id, results=None):
     # get all the race reults for this season
     if results == None:
         results = get_race_results(season_id)
 
     if results != None:
+        start = timer()
         # calculate scores for all users & races
         user_scores = {}
         previous_rounds = 0
@@ -333,6 +340,21 @@ def generate_results_data(season_id, results=None):
                     else:
                         user_scores[p.user] = [score_round(p,r,top_ten)]
             previous_rounds += 1
+
+        end = timer()
+        print("user_scores: "+str(end - start))
+        return user_scores
+
+
+def generate_results_data(season_id, results=None, user_scores=None):
+    # get all the race reults for this season
+    if results == None:
+        results = get_race_results(season_id)
+
+    if results != None:
+        # calculate scores for all users & races
+        if user_scores == None:
+            user_scores = generate_user_scores(season_id, results)
 
         # construct the results table
         table = []
@@ -367,7 +389,8 @@ def generate_results_data(season_id, results=None):
 
 def results_table(season_id, results=None):
     # rebuild the data
-    generate_results_data(season_id,results)
+    #if season_id not in global_results:
+    #generate_results_data(season_id,results)
 
     # return the data
     if season_id in global_results:
@@ -377,7 +400,8 @@ def results_table(season_id, results=None):
 
 def results_graph(season_id, results=None):
     # rebuild the data
-    generate_results_data(season_id,results)
+    #if season_id not in global_graphs:
+    #generate_results_data(season_id,results)
 
     # return the data
     if season_id in global_graphs:
@@ -447,7 +471,7 @@ def get_context_season(request, season_id):
     season = Season.objects.filter(name=season_id)
     if season.count > 0:
         context['season'] = season
-        score = score_season(request.user, season_id)
+        score = 0#score_season(request.user, season_id)
         context['season_score'] = score
     return context
 
