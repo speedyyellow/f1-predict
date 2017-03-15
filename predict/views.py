@@ -41,7 +41,7 @@ def season_overview(request, season_id):
     if t != None:
         context['season_results'] = t
 
-    data = None #results_graph(season_id, season_results)
+    data = results_graph(season_id, season_results)
     if data != None:
         Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
         context['chart'] = Chart
@@ -366,19 +366,20 @@ def generate_results_data(season_id, results=None):
         global_graphs[season_id] = graph_data
 
 def results_table(season_id, results=None):
-    # check if we have it already
-    if season_id not in global_results:
-        generate_results_data(season_id,results)
+    # rebuild the data
+    generate_results_data(season_id,results)
 
+    # return the data
     if season_id in global_results:
         return global_results[season_id]
     else:
         return None
 
 def results_graph(season_id, results=None):
-    if season_id not in global_graphs:
-        generate_results_data(season_id,results)
+    # rebuild the data
+    generate_results_data(season_id,results)
 
+    # return the data
     if season_id in global_graphs:
         return global_graphs[season_id]
     else:
