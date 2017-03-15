@@ -129,12 +129,14 @@ if os.environ.get("HEROKU") != None:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
-    # CACHES = {
-    #     'default': {
-    #         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    #         'LOCATION': 'unique-snowflake',
-    #     }
-    # }
+    # only enable caches when not in debug
+    if not settings.DEBUG:
+        CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+            }
+            }
 
     # Parse database configuration from $DATABASE_URL
     import dj_database_url
