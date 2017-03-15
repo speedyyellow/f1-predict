@@ -115,6 +115,7 @@ STATIC_URL = '/static/'
 # Heroku specific settings
 if os.environ.get("HEROKU") != None:
     DEBUG = True
+
     MIDDLEWARE_CLASSES = (
         'django.middleware.cache.UpdateCacheMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,13 +131,12 @@ if os.environ.get("HEROKU") != None:
     )
 
     # only enable caches when not in debug
-    if not settings.DEBUG:
-        CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake',
-            }
-            }
+    CACHES = {
+                'default': {
+                    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                    'LOCATION': 'unique-snowflake',
+                }
+    }
 
     # Parse database configuration from $DATABASE_URL
     import dj_database_url
