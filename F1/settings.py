@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = (
     'foundation',
     'graphos',
     'predict',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -51,6 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 
@@ -112,6 +115,7 @@ STATIC_URL = '/static/'
 # Heroku specific settings
 if os.environ.get("HEROKU") != None:
     DEBUG = True
+
     MIDDLEWARE_CLASSES = (
         'django.middleware.cache.UpdateCacheMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -123,13 +127,15 @@ if os.environ.get("HEROKU") != None:
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.middleware.cache.FetchFromCacheMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
+    # only enable caches when not in debug
     CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake',
-        }
+                'default': {
+                    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                    'LOCATION': 'unique-snowflake',
+                }
     }
 
     # Parse database configuration from $DATABASE_URL

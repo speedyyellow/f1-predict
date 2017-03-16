@@ -85,3 +85,11 @@ class PredictionPosition(models.Model):
     driver = models.ForeignKey(TeamDriver)
     def __str__(self):
         return str(self.position.position) + " " + self.driver.driver.name
+
+
+class RaceScore(models.Model):
+    score = models.IntegerField(default=0)
+    prediction = models.ForeignKey(Prediction, null=True)
+    result = models.ForeignKey(RaceResult, null=True)
+    def __str__(self):
+        return self.result.season_round.season.name + ' ' + self.result.season_round.circuit.country + ' ' + self.prediction.user.username + ' ' + str(self.score)

@@ -13,6 +13,7 @@ from .models import ResultPosition
 from .models import FinishingPosition
 from .models import Prediction
 from .models import PredictionPosition
+from .models import RaceScore
 
 # season stuff
 class RoundInline(admin.TabularInline ):
@@ -53,3 +54,4 @@ admin.site.register(FinishingPosition)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(RaceResult, ResultAdmin)
 admin.site.register(Prediction, PredictionAdmin)
+admin.site.register(RaceScore)
