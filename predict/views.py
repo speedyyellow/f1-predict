@@ -351,10 +351,10 @@ def generate_user_scores(season_id, results=None):
             threads = []
             lock = threading.Lock()
             for p in preds:
-                #score_prediction(lock, user_scores, p, r, top_ten, previous_rounds)
-                t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
-                threads.append(t)
-                t.start()
+                score_prediction(lock, user_scores, p, r, top_ten, previous_rounds)
+                #t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
+                #threads.append(t)
+                #t.start()
 
             # wait for our threads to finish
             for t in threads:
