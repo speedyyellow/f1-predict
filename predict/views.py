@@ -320,20 +320,19 @@ def score_prediction(lock, user_scores, prediction, result, top_ten, previous_ro
     lock.acquire()
     try:
         score = score_round(prediction,result,top_ten)
-    finally:
-        lock.release()
-
-    if prediction.user in user_scores:
-        #print("appending score to " + prediction.user.username +"\n")
-        user_scores[prediction.user].append(score)
-    else:
-        # add 0's for the previous rounds where this user didnt have a prediction
-        #print("inserting new score for " + prediction.user.username +"\n")
-        if previous_rounds > 0:
-            user_scores[prediction.user] = [0] * previous_rounds
+        if prediction.user in user_scores:
+            #print("appending score to " + prediction.user.username +"\n")
             user_scores[prediction.user].append(score)
         else:
-            user_scores[prediction.user] = [score]
+            # add 0's for the previous rounds where this user didnt have a prediction
+            #print("inserting new score for " + prediction.user.username +"\n")
+            if previous_rounds > 0:
+                user_scores[prediction.user] = [0] * previous_rounds
+                user_scores[prediction.user].append(score)
+            else:
+                user_scores[prediction.user] = [score]
+    finally:
+        lock.release()
 
 def generate_user_scores(season_id, results=None):
     #start = timer()
@@ -352,10 +351,10 @@ def generate_user_scores(season_id, results=None):
             threads = []
             lock = threading.Lock()
             for p in preds:
-                score_prediction(lock, user_scores, p, r, top_ten, previous_rounds)
-                #t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
-                #threads.append(t)
-                #t.start()
+                #score_prediction(lock, user_scores, p, r, top_ten, previous_rounds)
+                t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
+                threads.append(t)
+                t.start()
 
             # wait for our threads to finish
             for t in threads:
