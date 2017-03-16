@@ -11,7 +11,7 @@ from django.db.models import Max, Sum
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_page
 
-from .models import Season,SeasonRound,TeamDriver,RaceResult,ResultPosition,Team,Prediction,PredictionPosition,FinishingPosition
+from .models import *
 from .forms import PredictionForm, PredictionPositionForm, ResultForm, ResultPositionForm
 
 from graphos.sources.model import SimpleDataSource
@@ -316,26 +316,33 @@ def rebuild_results(season_id):
 
     generate_results_data(season_id)
 
-def score_prediction(lock, user_scores, prediction, result, top_ten, previous_rounds):
-    lock.acquire()
-    try:
+def score_prediction(user_scores, prediction, result, previous_rounds):
+    score = 0
+    # check if we have this saved to the db already
+    race_score = RaceScore.objects.filter(result=result, prediction=prediction)
+    if race_score.count() >= 1:
+        score = race_score[0].score
+    else:
+        # we dont so calculate it and save to the db
+        top_ten = get_race_result_top_ten(result)
         score = score_round(prediction,result,top_ten)
-        if prediction.user in user_scores:
-            #print("appending score to " + prediction.user.username +"\n")
+        new_score = RaceScore()
+        new_score.score = score
+        new_score.prediction = prediction
+        new_score.result = result
+        new_score.save()
+
+    if prediction.user in user_scores:
+        user_scores[prediction.user].append(score)
+    else:
+        # add 0's for the previous rounds where this user didnt have a prediction
+        if previous_rounds > 0:
+            user_scores[prediction.user] = [0] * previous_rounds
             user_scores[prediction.user].append(score)
         else:
-            # add 0's for the previous rounds where this user didnt have a prediction
-            #print("inserting new score for " + prediction.user.username +"\n")
-            if previous_rounds > 0:
-                user_scores[prediction.user] = [0] * previous_rounds
-                user_scores[prediction.user].append(score)
-            else:
-                user_scores[prediction.user] = [score]
-    finally:
-        lock.release()
+            user_scores[prediction.user] = [score]
 
 def generate_user_scores(season_id, results=None):
-    #start = timer()
     # get all the race reults for this season
     if results == None:
         results = get_race_results(season_id)
@@ -345,27 +352,11 @@ def generate_user_scores(season_id, results=None):
         user_scores = {}
         previous_rounds = 0
         for r in results:
-#            start_loop = timer()
-            top_ten = get_race_result_top_ten(r)
             preds = get_race_predictions(r.season_round)
-            threads = []
-            lock = threading.Lock()
             for p in preds:
-                score_prediction(lock, user_scores, p, r, top_ten, previous_rounds)
-                #t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
-                #threads.append(t)
-                #t.start()
-
-            # wait for our threads to finish
-            for t in threads:
-                t.join()
-
+                score_prediction(user_scores, p, r, previous_rounds)
             previous_rounds += 1
-#            end_loop = timer()
-#            print("processed result: "+str(end_loop - start_loop))
 
-        #end = timer()
-        #print("user_scores: "+str(end - start))
         return user_scores
 
 
