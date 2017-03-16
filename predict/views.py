@@ -1,5 +1,6 @@
 import time
 import datetime
+import threading
 
 from django.utils import timezone
 from django.shortcuts import render
@@ -315,33 +316,57 @@ def rebuild_results(season_id):
 
     generate_results_data(season_id)
 
+def score_prediction(lock, user_scores, prediction, result, top_ten, previous_rounds):
+    lock.acquire()
+    try:
+        score = score_round(prediction,result,top_ten)
+    finally:
+        lock.release()
+
+    if prediction.user in user_scores:
+        #print("appending score to " + prediction.user.username +"\n")
+        user_scores[prediction.user].append(score)
+    else:
+        # add 0's for the previous rounds where this user didnt have a prediction
+        #print("inserting new score for " + prediction.user.username +"\n")
+        if previous_rounds > 0:
+            user_scores[prediction.user] = [0] * previous_rounds
+            user_scores[prediction.user].append(score)
+        else:
+            user_scores[prediction.user] = [score]
+
 def generate_user_scores(season_id, results=None):
+    #start = timer()
     # get all the race reults for this season
     if results == None:
         results = get_race_results(season_id)
 
     if results != None:
-        start = timer()
         # calculate scores for all users & races
         user_scores = {}
         previous_rounds = 0
         for r in results:
+#            start_loop = timer()
             top_ten = get_race_result_top_ten(r)
             preds = get_race_predictions(r.season_round)
+            threads = []
+            lock = threading.Lock()
             for p in preds:
-                if p.user in user_scores:
-                    user_scores[p.user].append(score_round(p,r,top_ten))
-                else:
-                    # add 0's for the previous rounds where this user didnt have a prediction
-                    if previous_rounds > 0:
-                        user_scores[p.user] = [0] * previous_rounds
-                        user_scores[p.user].append(score_round(p,r,top_ten))
-                    else:
-                        user_scores[p.user] = [score_round(p,r,top_ten)]
-            previous_rounds += 1
+                #score_prediction(user_scores, p, r, top_ten, previous_rounds)
+                t = threading.Thread(target=score_prediction, args=(lock, user_scores, p, r, top_ten, previous_rounds))
+                threads.append(t)
+                t.start()
 
-        end = timer()
-        print("user_scores: "+str(end - start))
+            # wait for our threads to finish
+            for t in threads:
+                t.join()
+
+            previous_rounds += 1
+#            end_loop = timer()
+#            print("processed result: "+str(end_loop - start_loop))
+
+        #end = timer()
+        #print("user_scores: "+str(end - start))
         return user_scores
 
 
@@ -470,8 +495,6 @@ def get_context_season(request, season_id):
     season = Season.objects.filter(name=season_id)
     if season.count > 0:
         context['season'] = season
-        score = 0#score_season(request.user, season_id)
-        context['season_score'] = score
     return context
 
 def get_context_race(request, season_round, prefix):
