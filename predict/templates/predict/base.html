@@ -8,11 +8,6 @@
 
     <title>{% block title %}F1 Prediction Game{% endblock %}</title>
 
-    <!-- Foundation -->
-    <link rel="stylesheet" href="{% static 'foundation/css/normalize.css' %}" />
-    <link rel="stylesheet" href="{% static 'foundation/css/foundation.css' %}" />
-    <link rel="stylesheet" href="{% static 'responsive-tables/responsive-tables.css' %}" />
-
     <!-- My App -->
     <link rel="stylesheet" href="{% static 'predict/app.css' %}" />
     <style>
@@ -22,15 +17,7 @@
           background-size: cover;
           padding: 4rem;
       }
-      body {
-          background-color: #333
-      }
     </style>
-
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-        google.load("visualization", "1", {packages:["corechart"]});
-    </script>
 
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}"/>
     {% block page_header %}
@@ -38,6 +25,15 @@
 </head>
 
 <body>
+    <!-- Foundation -->
+    <link rel="stylesheet" href="{% static 'foundation/css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'foundation/css/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'responsive-tables/responsive-tables.css' %}" />
+    <style>
+    body {
+        background-color: #333
+    }
+    </style>
 
     {% include "predict/topbar.html" %}
 
@@ -64,6 +60,11 @@
         {% endblock %}
         </ul>
     </header>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" async>
+        google.load("visualization", "1", {packages:["corechart"]});
+    </script>
 
     {% block page-content %}
     <p>Page Content</p>

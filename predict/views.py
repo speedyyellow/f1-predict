@@ -41,17 +41,21 @@ def season_overview(request, season_id):
     season_results = get_race_results(season_id)
     context['race_list'] = season_results
 
-    # generate all the data
-    generate_results_data(season_id,season_results)
-    # populate the table into the context
-    t = results_table(season_id, season_results)
-    if t != None:
-        context['season_results'] = t
-    # populate the graph data into the context
-    data = results_graph(season_id, season_results)
-    if data != None:
-        Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
-        context['chart'] = Chart
+    if season_results == None:
+        # display users with predictions for the current season
+        context['predictions'] = get_season_predictions(season_id)
+    else:
+        # generate all the data
+        generate_results_data(season_id,season_results)
+        # populate the table into the context
+        t = results_table(season_id, season_results)
+        if t != None:
+            context['season_results'] = t
+        # populate the graph data into the context
+        data = results_graph(season_id, season_results)
+        if data != None:
+            Chart = gchart.LineChart(SimpleDataSource(data=data), html_id="line_chart", options={'title': '', 'legend':{'position':'bottom'}, 'pointsVisible':'true'})
+            context['chart'] = Chart
 
     return render(request, 'predict/season_overview.html', context)
 
@@ -599,6 +603,18 @@ def get_latest_user_prediction(user, season_id):
         end     = season_id+"-12-31"
         prediction = Prediction.objects.filter(user__pk=user.pk,created__gte=begin, created__lte=end).latest('pk')
         return prediction
+    except Exception, e:
+        print e
+        return None
+
+def get_season_predictions(season_id):
+    try:
+        # create year bounds for the query
+        print season_id
+        begin   = season_id+"-01-01"
+        end     = season_id+"-12-31"
+        prediction = Prediction.objects.filter(created__gte=begin, created__lte=end).order_by('-created')
+        return prediction[:25]
     except Exception, e:
         print e
         return None
