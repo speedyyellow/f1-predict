@@ -614,7 +614,7 @@ def get_season_predictions(season_id):
         begin   = season_id+"-01-01"
         end     = season_id+"-12-31"
         prediction = Prediction.objects.filter(created__gte=begin, created__lte=end).order_by('-created')
-        return prediction
+        return prediction[:25]
     except Exception, e:
         print e
         return None
