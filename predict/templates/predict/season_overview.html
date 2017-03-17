@@ -69,6 +69,18 @@
 {% endif %}
 
 {% else %}
+{% if predictions %}
+<div class="row panel">
+    <div class="small-12 columns">
+        <h4>Preseason Prediction Activity</h4>
+        <ul>
+        {% for p in predictions %}
+            <li>{{p.user.username}} updated their prediction on {{p.created}}</li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+{% else %}
 <div class="row panel">
     <div class="small-12 columns">
       {% if not season_results and race_list %}
@@ -78,6 +90,8 @@
       {% endif %}
     </div>
 </div>
+{% endif %}
+
 {% endif %}
 
 
